@@ -20,6 +20,7 @@ const TorusPoints: FC<TorusPointsProps> = ({ section }) => {
   const activeProgress = useHomeStore((s) => s.activeProgress[section])
   const rotateAngle = useHomeStore((s) => s.rotateAngles[section])
   const introScrollProgress = useHomeStore((s) => s.introScrollProgress)
+  const outroScrollProgress = useHomeStore((s) => s.outroScrollProgress)
 
   useFrame(({ clock }) => {
     if (!pointsShaderMaterial.current) return
@@ -27,7 +28,8 @@ const TorusPoints: FC<TorusPointsProps> = ({ section }) => {
     pointsShaderMaterial.current.uTime = elapsedTime
     pointsShaderMaterial.current.uActiveProgress = activeProgress.value
     pointsShaderMaterial.current.uRotateAngle = rotateAngle.value
-    pointsShaderMaterial.current.uScrollProgress = introScrollProgress.value
+    pointsShaderMaterial.current.uIntroScrollProgress = introScrollProgress.value
+    pointsShaderMaterial.current.uOutroScrollProgress = outroScrollProgress.value
   })
 
   return (
@@ -73,7 +75,8 @@ type PointsUniforms = {
   uTime: number
   uRotateAngle: number
   uColour: Color
-  uScrollProgress: number
+  uIntroScrollProgress: number
+  uOutroScrollProgress: number
   uActiveProgress: number
 }
 
@@ -81,7 +84,8 @@ const POINTS_UNIFORMS: PointsUniforms = {
   uTime: 0,
   uRotateAngle: 0,
   uColour: POINT_VEC3,
-  uScrollProgress: 0,
+  uIntroScrollProgress: 0,
+  uOutroScrollProgress: 0,
   uActiveProgress: 0,
 }
 

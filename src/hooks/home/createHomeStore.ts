@@ -8,6 +8,7 @@ import { SceneSection } from '@/resources/home'
 
 export type HomeState = {
   introScrollProgress: { value: number }
+  outroScrollProgress: { value: number }
 
   activeSection: SceneSection | null
   setActiveSection: (activeSection: SceneSection | null) => void
@@ -39,6 +40,9 @@ export const createHomeStore = (isMobile: boolean) => {
 
   const initialValues: Omit<HomeState, 'setActiveSection'> = {
     introScrollProgress: {
+      value: 0,
+    },
+    outroScrollProgress: {
       value: 0,
     },
     activeSection: null,
@@ -73,6 +77,18 @@ export const createHomeStore = (isMobile: boolean) => {
       initialValues.introScrollProgress.value = progress
     },
   })
+
+  setTimeout(() => {
+    ScrollTrigger.create({
+      trigger: '#home-footer',
+      start: 'top bottom',
+      end: 'max',
+      scrub: true,
+      onUpdate: ({ progress, isActive }) => {
+        initialValues.outroScrollProgress.value = progress
+      },
+    })
+  }, 300) // Delay for footer to mount
 
   const rotateFast = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 5, duration: 2 })
   const rotateNormal = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 1, duration: 0.5 })

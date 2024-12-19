@@ -9,7 +9,8 @@ attribute vec3 scatteredPosition;
 
 uniform float uTime;
 uniform float uRotateAngle;
-uniform float uScrollProgress;
+uniform float uIntroScrollProgress;
+uniform float uOutroScrollProgress;
 uniform float uActiveProgress;
 // varying vec3 vViewPosition;
 
@@ -26,7 +27,10 @@ void main() {
     vec3 introPosition = mix(INTRO_POSITION, scatteredPosition, introProgress);
 
     // vec3 particlePosition =introPosition;
-    vec3 particlePosition = mix(introPosition, inactivePosition, uScrollProgress);
+    vec3 particlePosition = mix(introPosition, inactivePosition, uIntroScrollProgress);
+
+    particlePosition = mix(particlePosition, scatteredPosition, uOutroScrollProgress);
+
     particlePosition = mix(particlePosition, position, uActiveProgress);
 
     particlePosition = rotateTorus(particlePosition, uRotateAngle);

@@ -5,6 +5,7 @@
 
 uniform float uTime;
 uniform float uActiveProgress;
+uniform float uOutroScrollProgress;
 uniform vec3 uColour;
 
 const float INTRO_DURATION = 1.6;
@@ -20,6 +21,8 @@ const float ACTIVE_ALPHA = 0.0; // points fade out when active
     );
 
     float alpha = mix(mix(0.0, ALPHA, introProgress), ACTIVE_ALPHA, uActiveProgress);
+
+    alpha = mix(alpha, 0.1, uOutroScrollProgress);
 
     // Calculate the distance from the center of the point (normalized to [0, 1])
     vec2 coord = gl_PointCoord - vec2(0.5);

@@ -1,4 +1,7 @@
 'use client'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import { type FC, type PropsWithChildren, useContext, useRef } from 'react'
 import { createContext } from 'react'
 import { useStore } from 'zustand'
@@ -10,6 +13,8 @@ export const HomeContext = createContext<HomeStore | null>(null)
 type Props = PropsWithChildren<{
   isMobile: boolean
 }>
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 export const HomeProvider: FC<Props> = ({ children, isMobile }) => {
   const store = useRef(createHomeStore(isMobile))

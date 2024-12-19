@@ -45,7 +45,7 @@ const HomeFooter: FC = () => {
           trigger: aboutSection.current,
           start: 'top 90%',
           end: 'center center',
-          scrub: true,
+          scrub: 1,
         },
       })
     },
@@ -58,7 +58,7 @@ const HomeFooter: FC = () => {
   return (
     <div id="home-footer" className="relative grid w-full grid-cols-1 grid-rows-[1fr_auto_auto] gap-4 pt-16 md:h-lvh">
       {/* About Section */}
-      <section className="flex flex-col items-center justify-center gap-4 horizontal-padding md:flex-row md:gap-8 md:py-24">
+      <section className="flex flex-col items-center justify-center gap-4 horizontal-padding md:flex-row md:gap-8">
         <div className="relative flex aspect-square size-fit w-3/4 items-center justify-center md:w-auto">
           <div className="absolute size-4/5 rounded-full bg-light/20 backdrop-blur-sm" />
           <Image src={profilePic} alt="Matthew Frawley" width={400} height={400} className="relative object-contain" />
@@ -69,8 +69,8 @@ const HomeFooter: FC = () => {
             Hi, I&apos;m <span className="text-green">Matt</span>
           </h3>
           <div className="relative mt-2 size-fit">
-            <p className="absolute inset-0 text-sm text-white opacity-15 sm:text-lg lg:text-xl">{bio}</p>
-            <p id="bio" className="relative z-10 text-sm text-white sm:text-lg lg:text-xl">
+            <p className="absolute inset-0 text-sm text-white opacity-15 sm:text-lg xl:text-xl">{bio}</p>
+            <p id="bio" className="relative z-10 text-sm text-white sm:text-lg xl:text-xl">
               {bio}
             </p>
           </div>

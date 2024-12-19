@@ -22,7 +22,7 @@ const HomeMain: FC<Props> = ({ isMobile }) => {
     () => {
       if (!torusGroup.current) return
       gsap.to(torusGroup.current.position, {
-        z: -4,
+        z: 5,
         ease: 'power1.out',
         scrollTrigger: {
           trigger: '#home-footer',
