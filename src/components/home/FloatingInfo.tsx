@@ -134,14 +134,14 @@ const CONFIG: Record<
     position: [-1.2, 0.6, 1],
     overlineClassName: 'text-green',
     heading: 'Use technology to improve human performance',
-    paragraph: `Purpose fuels progress. That's why it's at the core of everything we create together.`,
+    paragraph: `Purpose fuels progress. That's why it's at the core of everything we create together. What's your mission?`,
   },
   [SceneSection.Design]: {
     position: [-1.4, -0.2, 2],
     overlineClassName: 'text-orange',
     heading: 'Where form meets function',
     paragraph:
-      'By deeply understanding the problem and any constraints, we design solutions that are both effective and delightful.',
+      'By deeply understanding the problem and any constraints, we can design solutions that are both effective and delightful for your audience.',
   },
   [SceneSection.Engineering]: {
     position: [-1.2, -1.2, 1],
