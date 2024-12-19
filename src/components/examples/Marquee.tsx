@@ -9,7 +9,7 @@ import { twJoin, twMerge } from 'tailwind-merge'
 
 import gsapIcon from '@/assets/icons/technologies/gsap.svg'
 import nextIcon from '@/assets/icons/technologies/next.svg'
-import openGLIcon from '@/assets/icons/technologies/opengl.svg'
+import webGLIcon from '@/assets/icons/technologies/webgl.svg'
 import reactIcon from '@/assets/icons/technologies/react.svg'
 import tailwindIcon from '@/assets/icons/technologies/tailwind.svg'
 import threeIcon from '@/assets/icons/technologies/three.svg'
@@ -25,7 +25,7 @@ type Props = {
 const TECHNOLOGY_ICONS: StaticImageData[] = [
   gsapIcon,
   nextIcon,
-  openGLIcon,
+  webGLIcon,
   reactIcon,
   tailwindIcon,
   threeIcon,

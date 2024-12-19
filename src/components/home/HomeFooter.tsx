@@ -45,7 +45,7 @@ const HomeFooter: FC = () => {
           trigger: aboutSection.current,
           start: 'top 90%',
           end: 'center center',
-          scrub: 1,
+          scrub: 2,
         },
       })
     },
