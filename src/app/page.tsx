@@ -11,10 +11,6 @@ export default async function HomePage() {
   const userAgent = headersList.get('user-agent')
   const isMobile = !!userAgent?.includes('Mobile')
 
-  // Feedback tasks
-
-  // Less particle motion in the main header - draw attention to background
-
   return (
     <HomeProvider isMobile={isMobile}>
       <main className="w-full overflow-x-hidden bg-black text-white">

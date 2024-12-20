@@ -9,11 +9,11 @@ import { twJoin, twMerge } from 'tailwind-merge'
 
 import gsapIcon from '@/assets/icons/technologies/gsap.svg'
 import nextIcon from '@/assets/icons/technologies/next.svg'
-import webGLIcon from '@/assets/icons/technologies/webgl.svg'
 import reactIcon from '@/assets/icons/technologies/react.svg'
 import tailwindIcon from '@/assets/icons/technologies/tailwind.svg'
 import threeIcon from '@/assets/icons/technologies/three.svg'
 import typescriptIcon from '@/assets/icons/technologies/typescript.svg'
+import webGLIcon from '@/assets/icons/technologies/webgl.svg'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 

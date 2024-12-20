@@ -134,7 +134,7 @@ const CONFIG: Record<
     position: [-1.2, 0.6, 1],
     overlineClassName: 'text-green',
     heading: 'Use technology to improve human performance',
-    paragraph: `Purpose fuels progress. That's why it's at the core of everything we create together. What's your mission?`,
+    paragraph: `Purpose fuels progress. That's why it's at the core of everything we create together. What's the mission?`,
   },
   [SceneSection.Design]: {
     position: [-1.4, -0.2, 2],

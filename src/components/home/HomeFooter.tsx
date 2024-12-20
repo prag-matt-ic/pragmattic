@@ -21,11 +21,21 @@ const HomeFooter: FC = () => {
       I&apos;ve spent the last decade designing and building web and mobile apps.
       <br />
       <br />
-      I&apos;m currently leading development efforts at Associo as CTO. We&apos;re transforming how legal analysis is
-      prepared using structured data and AI.
+      I&apos;m currently leading development efforts at{' '}
+      <a href="https://associo.com" target="_blank" rel="noreferrer" className="text-cyan underline underline-offset-2">
+        Associo
+      </a>{' '}
+      as CTO. We&apos;re transforming how legal analysis is prepared using structured data and AI.
       <br />
-      <br />I also co-run a development team over at Loopspeed: We help startups and agencies launch exciting digital
-      products.
+      <br />I also co-run a development team over at{' '}
+      <a
+        href="https://loopspeed.co.uk"
+        target="_blank"
+        rel="noreferrer"
+        className="text-green underline underline-offset-2">
+        Loopspeed
+      </a>
+      , where we help startups and agencies design and build exciting digital products.
     </>
   )
 
