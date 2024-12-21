@@ -1,10 +1,7 @@
 'use client'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React, { type FC, useRef } from 'react'
-
-gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const HomeHeader: FC = () => {
   const container = useRef<HTMLDivElement>(null)

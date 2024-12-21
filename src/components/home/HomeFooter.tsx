@@ -43,21 +43,45 @@ const HomeFooter: FC = () => {
     () => {
       const pSplit = new SplitText('#bio', { type: 'lines,words', wordsClass: 'opacity-0 blur-sm' })
 
-      gsap.to(pSplit.words, {
-        keyframes: [
-          { opacity: 0.6, filter: 'blur(4px)' },
-          { opacity: 1, filter: 'blur(0px)' },
-        ],
-        duration: 0.5,
-        stagger: 0.05,
-        ease: 'power1.out',
-        scrollTrigger: {
-          trigger: aboutSection.current,
-          start: 'top 90%',
-          end: 'center center',
-          scrub: 2,
-        },
-      })
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: aboutSection.current,
+            start: 'top 90%',
+            end: 'center center',
+            scrub: 2.5,
+          },
+        })
+        .to(pSplit.words, {
+          keyframes: [
+            { opacity: 0.6, filter: 'blur(4px)', ease: 'power1.out' },
+            { opacity: 1, filter: 'blur(0px)', ease: 'power1.out' },
+          ],
+          duration: 0.6,
+          delay: 1,
+          stagger: 0.06,
+          ease: 'none',
+        })
+        .fromTo(
+          '#profile-pic',
+          {
+            scale: 1.1,
+          },
+          {
+            scale: 1,
+            duration: 3.8,
+            ease: 'power1.out',
+          },
+          0,
+        )
+        .fromTo(
+          '#profile-pic-bg',
+          {
+            scale: 0,
+          },
+          { scale: 1, duration: 3.8, ease: 'power1.in' },
+          0,
+        )
     },
     {
       dependencies: [],
@@ -66,15 +90,26 @@ const HomeFooter: FC = () => {
   )
 
   return (
-    <div id="home-footer" className="relative grid w-full grid-cols-1 grid-rows-[1fr_auto_auto] gap-4 pt-16 md:h-lvh">
+    <div
+      id="home-footer"
+      className="relative grid w-full grid-cols-1 grid-rows-[1fr_auto_auto] place-items-center gap-4 pt-16 md:h-lvh">
       {/* About Section */}
-      <section className="flex flex-col items-center justify-center gap-4 horizontal-padding md:flex-row md:gap-8">
+      <section
+        ref={aboutSection}
+        className="flex flex-col items-center justify-center gap-4 horizontal-padding md:flex-row md:gap-8">
         <div className="relative flex aspect-square size-fit w-3/4 items-center justify-center md:w-auto">
-          <div className="absolute size-4/5 rounded-full bg-light/20 backdrop-blur-sm" />
-          <Image src={profilePic} alt="Matthew Frawley" width={400} height={400} className="relative object-contain" />
+          <div id="profile-pic-bg" className="absolute size-4/5 rounded-full bg-light/20 backdrop-blur-sm" />
+          <Image
+            id="profile-pic"
+            src={profilePic}
+            alt="Matthew Frawley"
+            width={400}
+            height={400}
+            className="relative object-contain"
+          />
         </div>
         {/* Bio */}
-        <div ref={aboutSection} className="h-fit max-w-lg space-y-4 sm:space-y-6">
+        <div className="h-fit max-w-lg space-y-4 sm:space-y-6">
           <h3 className="text-xl font-bold md:text-3xl">
             Hi, I&apos;m <span className="text-green">Matt</span>
           </h3>
