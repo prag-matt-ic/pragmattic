@@ -1,6 +1,6 @@
 'use client'
 import { useGSAP } from '@gsap/react'
-import { PerformanceMonitor, type PerformanceMonitorApi } from '@react-three/drei'
+import { PerformanceMonitor, type PerformanceMonitorApi, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
@@ -45,6 +45,7 @@ const HomeCanvas: FC<Props> = ({ isMobile }) => {
         onFallback={onPerformanceDecline}
         flipflops={4}
       />
+      {/* <Stats /> */}
       <ambientLight intensity={1} />
       {!isMobile && <PointerCamera cameraProps={{ far: 20, position: [0, 0, 5] }} intensity={0.04} />}
       <HomeBackgroundPlane />

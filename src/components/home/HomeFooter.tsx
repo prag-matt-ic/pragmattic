@@ -32,7 +32,7 @@ const HomeFooter: FC = () => {
         href="https://loopspeed.co.uk"
         target="_blank"
         rel="noreferrer"
-        className="text-green underline underline-offset-2">
+        className="text-cyan underline underline-offset-2">
         Loopspeed
       </a>
       , where we help startups and agencies design and build exciting digital products.

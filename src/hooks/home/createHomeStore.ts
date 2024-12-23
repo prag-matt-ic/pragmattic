@@ -84,13 +84,13 @@ export const createHomeStore = (isMobile: boolean) => {
       start: 'top bottom',
       end: 'max',
       scrub: true,
-      onUpdate: ({ progress, isActive }) => {
+      onUpdate: ({ progress }) => {
         initialValues.outroScrollProgress.value = progress
       },
     })
   }, 300) // Delay for footer to mount
 
-  const rotateFast = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 5, duration: 2 })
+  const rotateFast = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 6, duration: 2 })
   const rotateNormal = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 1, duration: 0.5 })
 
   const activate = (progressValue: { value: number }) =>

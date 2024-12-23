@@ -1,6 +1,5 @@
 // Torus Points Vertex shader
-#pragma glslify: easeElastic = require('glsl-easings/elastic-out')  
-
+#pragma glslify: easeElastic = require('glsl-easings/elastic-out')
 #pragma glslify: rotateTorus = require('../rotateTorus.glsl')
 #pragma glslify: noiseTorus = require('../noise.glsl')
 
@@ -12,25 +11,13 @@ uniform float uRotateAngle;
 uniform float uIntroScrollProgress;
 uniform float uOutroScrollProgress;
 uniform float uActiveProgress;
-// varying vec3 vViewPosition;
 
-const float INTRO_DURATION = 3.0;
-const vec3 INTRO_POSITION = vec3(0.0, 0.0, 3.0);
-const float MIN_PT_SIZE = 4.0;
-const float MAX_PT_SIZE = 64.0;
+const float MIN_PT_SIZE = 64.0;
+const float MAX_PT_SIZE = 160.0;
 
 void main() {
-    // If the time is less than the intro duration, then mix between INTRO_POSITION and scatteredPosition
-    float introProgress = smoothstep(0.0, INTRO_DURATION, uTime);
-    introProgress = easeElastic(introProgress);
-
-    vec3 introPosition = mix(INTRO_POSITION, scatteredPosition, introProgress);
-
-    // vec3 particlePosition =introPosition;
-    vec3 particlePosition = mix(introPosition, inactivePosition, uIntroScrollProgress);
-
+    vec3 particlePosition = mix(scatteredPosition, inactivePosition, uIntroScrollProgress);
     particlePosition = mix(particlePosition, scatteredPosition, uOutroScrollProgress);
-
     particlePosition = mix(particlePosition, position, uActiveProgress);
 
     particlePosition = rotateTorus(particlePosition, uRotateAngle);

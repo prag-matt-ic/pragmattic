@@ -29,10 +29,7 @@ const Nav: FC = () => {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="outlined"
-            size="small"
-            href="mailto:pragmattic.ltd@gmail.com&subject=Let's%20work%20together">
+          <Button variant="filled" size="small" href="mailto:pragmattic.ltd@gmail.com&subject=Let's%20work%20together">
             Work together
           </Button>
 
@@ -47,3 +44,9 @@ const Nav: FC = () => {
 }
 
 export default Nav
+
+// const WorkTogetherFloatingMenu: FC = () => {
+//   return <div></div>
+// }
+
+// href="mailto:pragmattic.ltd@gmail.com&subject=Let's%20work%20together"

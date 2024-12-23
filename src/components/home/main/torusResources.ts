@@ -55,7 +55,7 @@ function getTorusParticlePositions({
       )
 
       // Create random positions around a sphere
-      const distance = 2.0
+      const distance = 3
       const theta = MathUtils.randFloatSpread(360)
       const phi = MathUtils.randFloatSpread(360)
       scatteredPositions.push(
@@ -77,27 +77,27 @@ const TORUS_POINTS_POSITIONS: Record<SceneSection, ReturnType<typeof getTorusPar
   [SceneSection.Purpose]: getTorusParticlePositions({
     radius: PURPOSE_TORUS_RADIUS,
     tube: PURPOSE_TORUS_TUBE,
-    radialSegments: 8,
-    tubularSegments: 32,
+    radialSegments: 6,
+    tubularSegments: 16,
   }),
   [SceneSection.Design]: getTorusParticlePositions({
     radius: DESIGN_TORUS_RADIUS,
     tube: DESIGN_TORUS_TUBE,
-    radialSegments: 8,
-    tubularSegments: 32 * 2,
+    radialSegments: 6,
+    tubularSegments: 16 * 2,
   }),
   [SceneSection.Engineering]: getTorusParticlePositions({
     radius: ENGINEERING_TORUS_RADIUS,
     tube: ENGINEERING_TORUS_TUBE,
-    radialSegments: 8,
-    tubularSegments: 32 * 3,
+    radialSegments: 6,
+    tubularSegments: 16 * 3,
   }),
 } as const
 
 const ROTATE_DURATION: Record<SceneSection, number> = {
-  [SceneSection.Purpose]: 30,
-  [SceneSection.Design]: 40,
-  [SceneSection.Engineering]: 50,
+  [SceneSection.Purpose]: 40,
+  [SceneSection.Design]: 50,
+  [SceneSection.Engineering]: 60,
 } as const
 
 export { TORUS_POINTS_POSITIONS as POINTS_POSITIONS, ROTATE_DURATION, TORUS_ARGS }
