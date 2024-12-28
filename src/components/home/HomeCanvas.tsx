@@ -8,8 +8,9 @@ import SplitText from 'gsap/dist/SplitText'
 import React, { type FC, useState } from 'react'
 
 import HomeBackgroundPlane from '@/components/home/background/HomeBackgroundPlane'
-import HomeMain from '@/components/home/main/HomeMain'
+import FloatingInfos from '@/components/home/floatingInfo/FloatingInfos'
 import PointsPlane from '@/components/home/main/points/Points'
+import TorusSections from '@/components/home/main/TorusSections'
 import PointerCamera from '@/components/PointerCamera'
 
 gsap.registerPlugin(useGSAP, SplitText, ScrollTrigger)
@@ -50,7 +51,8 @@ const HomeCanvas: FC<Props> = ({ isMobile }) => {
       {!isMobile && <PointerCamera cameraProps={{ far: 20, position: [0, 0, 5] }} intensity={0.04} />}
       <HomeBackgroundPlane />
       <PointsPlane isMobile={isMobile} />
-      <HomeMain isMobile={isMobile} />
+      <TorusSections isMobile={isMobile} />
+      <FloatingInfos isMobile={isMobile} />
     </Canvas>
   )
 }

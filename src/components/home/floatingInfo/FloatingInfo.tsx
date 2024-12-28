@@ -134,20 +134,20 @@ const CONFIG: Record<
     position: [-1.2, 0.6, 1],
     overlineClassName: 'text-green',
     heading: 'Use technology to improve human performance',
-    paragraph: `Purpose fuels progress. That's why it's at the core of everything we create together. What's the mission?`,
+    paragraph: `Purpose fuels progress. That's why it's at the core of everything we do together.`,
   },
   [SceneSection.Design]: {
     position: [-1.4, -0.2, 2],
     overlineClassName: 'text-orange',
     heading: 'Where form meets function',
     paragraph:
-      'By deeply understanding the problem and any constraints, we can design solutions that are both effective and delightful for your audience.',
+      'By deeply understanding the problem and any constraints, we can architect solutions that are both effective and delightful.',
   },
   [SceneSection.Engineering]: {
     position: [-1.2, -1.2, 1],
     overlineClassName: 'text-cyan',
     heading: 'From concept to impact',
-    paragraph: 'Bring your vision to life with cutting-edge web solutions. Fast, secure, and built to maintain.',
+    paragraph: 'Bring your vision to life with cutting-edge web and AI solutions. Fast, secure, and built to maintain.',
   },
 } as const
 

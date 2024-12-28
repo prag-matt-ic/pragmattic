@@ -2,6 +2,8 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
+import SplitText from 'gsap/dist/SplitText'
+import TextPlugin from 'gsap/dist/TextPlugin'
 import { type FC, type PropsWithChildren, useContext, useRef } from 'react'
 import { createContext } from 'react'
 import { useStore } from 'zustand'
@@ -14,7 +16,7 @@ type Props = PropsWithChildren<{
   isMobile: boolean
 }>
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
+gsap.registerPlugin(ScrollTrigger, SplitText, TextPlugin, useGSAP)
 
 export const HomeProvider: FC<Props> = ({ children, isMobile }) => {
   const store = useRef(createHomeStore(isMobile))

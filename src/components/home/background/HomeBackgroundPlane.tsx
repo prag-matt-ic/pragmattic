@@ -35,7 +35,6 @@ extend({ HomeBackgroundShaderMaterial })
 const HomeBackgroundPlane: FC = () => {
   const { viewport } = useThree()
   const shader = useRef<ShaderMaterial & Partial<Uniforms>>(null)
-  // const activeSection = useHomeSceneStore((state) => state.activeSection)
 
   useFrame(({ clock }) => {
     if (!shader.current) return
