@@ -4,14 +4,15 @@
 uniform float uTime;
 uniform float uAspect;
 uniform vec2 uPointer; // NDC coordinates of the mouse pointer
+uniform float uScrollProgress;
 
 varying vec2 vUv;
 
-#define FOV 50.0
+#define FOV 100.0
 #define PI 3.14159265359
-#define MAX_ITERATIONS 90
-#define MIN_DISTANCE 0.01
-#define MAX_DISTANCE 50.0
+#define MAX_ITERATIONS 80
+#define MIN_DISTANCE 0.001
+#define MAX_DISTANCE 60.0
 
 #define SHADOWS 0
 
@@ -48,7 +49,7 @@ DistColour getBoxDistColour(in vec3 p, in bool calcColour) {
 
     vec3 b = vec3(0.25); // Size of the largest box
 
-    vec3 offsetP = vec3(p.x, p.y, p.z - uTime * 3.0); // Move the box in z
+    vec3 offsetP = vec3(p.x, p.y, p.z - uScrollProgress * 100.0); // Move the box in z
     vec3 boxP = mod(offsetP, GRID) - GRID / 2.0; // Center the fractal
     boxP.xz *= rot2D(-uTime - p.y);     // rotate the box 
 
@@ -162,7 +163,7 @@ float getLight(in vec3 p, in vec3 lightPos, in float intensity) {
     dif *= attenuation * intensity;
 
     // Add ambient lighting (baseline illumination)
-    float ambient = 0.05; // Ambient light intensity
+    float ambient = 0.1; // Ambient light intensity
     float lightContribution = dif + ambient;
 
     // Specular highlights (Blinn-Phong model)
@@ -194,7 +195,7 @@ void main() {
   
   vec3 rd = normalize(vec3(uv.x, uv.y, 1.0));
   // Rotate the ray using a sine function
-  // rd.xy *= rot2D(uTime * 0.6);
+  rd.xy *= rot2D(uScrollProgress * 16.0);
   // rd.x += rayNoise;
 
   vec3 colour = vec3(0.0); // Initialize the color
@@ -204,7 +205,7 @@ void main() {
 
   vec3 p = ro + rd * td; // Intersection point
 
-  vec3 lightPos = vec3(0.0, 0.0, (sin(uTime) * 0.5 + 0.5) * 30.0);
+  vec3 lightPos = vec3(0.0, 0.0, (sin(uTime) * 0.5 + 0.5) * 24.0 - 1.0);
   float lightIntensity = 12.0;
   float light = getLight(p, lightPos, lightIntensity);
 
