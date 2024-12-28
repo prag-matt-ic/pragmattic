@@ -9,7 +9,7 @@ varying vec2 vUv;
 
 #define FOV 50.0
 #define PI 3.14159265359
-#define MAX_ITERATIONS 80
+#define MAX_ITERATIONS 40
 #define MIN_DISTANCE 0.001
 #define MAX_DISTANCE 20.00
 

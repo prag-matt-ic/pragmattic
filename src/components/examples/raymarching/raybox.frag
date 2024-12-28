@@ -8,14 +8,13 @@ uniform float uScrollProgress;
 
 varying vec2 vUv;
 
-#define FOV 100.0
+#define FOV 80.0
 #define PI 3.14159265359
 #define MAX_ITERATIONS 80
 #define MIN_DISTANCE 0.001
 #define MAX_DISTANCE 60.0
 
 #define SHADOWS 0
-
 #define GRID 2.0
 
 const float FOV_MULTIPLIER = tan(PI * 0.5 * FOV / 180.0); // Convert FOV to radians

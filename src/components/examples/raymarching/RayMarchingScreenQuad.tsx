@@ -26,9 +26,9 @@ const INITIAL_UNIFORMS: Uniforms = {
   uScrollProgress: 0,
 }
 
-const RMScreenQuad = shaderMaterial(INITIAL_UNIFORMS, vertexShader, rayMarchingFragment)
+const RayMarchingShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, rayMarchingFragment)
 
-extend({ RMScreenQuad })
+extend({ RayMarchingShaderMaterial })
 
 const RayMarchingScreenQuadShader: FC = () => {
   const { viewport } = useThree()
@@ -44,7 +44,7 @@ const RayMarchingScreenQuadShader: FC = () => {
       onUpdate: ({ progress }) => {
         scrollProgress.current = progress
         if (progress === 1) {
-          // Reset scroll to 0 when scrubbing ends
+          // Loop the scroll
           scrollProgress.current = 0
           scrollLoopCount.current += 1
           window.scrollTo(0, 0)
@@ -62,8 +62,8 @@ const RayMarchingScreenQuadShader: FC = () => {
 
   return (
     <ScreenQuad>
-      <rMScreenQuad
-        key={RMScreenQuad.key}
+      <rayMarchingShaderMaterial
+        key={RayMarchingShaderMaterial.key}
         ref={shader}
         // Uniforms
         uTime={0}
@@ -80,7 +80,7 @@ export default RayMarchingScreenQuadShader
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      rMScreenQuad: ShaderMaterialProps & Uniforms
+      rayMarchingShaderMaterial: ShaderMaterialProps & Uniforms
     }
   }
 }
