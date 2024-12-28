@@ -28,7 +28,7 @@ const FloatingInfo: FC<Props> = ({ isMobile, section }) => {
   const { refs, floatingStyles } = useFloating({
     open: isOpen,
     placement: 'top',
-    middleware: [shift({ padding: 80 }), offset({ mainAxis: 0 }), flip()],
+    middleware: [shift({ padding: isMobile ? 0 : 72 }), offset({ mainAxis: 0 }), flip()],
   })
 
   const onModalEnter = contextSafe(() => {
