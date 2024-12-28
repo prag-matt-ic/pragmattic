@@ -20,7 +20,6 @@ varying vec2 vUv;
 
 const float FOV_MULTIPLIER = tan(PI * 0.5 * FOV / 180.0); // Convert FOV to radians
 
-
 // Smooth minimum function
 // Note: K can be animated to adjust the merge intensity of the two shapes
 float smin(in float a, in float b, in float k) {

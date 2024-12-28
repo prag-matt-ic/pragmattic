@@ -4,7 +4,6 @@ import { OrthographicCamera, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
-import { Leva } from 'leva'
 import React from 'react'
 
 import RayMarchingScreenQuadShader from '@/components/examples/raymarching/RayMarchingScreenQuad'
