@@ -18,7 +18,7 @@ export default function RayMarchingPage() {
     <main className="h-[1000vh] w-full font-sans">
       <Canvas
         className="!fixed inset-0"
-        dpr={1.5}
+        dpr={1}
         gl={{
           alpha: false,
           antialias: false,
