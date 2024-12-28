@@ -68,11 +68,11 @@ export const EXAMPLES: Record<ExamplePathname, Example> = {
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic-tutorials/blob/main/src/components/Marquee.tsx',
   },
   [ExamplePathname.WavePlane]: {
-    title: 'Wave Plane',
+    title: 'ThreeJS Wave Plane',
     pathname: ExamplePathname.WavePlane,
   },
   [ExamplePathname.RayMarching]: {
-    title: 'Ray Marching',
+    title: 'GLSL Ray Marching with infinite scroll',
     pathname: ExamplePathname.RayMarching,
   },
   [ExamplePathname.StripeHeader]: {

@@ -9,7 +9,7 @@
 #define TORUS_POS vec3(0.0, 0.0, 1.5)
 #define LIGHT_POS vec3(0.5, -0.5, 0.0)
 
-#define ALPHA 0.8 // points fade in when inactive (normal state)
+#define ALPHA 0.7 // points fade in when inactive (normal state)
 #define ACTIVE_ALPHA 0.0 // points fade out when active
 #define OUTRO_ALPHA 0.2 // points fade out when outro is triggered
 

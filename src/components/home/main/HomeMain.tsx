@@ -46,6 +46,7 @@ const HomeMain: FC<Props> = ({ isMobile }) => {
         <Torus section={SceneSection.Engineering} />
         <TorusPoints section={SceneSection.Engineering} />
       </group>
+      {/* TODO: move to new component */}
       <group>
         <FloatingInfo section={SceneSection.Purpose} isMobile={isMobile} />
         <FloatingInfo section={SceneSection.Design} isMobile={isMobile} />

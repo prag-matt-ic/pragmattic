@@ -12,9 +12,9 @@ const ENGINEERING_TORUS_RADIUS = 1.2 as const
 const ENGINEERING_TORUS_TUBE = 0.08 as const
 
 const TORUS_ARGS: Record<SceneSection, [number, number, number, number]> = {
-  [SceneSection.Purpose]: [PURPOSE_TORUS_RADIUS, PURPOSE_TORUS_TUBE, 10, 32],
-  [SceneSection.Design]: [DESIGN_TORUS_RADIUS, DESIGN_TORUS_TUBE, 10, 32 * 2],
-  [SceneSection.Engineering]: [ENGINEERING_TORUS_RADIUS, ENGINEERING_TORUS_TUBE, 10, 32 * 3],
+  [SceneSection.Purpose]: [PURPOSE_TORUS_RADIUS, PURPOSE_TORUS_TUBE, 8, 32],
+  [SceneSection.Design]: [DESIGN_TORUS_RADIUS, DESIGN_TORUS_TUBE, 8, 32 * 2],
+  [SceneSection.Engineering]: [ENGINEERING_TORUS_RADIUS, ENGINEERING_TORUS_TUBE, 8, 32 * 3],
 }
 
 function getTorusParticlePositions({

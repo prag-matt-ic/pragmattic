@@ -47,7 +47,7 @@ DistColour getBoxDistColour(in vec3 p, in bool calcColour) {
 
     vec3 b = vec3(0.25); // Size of the largest box
 
-    vec3 offsetP = vec3(p.x, p.y, p.z - uScrollProgress * 100.0); // Move the box in z
+    vec3 offsetP = vec3(p.x, p.y, p.z - uScrollProgress * 80.0); // Move the box in z
     vec3 boxP = mod(offsetP, GRID) - GRID / 2.0; // Center the fractal
     boxP.xz *= rot2D(-uTime - p.y);     // rotate the box 
 
@@ -57,7 +57,7 @@ DistColour getBoxDistColour(in vec3 p, in bool calcColour) {
     if (calcColour) {
       // Colour each box differently
       // Determine the grid coordinates (static position snapped to grid)
-      vec3 gridPosition = floor(offsetP / GRID); // Adjust grid size as needed
+      vec3 gridPosition = floor(offsetP / GRID);
 
       // Map grid coordinates to unique colors
        colour = vec3(
@@ -67,7 +67,6 @@ DistColour getBoxDistColour(in vec3 p, in bool calcColour) {
       );
     }
 
-    // Return both distance and color
     DistColour result;
     result.dist = d;
     result.colour = colour;
@@ -77,12 +76,11 @@ DistColour getBoxDistColour(in vec3 p, in bool calcColour) {
 
 // Map function for the scene
 DistColour getDistanceAndColor(in vec3 p) {
-    DistColour res = getBoxDistColour(p, true);
-    return res;
+  return getBoxDistColour(p, true);
 }
 
 float getDistance(in vec3 p) {
-    return getBoxDistColour(p, false).dist;
+  return getBoxDistColour(p, false).dist;
 }
 
 
@@ -117,7 +115,7 @@ float rayMarch(in vec3 ro, in vec3 rd, inout vec3 colour) {
 
 
 float softShadow(in vec3 ro, in vec3 rd, float mint, float maxt, float w) {
-    // w influences how quickly the shadow factor drops off
+    // W influences how quickly the shadow factor drops off
     float res = 1.0;
     float t = mint;
     for (int i=0; i< 128 && t < maxt; i++) {
@@ -173,14 +171,14 @@ float getLight(in vec3 p, in vec3 lightPos, in float intensity) {
     spec *= s * attenuation * intensity;
 
     // Combine diffuse, ambient, and specular contributions
-    lightContribution += spec * 4.0; // Scale specular for balance
+    lightContribution += spec * 2.0; // Scale specular for balance
 
     return lightContribution;
 }
 
 
 void main() {
-  // Update UV coordinates to aspect ratio
+  // Normalize UV coordinates to [-1, 1]
   vec2 uv = vUv * 2.0 - 1.0;
   uv.x *= uAspect;
   uv *= FOV_MULTIPLIER;
@@ -203,8 +201,8 @@ void main() {
 
   vec3 p = ro + rd * td; // Intersection point
 
-  vec3 lightPos = vec3(0.0, 0.0, (sin(uTime) * 0.5 + 0.5) * 24.0 - 1.0);
-  float lightIntensity = 12.0;
+  vec3 lightPos = vec3(0.0, 0.0, (sin(uTime) * 0.5 + 0.5) * 40.0 - 2.0);
+  float lightIntensity = 16.0;
   float light = getLight(p, lightPos, lightIntensity);
 
   colour *= light; // Apply lighting

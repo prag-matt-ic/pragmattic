@@ -48,7 +48,7 @@ const HomeHeader: FC = () => {
         <h1 className="relative max-w-4xl text-4xl font-extrabold !leading-[1.3] tracking-tight md:text-6xl xl:text-7xl">
           Helping innovative teams <span className="text-green">bring big web ideas to life</span>
         </h1>
-        <h2 className="absolute max-w-4xl scale-110 text-balance text-4xl font-extrabold !leading-[1.3] tracking-tight opacity-0 md:text-6xl xl:text-7xl">
+        <h2 className="absolute max-w-4xl scale-110 text-balance p-4 text-4xl font-extrabold !leading-[1.3] tracking-tight opacity-0 md:text-6xl xl:text-7xl">
           with purposeful design and engineering
         </h2>
       </header>
