@@ -1,12 +1,14 @@
 // Points Fragment shader
 #pragma glslify: getRingAlpha = require('../ring.glsl')
 
-#define MAX_ITERATIONS 24
-#define MIN_DISTANCE 0.001
+#define MAX_ITERATIONS 20
+#define MIN_DISTANCE 0.01
 #define MAX_DISTANCE 5.00
+#define TORUS_POS vec3(0.0, 0.0, 1.5)
+#define LIGHT_POS vec3(0.5, -0.5, 0.0)
 
 varying vec3 vColour;
-varying vec3 vViewPosition;
+varying vec3 vPosition;
 
 uniform float uTime;
 
@@ -23,11 +25,10 @@ float sdTorus(in vec3 p, in vec2 t) {
   return length(q)-t.y;
 }
 
-// Main Map function for the scene (torus)
+// Map function for the scene (torus)
 float getDistance (in vec3 p) {
-    vec3 torusPos = vec3(0.0, 0.0, 1.5);
-    vec3 torusP = p - torusPos;
-    float rotation = 0.5 + uTime + pow(vViewPosition.y * vViewPosition.x, 2.0);
+    vec3 torusP = p - TORUS_POS;
+    float rotation = uTime + (vPosition.x * 33.);
     torusP.yz *= rot2D(rotation);
     float dTorus = sdTorus(torusP, vec2(0.5, 0.15));
     return dTorus;
@@ -55,8 +56,8 @@ vec3 getNormal(in vec3 p) {
   return normalize(n);
 }
 
-float getLight(in vec3 p, in vec3 lightPos) {
-  vec3 l = normalize(lightPos - p);
+float getLight(in vec3 p) {
+  vec3 l = normalize(LIGHT_POS - p);
   vec3 n = getNormal(p);
   float dif = clamp(dot(n, l), 0., 1.0);
 
@@ -68,19 +69,18 @@ float getLight(in vec3 p, in vec3 lightPos) {
 void main() {
   vec2 coord = gl_PointCoord - vec2(0.5);
 
-  // Ray marching to draw the torus
+  // Ray marching
   // Ray origin (camera position)
   vec3 ro = vec3(0.0, 0.0, 0.0);
   // Ray direction
   vec3 rd = normalize(vec3(coord, 1.0));
 
-  float td = rayMarch(ro, rd); // Total distance travelled
+  float td = rayMarch(ro, rd); // Total distance
   vec3 p = ro + rd * td; // Current point on the ray
 
-  vec3 lightPos = vec3(0.5, -0.5, 0.0);
-  float diffuse = getLight(p, lightPos);
+  float diffuse = getLight(p);
   vec3 colour = vColour * diffuse;
-  vec4 finalColour = vec4(colour, 1.0);
+  vec4 finalColour = vec4(colour, 0.8);
   
   gl_FragColor = finalColour;
 }

@@ -35,7 +35,7 @@ const RayMarchingScreenQuadShader: FC = () => {
   const shader = useRef<ShaderMaterial & Partial<Uniforms>>(null)
 
   const scrollProgress = useRef(0)
-  const scrollLoopCount = useRef(0)
+  const scrollLoopCount = useRef(0) // Ensures a smooth progress loop
 
   useGSAP(() => {
     ScrollTrigger.create({
