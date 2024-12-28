@@ -77,10 +77,9 @@ const RayMarchingScreenQuadShader: FC = () => {
 
 export default RayMarchingScreenQuadShader
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      rayMarchingShaderMaterial: ShaderMaterialProps & Uniforms
-    }
+// Add types to ThreeElements elements so primitives pick up on it
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    rayMarchingShaderMaterial: ShaderMaterialProps & Uniforms
   }
 }
