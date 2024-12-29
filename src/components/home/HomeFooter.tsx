@@ -35,7 +35,7 @@ const HomeFooter: FC = () => {
         className="text-cyan underline underline-offset-2">
         Loopspeed
       </a>
-      , where we help startups and agencies design and build exciting digital products.
+      , where we help creative agencies and startups develop exciting digital products.
     </>
   )
 

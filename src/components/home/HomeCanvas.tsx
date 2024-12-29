@@ -39,7 +39,14 @@ const HomeCanvas: FC<Props> = ({ isMobile }) => {
       gl={{
         antialias: false,
         powerPreference: 'high-performance',
-      }}>
+      }}
+      // TODO: custom performance implementation to scale the point sizes accordingly when the DPR is lowered
+      // performance={{
+      //   min: 0.4,
+      //   max: 1,
+      //   current: 1,
+      // }}
+    >
       <PerformanceMonitor
         onIncline={onPerformanceInline}
         onDecline={onPerformanceDecline}
