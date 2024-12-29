@@ -112,10 +112,10 @@ const HomeHeader: FC = () => {
         <h1 className="relative text-3xl font-extrabold tracking-tight md:text-6xl xl:text-7xl">
           Helping innovative teams
           <br />
-          <span className="relative inline-block h-24 w-full text-green md:h-40">
+          <span className="relative inline-block h-24 w-full text-green md:h-32">
             <span className="mission absolute inset-0 py-2">build interactive 3D experiences</span>
             <span className="mission absolute inset-0 py-2">streamline workflows using AI</span>
-            <span className="mission absolute inset-0 py-2">launch web applications</span>
+            <span className="mission absolute inset-0 py-2">launch web and mobile apps</span>
           </span>
         </h1>
         <h2 className="absolute max-w-4xl scale-110 text-balance p-4 text-4xl font-extrabold !leading-[1.3] tracking-tight opacity-0 md:text-6xl xl:text-7xl">
