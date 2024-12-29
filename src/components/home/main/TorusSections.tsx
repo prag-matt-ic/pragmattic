@@ -1,7 +1,5 @@
 'use client'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import React, { type FC, useRef } from 'react'
+import { type FC, useRef } from 'react'
 import { Group, PointLight } from 'three'
 
 import { SceneSection } from '@/resources/home'
@@ -16,23 +14,6 @@ type Props = {
 const TorusSections: FC<Props> = ({ isMobile }) => {
   const torusGroup = useRef<Group>(null)
   const pointLight = useRef<PointLight>(null)
-
-  useGSAP(
-    () => {
-      if (!torusGroup.current) return
-      gsap.to(torusGroup.current.position, {
-        z: 5,
-        ease: 'power1.out',
-        scrollTrigger: {
-          trigger: '#home-footer',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
-    },
-    { dependencies: [] },
-  )
 
   return (
     <group ref={torusGroup} position={isMobile ? [0, 0.5, 0] : [0, 0, 0]}>

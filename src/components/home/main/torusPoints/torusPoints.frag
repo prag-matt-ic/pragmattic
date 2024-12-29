@@ -11,7 +11,7 @@
 
 #define ALPHA 0.7 // points fade in when inactive (normal state)
 #define ACTIVE_ALPHA 0.0 // points fade out when active
-#define OUTRO_ALPHA 0.2 // points fade out when outro is triggered
+#define OUTRO_ALPHA 0.0 // points fade out when outro is triggered
 
 uniform float uTime;
 uniform float uActiveProgress;
