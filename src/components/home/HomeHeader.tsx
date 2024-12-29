@@ -60,13 +60,18 @@ const HomeHeader: FC = () => {
   useEffect(() => {
     if (!splitTexts) return
 
-    let timeout: NodeJS.Timeout
     let timeline: gsap.core.Timeline
+    let timeout: NodeJS.Timeout
 
     const cycleMissionText = () => {
       const newIndex = (currentMissionIndex.current + 1) % 3
       timeline = gsap
-        .timeline()
+        .timeline({
+          onComplete: () => {
+            currentMissionIndex.current = newIndex
+            timeout = setTimeout(cycleMissionText, 600)
+          },
+        })
         .to(splitTexts[currentMissionIndex.current].chars, {
           opacity: 0,
           filter: 'blur(4px)',
@@ -87,10 +92,6 @@ const HomeHeader: FC = () => {
             ],
             duration: 0.4,
             stagger: 0.05,
-            onComplete: () => {
-              currentMissionIndex.current = newIndex
-              timeout = setTimeout(cycleMissionText, 600)
-            },
           },
         )
     }
