@@ -2,7 +2,7 @@
 import { shaderMaterial } from '@react-three/drei'
 import { extend, type ShaderMaterialProps, useFrame } from '@react-three/fiber'
 import React, { type FC, useEffect, useMemo, useRef } from 'react'
-import { AdditiveBlending, BufferAttribute, MathUtils, ShaderMaterial } from 'three'
+import { AdditiveBlending, BufferAttribute, Color, MathUtils, ShaderMaterial } from 'three'
 
 import { useHomeStore } from '@/hooks/home/HomeProvider'
 import { POINT_VEC3, SceneSection, SECTION_COLOURS } from '@/resources/home'
@@ -37,7 +37,8 @@ const getColours = (count: number, activeSection: SceneSection | null): Float32A
 
   // Random value between 6 and 10 for the coloured particle
   const randomColourIndex = Math.floor(Math.random() * 6) + 4
-  const activeColour = activeSection ? SECTION_COLOURS[activeSection] : POINT_VEC3
+  const activeColour = new Color(activeSection ? SECTION_COLOURS[activeSection] : POINT_VEC3)
+  activeColour.convertLinearToSRGB()
 
   for (let i = 0; i < count; i++) {
     if (i % randomColourIndex === 0) {
