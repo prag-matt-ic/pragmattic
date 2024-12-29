@@ -22,7 +22,11 @@ const HomeFooter: FC = () => {
       <br />
       <br />
       I&apos;m currently leading development efforts at{' '}
-      <a href="https://associo.com" target="_blank" rel="noreferrer" className="text-cyan underline underline-offset-2">
+      <a
+        href="https://associo.com"
+        target="_blank"
+        rel="noreferrer"
+        className="text-cyan underline underline-offset-2 hover:text-orange">
         Associo
       </a>{' '}
       as CTO. We&apos;re transforming how legal analysis is prepared using structured data and AI.
@@ -32,7 +36,7 @@ const HomeFooter: FC = () => {
         href="https://loopspeed.co.uk"
         target="_blank"
         rel="noreferrer"
-        className="text-cyan underline underline-offset-2">
+        className="text-cyan underline underline-offset-2 hover:text-orange">
         Loopspeed
       </a>
       , where we help creative agencies and startups develop exciting digital products.
