@@ -36,7 +36,7 @@ const FloatingInfo: FC<Props> = ({ isMobile, section }) => {
     timeline.current?.kill()
 
     const splitHeading = new SplitText('h3', {
-      charsClass: 'opacity-0',
+      charsClass: 'opacity-0 blur-sm',
     })
 
     gsap.set(refs.floating.current, { opacity: 1 })
@@ -52,7 +52,10 @@ const FloatingInfo: FC<Props> = ({ isMobile, section }) => {
         splitHeading.chars,
         { opacity: 0 },
         {
-          opacity: 1,
+          keyframes: [
+            { opacity: 0.6, filter: 'blur(4px)', ease: 'power1.out' },
+            { opacity: 1, filter: 'blur(0px)', ease: 'power1.out' },
+          ],
           duration: 0.5,
           stagger: 0.016,
           ease: 'power2.out',

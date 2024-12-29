@@ -21,7 +21,7 @@ type Props = {
 
 const HomeCanvas: FC<Props> = ({ isMobile }) => {
   const [dpr, setDpr] = useState(1.4)
-  const minDpr = isMobile ? 0.6 : 0.8
+  const minDpr = isMobile ? 0.8 : 1
 
   const onPerformanceInline = (api: PerformanceMonitorApi) => {
     if (dpr < window.devicePixelRatio) setDpr((prev) => prev + 0.2)
