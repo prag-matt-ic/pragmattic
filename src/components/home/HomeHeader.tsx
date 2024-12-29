@@ -1,7 +1,7 @@
 'use client'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import { SplitText } from 'gsap/dist/SplitText'
+import SplitText from 'gsap/dist/SplitText'
 import React, { type FC, useEffect, useRef, useState } from 'react'
 
 const HomeHeader: FC = () => {
