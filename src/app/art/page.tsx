@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber'
 import { Leva } from 'leva'
 import React from 'react'
 
-import ArtShader from '@/components/examples/art/ArtShader'
+import ArtShader from '@/components/examples/art/alone/ArtShader'
 import ScrollDownArrow from '@/components/examples/ScrollDown'
 
 const SCREENS = 30
@@ -14,6 +14,7 @@ export default function ArtPage() {
     <main className="w-full font-sans" style={{ height: `${SCREENS * 100}vh` }}>
       <Canvas
         className="!fixed inset-0"
+        dpr={2}
         gl={{
           alpha: false,
           antialias: false,
