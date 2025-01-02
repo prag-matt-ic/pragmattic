@@ -8,8 +8,6 @@ import { Color, ShaderMaterial } from 'three'
 import vertexShader from './screen.vert'
 import fragmentShader from './timeboxx.frag'
 
-// Boilerplate for creating a screen quad shader - ideal for backgrounds, post-processing effects, etc.
-
 type Uniforms = {
   uTime: number
   uAspect: number
