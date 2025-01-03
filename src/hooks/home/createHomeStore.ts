@@ -69,16 +69,15 @@ export const createHomeStore = (isMobile: boolean) => {
     },
   }
 
-  ScrollTrigger.create({
-    start: 0,
-    end: 1000,
-    scrub: true,
-    onUpdate: ({ progress }) => {
-      initialValues.introScrollProgress.value = progress
-    },
-  })
-
   setTimeout(() => {
+    ScrollTrigger.create({
+      start: 0,
+      end: 1000,
+      scrub: true,
+      onUpdate: ({ progress }) => {
+        initialValues.introScrollProgress.value = progress
+      },
+    })
     ScrollTrigger.create({
       trigger: '#home-footer',
       start: 'top bottom',
@@ -88,7 +87,7 @@ export const createHomeStore = (isMobile: boolean) => {
         initialValues.outroScrollProgress.value = progress
       },
     })
-  }, 300) // Delay for footer to mount
+  }, 300) // Delay for elements to be rendered
 
   const rotateFast = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 6, duration: 2 })
   const rotateNormal = (rotateTween: GSAPTween) => gsap.to(rotateTween, { timeScale: 1, duration: 0.5 })
