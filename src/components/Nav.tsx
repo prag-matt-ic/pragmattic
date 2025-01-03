@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type FC, useState } from 'react'
+import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
 import logo from '@/assets/brand/pragmattic.svg'
@@ -12,15 +13,18 @@ import menuIcon from '@/assets/icons/menu.svg'
 import Button from '@/components/buttons/Button'
 import Menu from '@/components/Menu'
 
+import WorkTogether from './workTogether/WorkTogether'
+
 const Nav: FC = () => {
   const pathname = usePathname()
   const isRebuildPage = pathname.includes('rebuild')
   const [isMenuShowing, setIsMenuShowing] = useState(false)
+  const [isWorkTogetherShowing, setIsWorkTogetherShowing] = useState(false)
 
   useGSAP(() => {
     if (isRebuildPage) return
     gsap.to('#nav-bg', {
-      duration: 0.32,
+      duration: 0.3,
       opacity: 1,
       ease: 'power1.in',
       scrollTrigger: {
@@ -44,10 +48,7 @@ const Nav: FC = () => {
         </Link>
 
         <div className="relative flex items-center gap-2">
-          <Button variant="filled" size="small" href="mailto:pragmattic.ltd@gmail.com&subject=Let's%20work%20together">
-            Work together
-          </Button>
-
+          <WorkTogether />
           <button className="p-2" onClick={() => setIsMenuShowing((prev) => !prev)}>
             <Image src={menuIcon} alt="menu" width={32} height={32} />
           </button>
@@ -59,9 +60,5 @@ const Nav: FC = () => {
 }
 
 export default Nav
-
-// const WorkTogetherFloatingMenu: FC = () => {
-//   return <div></div>
-// }
 
 // href="mailto:pragmattic.ltd@gmail.com&subject=Let's%20work%20together"

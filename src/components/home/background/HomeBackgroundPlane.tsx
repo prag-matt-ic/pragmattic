@@ -55,10 +55,8 @@ const HomeBackgroundPlane: FC = () => {
 
 export default HomeBackgroundPlane
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      homeBackgroundShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
-    }
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    homeBackgroundShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
   }
 }

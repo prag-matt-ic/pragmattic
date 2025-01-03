@@ -1,74 +1,120 @@
 'use client'
-import { ContextMode } from 'glsl-canvas-js/dist/esm/context/context'
-import { Canvas, type ICanvasOptions } from 'glsl-canvas-js/dist/esm/glsl'
-import { type FC, useEffect, useRef } from 'react'
+import { useGSAP } from '@gsap/react'
+import { ScreenQuad, shaderMaterial } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { extend, ShaderMaterialProps } from '@react-three/fiber'
+import gsap from 'gsap'
+import { type FC, useRef } from 'react'
 import React from 'react'
+import { Color, ShaderMaterial } from 'three'
 
-import { CYAN_VEC3, GREEN_VEC3, LIGHT_VEC3, OFF_BLACK_VEC3, ORANGE_VEC3 } from '@/resources/colours'
+import { BLACK_VEC3, CYAN_VEC3, GREEN_VEC3, LIGHT_VEC3, OFF_BLACK_VEC3, ORANGE_VEC3 } from '@/resources/colours'
 
 import agencyFragment from './agency.frag'
 import developerFragment from './developer.frag'
 import startupFragment from './startup.frag'
+import vertexShader from './screen.vert'
 
-type Shader = 'agency' | 'startup' | 'developer'
+export type WorkTogetherShader = 'agency' | 'startup' | 'developer'
 
-const FRAGMENT_SHADERS: Record<Shader, string> = {
-  agency: agencyFragment,
-  startup: startupFragment,
-  developer: developerFragment,
+type Uniforms = {
+  uTime: number
+  uIsHovered: boolean
+  uActiveColour: Color
+  uLightColour: Color
+  uDarkColour: Color
 }
 
-// For syntax highlighting
-const glsl = (x: any) => x
+const AGENCY_UNIFORMS: Uniforms = {
+  uTime: 0,
+  uIsHovered: false,
+  uLightColour: LIGHT_VEC3,
+  uDarkColour: BLACK_VEC3,
+  uActiveColour: ORANGE_VEC3,
+}
+const STARTUP_UNIFORMS: Uniforms = {
+  uTime: 0,
+  uIsHovered: false,
+  uLightColour: LIGHT_VEC3,
+  uDarkColour: BLACK_VEC3,
+  uActiveColour: GREEN_VEC3,
+}
+const DEVELOPER_UNIFORMS: Uniforms = {
+  uTime: 0,
+  uIsHovered: false,
+  uLightColour: LIGHT_VEC3,
+  uDarkColour: BLACK_VEC3,
+  uActiveColour: CYAN_VEC3,
+}
 
-const vertexShader = glsl`#version 300 es
-  in vec4 a_position;
-  out vec2 v_uv;
-  void main() {
-    v_uv = a_position.xy;
-    gl_Position = a_position;
+const AgencyShaderMaterial = shaderMaterial(AGENCY_UNIFORMS, vertexShader, agencyFragment)
+const StartupShaderMaterial = shaderMaterial(STARTUP_UNIFORMS, vertexShader, startupFragment)
+const DeveloperShaderMaterial = shaderMaterial(DEVELOPER_UNIFORMS, vertexShader, developerFragment)
+
+extend({ AgencyShaderMaterial, StartupShaderMaterial, DeveloperShaderMaterial })
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    agencyShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
+    startupShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
+    developerShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
   }
-`
+}
 
 type Props = {
-  type: Shader
-  size: number
+  type: WorkTogetherShader
+  isHovered: boolean
 }
 
-const WorkTogetherCanvas: FC<Props> = ({ type, size }) => {
-  const canvas = useRef<HTMLCanvasElement>(null)
-  const glsl = useRef<Canvas | null>(null)
+export const WorkTogetherAnimation: FC<Props> = ({ type, isHovered }) => {
+  const material = useRef<ShaderMaterial & Uniforms>(null)
+  const time = useRef({ value: 0 }) // Time value for the shader - accelerates when hovered
 
-  useEffect(() => {
-    if (!canvas.current) return
-    // https://actarian.github.io/glsl-canvas/api/
-    const options: ICanvasOptions = {
-      vertexString: vertexShader,
-      fragmentString: FRAGMENT_SHADERS[type],
-      alpha: false,
-      depth: false,
-      antialias: true,
-      mode: ContextMode.Flat,
-    }
-    glsl.current = new Canvas(canvas.current, options)
-    glsl.current.setUniform('u_orange', ORANGE_VEC3.toArray())
-    glsl.current.setUniform('u_light', LIGHT_VEC3.toArray())
-    glsl.current.setUniform('u_black', OFF_BLACK_VEC3.toArray())
-    glsl.current.setUniform('u_green', GREEN_VEC3.toArray())
-    glsl.current.setUniform('u_cyan', CYAN_VEC3.toArray())
-  }, [canvas, type])
+  useGSAP(() => {
+    gsap.to(time.current, {
+      duration: isHovered ? 2500 : 10000,
+      value: 10000,
+      ease: 'none',
+    })
+  }, [isHovered])
+
+  useFrame(() => {
+    if (!material.current) return
+    material.current.uTime = time.current.value
+  })
 
   return (
-    <canvas
-      ref={canvas}
-      width={size}
-      height={size}
-      style={{
-        width: size,
-        height: size,
-      }}
-    />
+    <ScreenQuad>
+      {type === 'agency' && (
+        <agencyShaderMaterial
+          ref={material}
+          key={StartupShaderMaterial.key}
+          uTime={0}
+          uIsHovered={false}
+          transparent={false}
+          depthTest={false}
+        />
+      )}
+      {type === 'startup' && (
+        <startupShaderMaterial
+          ref={material}
+          key={StartupShaderMaterial.key}
+          uTime={0}
+          uIsHovered={false}
+          transparent={false}
+          depthTest={false}
+        />
+      )}
+      {type === 'developer' && (
+        <developerShaderMaterial
+          ref={material}
+          key={StartupShaderMaterial.key}
+          uTime={0}
+          uIsHovered={false}
+          transparent={false}
+          depthTest={false}
+        />
+      )}
+    </ScreenQuad>
   )
 }
-
-export default WorkTogetherCanvas
