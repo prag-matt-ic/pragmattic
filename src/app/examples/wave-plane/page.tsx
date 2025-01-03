@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 export default function WavePlaneExample() {
   return (
-    <main className="h-[2000vh] w-full">
+    <main className="h-[1000vh] w-full">
       <Canvas
         className="!fixed inset-0"
         gl={{
@@ -22,13 +22,13 @@ export default function WavePlaneExample() {
           powerPreference: 'high-performance',
         }}>
         <color attach="background" args={['#000']} />
-        <WavePlane screenHeights={20 - 1} />
+        <WavePlane screenHeights={10 - 1} />
         <PointerCamera />
       </Canvas>
 
       <ScrollDownArrow />
 
-      {/* Controls */}
+      {/* Control positioning */}
       <Leva titleBar={{ position: { x: -8, y: 64 } }} />
     </main>
   )

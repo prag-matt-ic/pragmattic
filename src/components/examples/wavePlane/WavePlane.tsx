@@ -15,7 +15,7 @@ import vertexShader from './wavePlane.vert'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-// Blog Post
+// Inspiration
 // https://blog.maximeheckel.com/posts/vaporwave-3d-scene-with-threejs/
 
 type Uniforms = {
@@ -46,26 +46,33 @@ const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
   const planeWidth = useMemo(() => Math.round(viewport.width + 2), [viewport.width])
   const planeHeight = useMemo(() => Math.round(viewport.height * 2), [viewport.height])
   const planeSize = useMemo(() => Math.max(planeWidth, planeHeight), [planeWidth, planeHeight])
-  const planeSegments = useMemo(() => planeSize * 32, [planeSize])
+  const planeSegments = useMemo(() => planeSize * 8, [planeSize])
 
   const shaderMaterial = useRef<ShaderMaterial & Uniforms>(null)
   const scrollProgress = useRef(0)
-
-  useFrame(({ clock }) => {
-    if (!shaderMaterial.current) return
-    shaderMaterial.current.uTime = clock.elapsedTime
-    shaderMaterial.current.uScrollOffset = scrollProgress.current * screenHeights
-  })
+  const scrollLoop = useRef(0)
 
   useGSAP(() => {
     ScrollTrigger.create({
       start: 0,
       end: 'max',
       onUpdate: ({ progress }) => {
+        if (progress === 1) {
+          scrollLoop.current += 1
+          scrollProgress.current = 0
+          window.scrollTo(0, 0)
+          return
+        }
         scrollProgress.current = progress
       },
     })
   }, [])
+
+  useFrame(({ clock }) => {
+    if (!shaderMaterial.current) return
+    shaderMaterial.current.uTime = clock.elapsedTime
+    shaderMaterial.current.uScrollOffset = (scrollProgress.current + scrollLoop.current) * screenHeights
+  })
 
   const { colourPalette, showGrid, gridSize } = useConfig()
 
@@ -75,8 +82,6 @@ const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
       <wavePlaneShaderMaterial
         ref={shaderMaterial}
         key={WavePlaneShaderMaterial.key}
-        depthTest={false}
-        transparent={false}
         uTime={0}
         uScrollOffset={0}
         uColourPalette={colourPalette}
@@ -103,22 +108,21 @@ function useConfig() {
       label: 'Grid Size',
       value: 16.0,
       step: 1,
-      min: 1,
-      max: 48,
+      min: 4,
+      max: 64,
     },
   })
 
-  const colourPaletteVec3 = COSINE_GRADIENTS[paletteKey as CosineGradientPreset].map((color) => new Vector3(...color))
-
-  return { colourPalette: colourPaletteVec3, showGrid, gridSize }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      wavePlaneShaderMaterial: ShaderMaterialProps & Uniforms
-    }
+  return {
+    colourPalette: COSINE_GRADIENTS[paletteKey as CosineGradientPreset].map((color) => new Vector3(...color)),
+    showGrid,
+    gridSize,
   }
 }
 
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    wavePlaneShaderMaterial: ShaderMaterialProps & Uniforms
+  }
+}
 export default WavePlane

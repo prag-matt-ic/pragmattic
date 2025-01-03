@@ -1,6 +1,5 @@
 // Torus Points Fragment shader
 #pragma glslify: noise = require('glsl-noise/simplex/3d')
-
 #pragma glslify: getRingAlpha = require('../ring.glsl')
 
 #define MAX_ITERATIONS 20

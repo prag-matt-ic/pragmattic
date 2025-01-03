@@ -48,6 +48,8 @@ DistColour getBoxDistColour(in vec3 p, in bool calcColour) {
     vec3 b = vec3(0.25); // Size of the largest box
 
     vec3 offsetP = vec3(p.x, p.y, p.z - uScrollProgress * 80.0); // Move the box in z
+
+    // TODO: reviw grid repetition logic
     vec3 boxP = mod(offsetP, GRID) - GRID / 2.0; // Center the fractal
     boxP.xz *= rot2D(-uTime - p.y);     // rotate the box 
 
