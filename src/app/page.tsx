@@ -4,6 +4,7 @@ import HomeCanvas from '@/components/home/HomeCanvas'
 import HomeFooter from '@/components/home/HomeFooter'
 import HomeHeader from '@/components/home/HomeHeader'
 import HomeScrollManager from '@/components/home/HomeScrollManager'
+import WorkTogetherCanvas from '@/components/workTogether/shaders/WorkTogetherCanvas'
 import { HomeProvider } from '@/hooks/home/HomeProvider'
 
 export default async function HomePage() {
@@ -13,7 +14,12 @@ export default async function HomePage() {
 
   return (
     <HomeProvider isMobile={isMobile}>
-      <main className="w-full overflow-x-hidden bg-black text-white">
+      <section className="flex gap-10 p-16">
+        <WorkTogetherCanvas type="agency" />
+        <WorkTogetherCanvas type="startup" />
+        <WorkTogetherCanvas type="developer" />
+      </section>
+      {/* <main className="w-full overflow-x-hidden bg-black text-white">
         <HomeCanvas isMobile={isMobile} />
         <HomeHeader />
         <div id="purpose-section" className={SECTION_CLASSES} />
@@ -22,7 +28,7 @@ export default async function HomePage() {
         <div className={SECTION_CLASSES} />
         <HomeFooter />
         <HomeScrollManager />
-      </main>
+      </main> */}
     </HomeProvider>
   )
 }
