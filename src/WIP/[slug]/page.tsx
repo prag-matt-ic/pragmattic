@@ -5,7 +5,7 @@ import React, { type ButtonHTMLAttributes, type FC, type PropsWithChildren } fro
 import Markdown from 'react-markdown'
 
 // TODO: USE MDX instead or markdown
-import BlogHeader from '@/components/blog/header/Header'
+import BlogHeader from '@/components/blog/blogHeader/BlogHeader'
 // import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
 // import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 // import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript'

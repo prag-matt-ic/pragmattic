@@ -15,8 +15,8 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   }>
 
 const SIZE_CLASSES: Record<Size, string> = {
-  small: 'py-2 px-4 text-sm',
-  medium: 'py-3 px- 6 text-base sm:px-8',
+  small: 'py-1.5 px-4 text-sm',
+  medium: 'py-2 px-6 text-base sm:px-8',
   large: 'py-4 px-10 text-lg',
 } as const
 

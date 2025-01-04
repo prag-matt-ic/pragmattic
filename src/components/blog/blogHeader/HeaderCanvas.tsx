@@ -34,6 +34,7 @@ const HeaderCanvas: FC = () => {
       gl={{
         alpha: false,
         antialias: false,
+        powerPreference: 'low-power',
       }}>
       <HeaderShader />
     </Canvas>

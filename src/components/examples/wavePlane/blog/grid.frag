@@ -1,6 +1,6 @@
 // Wave Plane Fragment shader
 uniform float uTime;
-uniform float uScrollProgress;
+uniform float uScrollOffset;
 uniform vec3 uColourPalette[4];
 uniform bool uShowGrid;
 uniform float uGridSize;
@@ -26,11 +26,11 @@ void main() {
   vec3 colour = cosineGradientColor(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
   vec4 finalColor = vec4(colour, 1.0);
 
+  // Draw the grid lines
   if (uShowGrid) {
     // horizontal lines
     float lineThickness = 0.001 * uGridSize;
-    float yOffset = uScrollProgress * 6.0; // Move the lines by adding the scroll offset
-    float linePosY = fract(vUv.y * uGridSize + yOffset);
+    float linePosY = fract(vUv.y * uGridSize);
     float lineAlphaY = 1.0 - step(lineThickness, linePosY);
     // vertical lines
     float linePosX = fract(vUv.x * uGridSize);

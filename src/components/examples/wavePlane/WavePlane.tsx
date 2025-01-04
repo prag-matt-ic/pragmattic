@@ -1,8 +1,7 @@
 'use client'
-// import { useTexture } from "@react-three/drei";
 import { useGSAP } from '@gsap/react'
 import { shaderMaterial } from '@react-three/drei'
-import { extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
 import { COSINE_GRADIENTS, type CosineGradientPreset } from '@thi.ng/color'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/src/ScrollTrigger'
@@ -10,17 +9,16 @@ import { useControls } from 'leva'
 import React, { type FC, useMemo, useRef } from 'react'
 import { ShaderMaterial, Vector3 } from 'three'
 
+import PointerCamera from '@/components/PointerCamera'
+
 import fragmentShader from './wavePlane.frag'
 import vertexShader from './wavePlane.vert'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-// Inspiration
-// https://blog.maximeheckel.com/posts/vaporwave-3d-scene-with-threejs/
-
 type Uniforms = {
   uTime: number
-  uScrollOffset: number
+  uScrollProgress: number
   uColourPalette: Vector3[]
   uShowGrid: boolean
   uGridSize: number
@@ -30,7 +28,7 @@ const DEFAULT_COLOUR_PALETTE: Vector3[] = COSINE_GRADIENTS['heat1'].map((color) 
 
 const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,
-  uScrollOffset: 0,
+  uScrollProgress: 0,
   uColourPalette: DEFAULT_COLOUR_PALETTE,
   uShowGrid: true,
   uGridSize: 16,
@@ -40,7 +38,21 @@ const WavePlaneShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, f
 
 extend({ WavePlaneShaderMaterial })
 
-const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    wavePlaneShaderMaterial: ShaderMaterialProps & Uniforms
+  }
+}
+
+type Props = {
+  screenHeights: number
+  loopScroll: boolean
+  colourPalette: Vector3[]
+  showGrid: boolean
+  gridSize: number
+}
+
+const WavePlane: FC<Props> = ({ screenHeights, loopScroll, showGrid, gridSize, colourPalette }) => {
   const viewport = useThree((s) => s.viewport)
 
   const planeWidth = useMemo(() => Math.round(viewport.width + 2), [viewport.width])
@@ -57,8 +69,8 @@ const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
       start: 0,
       end: 'max',
       onUpdate: ({ progress }) => {
-        if (progress === 1) {
-          scrollLoop.current += 1
+        if (loopScroll && progress === 1) {
+          scrollLoop.current++
           scrollProgress.current = 0
           window.scrollTo(0, 0)
           return
@@ -66,15 +78,13 @@ const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
         scrollProgress.current = progress
       },
     })
-  }, [])
+  }, [loopScroll])
 
   useFrame(({ clock }) => {
     if (!shaderMaterial.current) return
     shaderMaterial.current.uTime = clock.elapsedTime
-    shaderMaterial.current.uScrollOffset = (scrollProgress.current + scrollLoop.current) * screenHeights
+    shaderMaterial.current.uScrollProgress = (scrollProgress.current + scrollLoop.current) * screenHeights
   })
-
-  const { colourPalette, showGrid, gridSize } = useConfig()
 
   return (
     <mesh position={[0, -viewport.height / 2.5, -1]} rotation={[-0.5 * Math.PI, 0, 0]}>
@@ -83,7 +93,7 @@ const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
         ref={shaderMaterial}
         key={WavePlaneShaderMaterial.key}
         uTime={0}
-        uScrollOffset={0}
+        uScrollProgress={0}
         uColourPalette={colourPalette}
         uShowGrid={showGrid}
         uGridSize={gridSize}
@@ -92,8 +102,8 @@ const WavePlane: FC<{ screenHeights: number }> = ({ screenHeights }) => {
   )
 }
 
+// Config for the shader
 function useConfig() {
-  // Config for the shader
   const { paletteKey, showGrid, gridSize } = useControls({
     paletteKey: {
       label: 'Palette',
@@ -110,6 +120,7 @@ function useConfig() {
       step: 1,
       min: 4,
       max: 64,
+      render: (get) => !!get('showGrid'),
     },
   })
 
@@ -120,9 +131,49 @@ function useConfig() {
   }
 }
 
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    wavePlaneShaderMaterial: ShaderMaterialProps & Uniforms
-  }
+const WavePlaneWithControls: FC = () => {
+  const { colourPalette, showGrid, gridSize } = useConfig()
+  return (
+    <WavePlane
+      loopScroll={true}
+      screenHeights={9}
+      colourPalette={colourPalette}
+      showGrid={showGrid}
+      gridSize={gridSize}
+    />
+  )
 }
-export default WavePlane
+
+type CanvasProps = {
+  className?: string
+  withControls?: boolean
+}
+
+const WavePlaneCanvas: FC<CanvasProps> = ({ className, withControls }) => {
+  return (
+    <Canvas
+      className={className}
+      camera={{ position: [0, 0, 5], fov: 60, far: 20, near: 0.001 }}
+      gl={{
+        alpha: false,
+        antialias: false,
+        powerPreference: 'high-performance',
+      }}>
+      <color attach="background" args={['#000']} />
+      {withControls ? (
+        <WavePlaneWithControls />
+      ) : (
+        <WavePlane
+          screenHeights={12}
+          loopScroll={false}
+          showGrid={true}
+          gridSize={24}
+          colourPalette={DEFAULT_COLOUR_PALETTE}
+        />
+      )}
+      <PointerCamera />
+    </Canvas>
+  )
+}
+
+export default WavePlaneCanvas

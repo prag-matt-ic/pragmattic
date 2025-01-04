@@ -1,0 +1,555 @@
+import WavePlane from '../WavePlane'
+import { RotatedPlaneCanvas, BasicFragmentShaderPlaneCanvas, GradientFragmentShaderPlaneCanvas, GridLinesFragmentShaderPlaneCanvas } from './WavePlaneBlog'
+
+<section className='w-full relative h-[620px]'>
+  <WavePlane  />
+</section>
+
+## Pretty cool, right? 
+
+This project is a great way to learn about <b>custom ThreeJS shaders</b> and how to use them in a <b>Next.js Typescript app</b>.<br/>
+As a bonus we'll be adding some scroll based interaction using <b>GSAP ScrollTrigger</b> to make the plane move as you scroll.
+
+## Getting Started
+
+### Install the necessary dependencies
+
+```bash
+npm i @gsap/react @react-three/drei @react-three/fiber gsap @thi.ng/color glslify glslify-loader glsl-noise raw-loader
+```
+
+### Configure Typescript for GLSL shader imports
+
+Create a root <code>shader.d.ts</code> file to prevent Typescript from throwing errors when importing GLSL files. <br/>This declaration file informs Typescript that .frag, .vert and .glsl files should be treated like strings.
+
+```typescript
+declare module '*.frag' {
+  const value: string
+  export default value
+}
+
+declare module '*.vert' {
+  const value: string
+  export default value
+}
+
+declare module '*.glsl' {
+  const value: string
+  export default value
+}
+```
+
+
+### Configure Next.js for Vertex and Fragment Shaders
+
+We need to update our Next.js config file to handle importing GLSL files and applying glslify transformations.
+
+The [glslify package](https://github.com/glslify/glslify) allows us to import and export GLSL files in a modular way. With it we can import a noise function from the glsl-noise node module right inside our shaders.
+
+
+<code>next.config.mjs</code>
+```javascript
+/** @type {import('next').NextConfig} */
+
+const nextConfig = {
+  webpack: (config, options) => {
+    config.module.rules.push({
+      test: /\.(glsl|vs|fs|vert|frag)$/,
+      use: ['raw-loader', 'glslify', 'glslify-loader'],
+    })
+    return config
+  },
+}
+
+export default nextConfig
+```
+
+## React Three Fiber Canvas Setup
+
+The [Canvas](https://r3f.docs.pmnd.rs/api/canvas) is the root component for your React ThreeJS scene.
+
+```tsx
+
+import { type FC } from 'react'
+import { Canvas } from '@react-three/fiber'
+
+const WavePlaneCanvas: FC = () => {
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 60, far: 20, near: 0.001 }}
+      gl={{
+        alpha: false,
+        antialias: false,
+      }}>
+      <color attach="background" args={['#000']} />
+      {/* Your ThreeJS component(s) go here... */}
+      <WavePlane />
+
+      {/* <PointerCamera /> */}
+    </Canvas>
+  )
+}
+```
+
+
+## Building The WavePlane Component
+
+### Rotated Plane with Dynamic Size
+
+The Wave Plane component is essentially just a plane geometry rotated 90 degrees on the x-axis to form a floor surface.
+
+The width and height are set dynamically based on the viewport size. The viewport size is obtained via the <code>useThree</code> hook - which can only be called from inside the <code>Canvas</code> component.
+
+We need to ensure there are enough segments for the vertices to displace smoothly. So the number of segments is a multiple of the plane size. If we were to leave this value at 1, we wouldn't see any distortion. Increasing the number of plane segments gives us a smoother wave effect at the cost of performance.
+
+The values are memoized with React's <code>useMemo</code> to prevent unnecessary re-renders - they will only recalculate when the viewport size changes.
+
+<code>WavePlane.tsx</code>
+```tsx
+// Relevant Imports
+import { type FC, useRef, useMemo } from 'react'
+import { useThree } from '@react-three/fiber'
+
+// Basic Rotated Plane Component
+const WavePlane: FC<Props> = () => {
+  const viewport = useThree((s) => s.viewport)
+
+  const planeWidth = useMemo(() => Math.round(viewport.width + 2), [viewport.width])
+  const planeHeight = useMemo(() => Math.round(viewport.height * 2), [viewport.height])
+  const planeSize = useMemo(() => Math.max(planeWidth, planeHeight), [planeWidth, planeHeight])
+  const planeSegments = useMemo(() => planeSize * 8, [planeSize])
+
+  return (
+    <mesh position={[0, -viewport.height / 2.5, -1]} rotation={[-0.5 * Math.PI, 0, 0]}>
+      <planeGeometry args={[planeSize, planeSize, planeSegments, planeSegments]} />
+      <meshBasicMaterial color="blue" /> // We'll be adding our custom shader material here
+    </mesh>
+  )
+}
+
+```
+
+### Result
+
+<RotatedPlaneCanvas />
+ 
+## The Custom Shader Material
+
+Now we're ready to create our custom shader material.
+
+#### Uniforms
+Uniforms are variables passed into the shader from Javascript.
+As the name suggests, they are the same for each vertex or fragment in the shader.
+It's good practice to define your uniforms as a type to mitigate errors.
+
+#### Vertex Shader
+The vertex shader runs simaltaneously for each point on the plane.
+The vertex shader is responsible for transforming the vertices of the geometry. We'll use it to distort our plane to create the wave effect.
+
+#### Fragment Shader
+The fragment shader runs in parallel for each pixel on the plane.
+The fragment shader is responsible for determining the colour of the pixel. This will allow us to shade the plane based on the height of the wave.
+
+
+## The Vertex Shader
+
+### Boilerplate Vertex Shader for ThreeJS 
+
+The following is an annotated version of a basic vertex shader for ThreeJS.
+ 
+```glsl
+// Declare a varying variable to pass UV coordinates to the fragment shader
+varying vec2 vUv;
+
+void main() {
+    // Transform the vertex position from local (object) space to world space
+    // 'modelMatrix' is a built-in uniform matrix that applies the object's transformations
+    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+
+    // Transform the vertex position from world space to camera (view) space
+    // 'viewMatrix' is a built-in uniform matrix for the camera's transformation
+    vec4 viewPosition = viewMatrix * modelPosition;
+
+    // Transform the vertex position from camera space to clip space
+    // 'projectionMatrix' is a built-in uniform matrix that applies perspective or orthographic projection
+    vec4 projectedPosition = projectionMatrix * viewPosition;
+
+    // Pass the vertex's UV coordinates to the fragment shader
+    // 'uv' is a built-in attribute containing the UV coordinates of the vertex
+    vUv = uv;
+
+    // Set the final position of the vertex in clip space
+    // 'gl_Position' is a built-in variable that defines the position of the vertex
+    gl_Position = projectedPosition;
+}
+```
+<i>Note: If you are using a ScreenQuad instead of a Plane - like some of my other examples - there's a simpler shader which reduces the number of transformations needed.</i>
+
+
+### Transforming the vertices using a noise function
+
+In order to create the wave effect, we'll import a noise function to displace the vertices of the plane along the Z axis (remember it's rotated 90 degrees so Z appears up/down).
+
+#### Getting Noisey
+
+Noise functions generate random values based on a given input. They are invaluable for creating organic looking effects such as clouds and terrain.
+We'll be using the Simplex 3D noise function which accepts a vec3 (3D vector) as input. By inputting the current position, we'll get a different noise value depending where on the plane we are.
+
+<b>Vertex Shader</b> <code>wavePlane.vert</code>
+```glsl
+// Import the noise function from the glsl-noise node module
+#pragma glslify: noise = require('glsl-noise/simplex/3d')
+
+// Relevant uniforms
+uniform float uTime;
+uniform float uScrollProgress; // Used later
+
+// Varyings for passing information to the fragment shader
+varying vec2 vUv;
+varying float vTerrainHeight;
+
+
+void main() {
+    vec3 noiseInput = vec3(position.x / 4.0,( position.y / 4.0) + uScrollProgress, uTime * 0.2);
+    float n = noise(noiseInput);
+    n = n * 0.5 + 0.5; // Noise value is between -1 and 1, normalise to 0-1
+    
+    vec3 newPosition = position;
+    newPosition.z += n; // Add the noise value to the Z position to create the wave effect
+
+    vec4 modelPosition = modelMatrix * vec4(newPosition, 1.0);
+    vec4 viewPosition = viewMatrix * modelPosition;
+    vec4 projectedPosition = projectionMatrix * viewPosition;
+
+    // Pass terrain height and UV to the fragment shader
+    vTerrainHeight = n;
+    vUv = uv;
+
+    gl_Position = projectedPosition;
+}
+```
+
+#### Our vertex shader code is similar to the boilerplate with a few additions
+- We create a noise input vec3 (noiseInput) using the X and Y positions of the vertex and the time uniform (uTime). We dividing the X and Y positions to make the waves smaller. (Try changing that value!)
+- By adding uTime as the 3rd input vector we get a value that continously changes as the elapsed time increases
+- We generate the noise value (n) using the imported noise function
+- We normalise the noise value (-1 to 1) to between 0 and 1, as we only want to add to the Z position
+- We clone the incoming position and add the noise value to the Z
+- We use the new position (newPosition) instead to calculate the model, view and projected positions
+- We pass the terrain height (vTerrainHeight) to the fragment shader so it can be used for colouring
+
+
+## A Basic Fragment Shader
+
+All fragment shaders needs to output a vec4 colour value (rgba). As a minimal test for our vertex shader we can output a solid grey colour for now.
+
+<b>Fragment Shader</b> <code>wavePlane.frag</code>
+```glsl
+void main() { 
+  gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+}
+```
+
+
+## React Three Shader Material Setup
+
+The [shaderMaterial](https://drei.docs.pmnd.rs/shaders/shader-material) takes three inputs: initial uniforms, a vertex shader, and a fragment shader. 
+We now have our vertex shader written and a basic fragment shader to test that it's working.
+
+<code>WavePlane.tsx</code>
+```tsx
+// Relevant Imports
+import { shaderMaterial } from '@react-three/drei'
+import { Canvas, extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
+import { COSINE_GRADIENTS } from '@thi.ng/color'
+import { ShaderMaterial, Vector3 } from 'three'
+
+import fragmentShader from './wavePlane.frag'
+import vertexShader from './wavePlane.vert'
+
+type Uniforms = {
+  uTime: number
+  uScrollProgress: number
+  uColourPalette: Vector3[]
+  uShowGrid: boolean
+  uGridSize: number
+}
+
+const DEFAULT_COLOUR_PALETTE: Vector3[] = COSINE_GRADIENTS['heat1'].map((color) => new Vector3(...color))
+
+const INITIAL_UNIFORMS: Uniforms = {
+  uTime: 0,
+  uScrollProgress: 0,
+  uColourPalette: DEFAULT_COLOUR_PALETTE,
+  uShowGrid: true,
+  uGridSize: 16,
+}
+
+const WavePlaneShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
+
+extend({ WavePlaneShaderMaterial })
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    wavePlaneShaderMaterial: ShaderMaterialProps & Uniforms
+  }
+}
+
+// Now we can use our custom shader material in the WavePlane component:
+
+const WavePlane: FC<Props> = ({ screenHeights, loopScroll, showGrid, gridSize, colourPalette }) => {
+   const viewport = useThree((s) => s.viewport)
+
+  const planeWidth = useMemo(() => Math.round(viewport.width + 2), [viewport.width])
+  const planeHeight = useMemo(() => Math.round(viewport.height * 2), [viewport.height])
+  const planeSize = useMemo(() => Math.max(planeWidth, planeHeight), [planeWidth, planeHeight])
+  const planeSegments = useMemo(() => planeSize * 8, [planeSize])
+
+  const shaderMaterial = useRef<ShaderMaterial & Uniforms>(null)
+
+  useFrame(({ clock }) => {
+    if (!shaderMaterial.current) return
+    shaderMaterial.current.uTime = clock.elapsedTime
+  })
+
+  return (
+    <mesh position={[0, -viewport.height / 2.5, -1]} rotation={[-0.5 * Math.PI, 0, 0]}>
+      <planeGeometry args={[planeSize, planeSize, planeSegments, planeSegments]} />
+
+      // Our custom shader material
+      <wavePlaneShaderMaterial
+        ref={shaderMaterial}
+        key={WavePlaneShaderMaterial.key}
+        uTime={0}
+        // Default values for now
+        uScrollProgress={0}
+        uColourPalette={DEFAULT_COLOUR_PALETTE}
+        uShowGrid={true}
+        uGridSize={24}
+      />
+    </mesh>
+  )
+}
+```
+
+#### Summary
+- We've defined our Uniforms type and default values
+- We've created a shader material using the imported vertex and fragment shaders, and then made it available with the <code>extend</code> function
+- We've added our shader material to the global ThreeElements interface so it can be used in the JSX without error
+- We've replaced our basic material with the <code>wavePlaneShaderMaterial</code>
+- We've added a <b>ref</b> to the shader material with the correct types
+- We've added a <b>key</b> so that it will automatically update when our shader code is edited
+- We've added the <code>useFrame</code> hook to update the shader's time uniform each frame
+
+Now we can see that our once flat plane is being distorted by the noise function in the vertex shader:
+<BasicFragmentShaderPlaneCanvas />
+
+## Adding Gradient Colours to our Fragment Shader
+
+<em>Let's start to make it look more interesting!</em>
+
+### Colour Palette
+We're passing in a colour palette uniform (uColourPalette) which is an array of four vec3 colours. These presets are imported from the [@thi.ng/color](https://github.com/thi-ng/cgg) package in the React Component.
+We can use a cosine gradient function to interpolate between these colours based on the terrain height (vTerrainHeight). This will give us a smooth gradient that changes with the wave.
+
+### Fog Effect
+I think it's a good idea to mask the edges of the plane. In essence we're adding a soft circular fog.
+
+
+<b>Fragment Shader</b> <code>wavePlane.frag</code>
+```glsl
+uniform float uTime;
+uniform float uScrollProgress;
+uniform vec3 uColourPalette[4];
+uniform bool uShowGrid;
+uniform float uGridSize;
+
+// Received from the vertex shader
+varying vec2 vUv; 
+varying float vTerrainHeight; 
+
+// Constants
+const vec4 BG_COLOUR = vec4(0.0, 0.0, 0.0, 1.0);
+
+// Colour palette values taken from: http://dev.thi.ng/gradients/
+vec3 cosineGradientColor(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
+  return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
+}
+
+void main() {
+  // Colour the surface based on the height of the terrain
+  vec3 colour = cosineGradientColor(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
+  vec4 finalColor = vec4(colour, 1.0);
+
+  // Fade out towards the edges in a soft circular shape
+  float distanceToCenter = distance(vUv, vec2(0.5, 0.5));
+  float fogAmount = smoothstep(0.35, 0.5, distanceToCenter);
+
+  finalColor = mix(finalColor, BG_COLOUR, fogAmount);
+
+  gl_FragColor = finalColor;
+}
+```
+
+#### Summary
+- We're calculating the colour based on the vTerrainHeight varying and the uColourPalette uniform using a nifty cosine gradient function. This gives us a vec3 colour which is then converted to a vec4 with full alpha (finalColour).
+- We're calculating the distance of the current fragment's coordinates (vUv) to the center of the plane (0.5, 0.5)
+- We're using the [smoothstep](https://thebookofshaders.com/glossary/?search=smoothstep) function to create a soft circular fade out effect using the distance. Try changing the value from 0.35 to see how it affects the fade.
+- Finally we're [mixing](https://thebookofshaders.com/glossary/?search=mix) the gradient colour with solid black based on the fog amount. As fogAmount increases to 1, the colour will get closer to black.
+- Note: if you want the plane fade out entirely (instead of to black), you could just change the finalColour alpha. But remember to set the material's 'transparent' property to true or it will have no effect
+
+#### Now this is more like it!
+
+<GradientFragmentShaderPlaneCanvas />
+
+## Adding the Grid Lines
+
+The grid lines add a cool retro effect to the plane. 
+We can draw them by using the UV coordinate and the grid size uniform:
+
+<b>Fragment Shader</b> <code>wavePlane.frag</code>
+```glsl
+// ... As before ....
+
+float brightenValue(in float value) {
+   return clamp(value + 0.25, 0.0, 1.0);
+}
+
+void main() {
+  // Colour the surface based on the height of the terrain
+  vec3 colour = cosineGradientColor(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
+  vec4 finalColor = vec4(colour, 1.0);
+
+  // Draw the grid lines
+  if (uShowGrid) {
+    // horizontal lines
+    float lineThickness = 0.001 * uGridSize;
+    float linePosY = fract(vUv.y * uGridSize);
+    float lineAlphaY = 1.0 - step(lineThickness, linePosY);
+    // vertical lines
+    float linePosX = fract(vUv.x * uGridSize);
+    float lineAlphaX = 1.0 - step(lineThickness, linePosX);
+
+    float lineAlpha = max(lineAlphaY, lineAlphaX);
+
+    vec4 lineColor = vec4(brightenValue(colour.r), brightenValue(colour.g), brightenValue(colour.b), 1.0);
+    finalColor = mix(finalColor, lineColor, lineAlpha);
+  }
+
+  // Fade out towards the edges in a soft circular shape
+  float distanceToCenter = distance(vUv, vec2(0.5));
+  float fogAmount = smoothstep(0.35, 0.5, distanceToCenter);
+
+  finalColor = mix(finalColor, BG_COLOUR, fogAmount);
+
+  gl_FragColor = finalColor;
+}
+```
+
+#### Summary
+- We've added a new function <code>brightenValue</code> which increases a given value by 0.25. This allows us to make the lines a brighter version of the underlying surface colour. The value is [clamped](https://thebookofshaders.com/glossary/?search=clamp) to ensure it doesn't exceed 1.
+- We're defining the thickness of the line relative to the size of the grid - as the grid size changes, the line thickness will appear constant. (Try setting it to a fixed value to see the difference.)
+- We're using the [fract](https://thebookofshaders.com/glossary/?search=fract) function to get the fractional part of the UV coordinate multiplied by the grid size. This gives us a repeating pattern of 0 to 1 for as many grid cols/rows as we've set.
+- If the line position (linePosY or linePosX) is less than the line thickness, we set the alpha to 1.0. 
+- We then get the max of the two line alphas so that the lines are drawn in both directions.
+- We generate a line colour by brightening the surface colour.
+- Finally we [mix](https://thebookofshaders.com/glossary/?search=mix) the line colour with the final colour based on the line alpha. This will give us a line where the alpha is 1.0, and the original colour where it's 0.0.
+
+<GridLinesFragmentShaderPlaneCanvas />
+
+## Scroll Based Interaction
+
+In order to utilise GSAP ScrollTrigger, we need to register the plugins at the top of the file:
+
+<code>WavePlane.tsx</code>
+```tsx
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/src/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+```
+
+### Passing the scroll progress to the shader
+
+Let's create a ref for storing the scrollProgress, and set it inside the [useGSAP hook](https://gsap.com/resources/react-basics/) via a ScrollTrigger.
+
+If you revisit the [live demo](/examples/wave-plane/demo) you can scroll til your heart's content. Literally, forever! That's because I've also added an infinite scroll loop inside the ScrollTrigger.
+
+```tsx
+  const scrollProgress = useRef(0) // value between 0 and 1 representing the window scroll progress
+  const scrollLoop = useRef(0) // number of times the scroll has looped - used to ensure a smooth transition from bottom to top
+
+  useGSAP(() => {
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: ({ progress }) => {
+        if (loopScroll && progress === 1) {
+          scrollLoop.current++
+          scrollProgress.current = 0
+          window.scrollTo(0, 0)
+          return
+        }
+        scrollProgress.current = progress
+      },
+    })
+  }, [loopScroll])
+
+  useFrame(({ clock }) => {
+    if (!shaderMaterial.current) return
+    shaderMaterial.current.uTime = clock.elapsedTime
+    shaderMaterial.current.uScrollProgress = (scrollProgress.current + scrollLoop.current) * screenHeights
+  })
+```
+
+#### Summary
+- We've setup our ScrollTrigger to start at 0 (top of the page) and end at the max scroll position (bottom of the page)
+- We update the scrollProgress value inside the onUpdate function. The progress ranges from 0 to 1.
+- For infinite scrolling. When the progress = 1, we increment scrollLoop, reset scrollProgress to 0, and scroll to the top of the window.
+- We update the shader's uScrollProgress uniform inside useFrame. By adding the scrollLoop count we make a smooth transiton between the bottom and the top of the page after we loop.
+
+Now that we have a live scroll progress value, we can incorporate it into our shaders to add an extra level of interaction.
+
+
+### Incorporating scroll progress into the shaders
+
+We can use the scroll progress uniform (uScrollProgress) to influence the noise and the line positions.
+This creates the impression of the plane moving towards us as we scroll.
+
+<b>Vertex Shader</b> <code>wavePlane.vert</code>
+````glsl
+    vec3 noiseInput = vec3(position.x / 4.0,( position.y / 4.0) + uScrollProgress, uTime * 0.2);
+````
+
+- In the vertex shader, we're already adding uScrollProgress to the Y position of the noise input.
+
+<b>Fragment Shader</b> <code>wavePlane.frag</code>
+````glsl
+    float yOffset = uScrollProgress * 6.0;
+    float linePosY = fract(vUv.y * uGridSize + yOffset); // <- Move the horizontal lines by adding the scroll offset
+````
+
+- Now in the fragment shader we can add uScrollProgress to the linePosY calculation. This moves the lines up and down as the scroll progress changes.
+
+
+### [Final Result](/examples/wave-plane/demo)
+
+You can find the full code for this project in my public [Github repo here](https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/wavePlane).
+
+<section className='w-full relative h-[620px]'>
+  <WavePlane  />
+</section>
+
+
+## Conclusion
+
+I hope this article has been useful. 
+If you've coded along (and I've made things clear enough!) you should now have your own wave plane with scroll interaction.
+
+
+#### Credits
+
+I was originally inspired by [this blog post](https://blog.maximeheckel.com/posts/vaporwave-3d-scene-with-threejs/) by Maxime Heckel.
+
+Thanks to my team for support and feedback.
