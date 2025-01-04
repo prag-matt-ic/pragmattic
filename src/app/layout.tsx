@@ -14,7 +14,8 @@ const fontSans = Kumbh_Sans({
 
 export const metadata: Metadata = {
   title: { template: '%s | Pragmattic', default: 'Pragmattic | Design and Engineering' },
-  description: 'Web app design and development for commercial projects',
+  description:
+    'Helping teams build interactive 3D experiences, launch web and mobile apps, and streamline their workflows using AI.',
 }
 
 export default function RootLayout({
