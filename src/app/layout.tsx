@@ -3,7 +3,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Kumbh_Sans } from 'next/font/google'
 
-import CustomCursor from '@/components/Cursor'
 import Footer from '@/components/Footer'
 import Nav from '@/components/Nav'
 
@@ -30,7 +29,6 @@ export default function RootLayout({
         <Nav />
         {children}
         <Footer />
-        <CustomCursor />
       </body>
     </html>
   )

@@ -1,7 +1,7 @@
 import WavePlane from '../WavePlane'
 import { RotatedPlaneCanvas, BasicFragmentShaderPlaneCanvas, GradientFragmentShaderPlaneCanvas, GridLinesFragmentShaderPlaneCanvas } from './WavePlaneBlog'
 
-<section className='w-full relative h-[704px]'>
+<section className='w-full relative h-[704px] max-h-[70vh]'>
   <WavePlane  />
 </section>
 
@@ -95,9 +95,9 @@ const WavePlaneCanvas: FC = () => {
 
 ### Rotated Plane with Dynamic Size
 
-The <code>WavePlane</code> component is essentially a plane geometry rotated 90 degrees on the x-axis to form a floor surface.
+The <code>WavePlane</code> component is essentially a plane geometry rotated 90 degrees on the X axis and shifted down on the Y axis to form a floor surface.
 
-The width and height are set dynamically based on the viewport size. The viewport size is obtained via the <code>useThree</code> hook - which can only be called from inside the <code>Canvas</code> component.
+The width, height and Y are set dynamically based on the viewport size. The viewport size is obtained via the <code>useThree</code> hook - which can only be called from inside the <code>Canvas</code> component.
 
 We need to ensure there are enough segments for the vertices to displace smoothly. So the number of segments is a multiple of the plane size. If we were to leave this value at 1, we wouldn't see any distortion. Increasing the number of plane segments gives us a smoother geometry at the cost of performance.
 
@@ -111,7 +111,6 @@ import { useThree } from '@react-three/fiber'
 // Basic Rotated Plane Component
 const WavePlane: FC<Props> = () => {
   const viewport = useThree((s) => s.viewport)
-
   const planeWidth = useMemo(() => Math.round(viewport.width + 2), [viewport.width])
   const planeHeight = useMemo(() => Math.round(viewport.height * 2), [viewport.height])
   const planeSize = useMemo(() => Math.max(planeWidth, planeHeight), [planeWidth, planeHeight])
@@ -120,7 +119,8 @@ const WavePlane: FC<Props> = () => {
   return (
     <mesh position={[0, -viewport.height / 2.5, -1]} rotation={[-0.5 * Math.PI, 0, 0]}>
       <planeGeometry args={[planeSize, planeSize, planeSegments, planeSegments]} />
-      <meshBasicMaterial color="blue" /> // We'll be adding our custom shader material here
+      {/* We'll be replacing this with our custom shader material */}
+      <meshBasicMaterial color="grey" />
     </mesh>
   )
 }
@@ -540,7 +540,7 @@ This will give the impression of the plane moving as we scroll.
 
 You can find the [final code here](https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/wavePlane).
 
-<section className='w-full relative h-[704px]'>
+<section className='w-full relative h-[704px] max-h-[70vh]'>
   <WavePlane  />
 </section>
 

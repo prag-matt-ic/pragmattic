@@ -17,7 +17,7 @@ const BlogHeader: FC<BlogHeaderProps> = ({ title, tags, demoUrl, date }) => {
     <>
       <header className="relative flex w-full select-none bg-off-black">
         <HeaderCanvas />
-        <div className="relative z-10 flex size-full flex-col items-center space-y-6 px-12 pb-20 pt-28">
+        <div className="relative z-10 flex size-full flex-col items-center space-y-5 px-12 pb-20 pt-40">
           <div className="flex flex-wrap justify-center gap-2">
             {tags.map((tag) => (
               <span

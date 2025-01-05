@@ -5,6 +5,7 @@ import HomeFooter from '@/components/home/HomeFooter'
 import HomeHeader from '@/components/home/HomeHeader'
 import HomeScrollManager from '@/components/home/HomeScrollManager'
 import { HomeProvider } from '@/hooks/home/HomeProvider'
+import CustomCursor from '@/components/Cursor'
 
 export default async function HomePage() {
   const headersList = headers()
@@ -23,6 +24,7 @@ export default async function HomePage() {
         <HomeFooter />
         <HomeScrollManager />
       </main>
+      <CustomCursor />
     </HomeProvider>
   )
 }

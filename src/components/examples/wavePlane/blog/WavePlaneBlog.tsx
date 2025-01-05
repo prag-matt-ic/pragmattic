@@ -58,7 +58,8 @@ const RotatedPlane: FC = () => {
   return (
     <mesh position={[0, -viewport.height / 2.5, -1]} rotation={[-0.5 * Math.PI, 0, 0]}>
       <planeGeometry args={[planeSize, planeSize, planeSegments, planeSegments]} />
-      <meshBasicMaterial color={GREEN_VEC3} />
+      {/* We'll be replacing this with our custom shader material */}
+      <meshBasicMaterial color="grey" />
     </mesh>
   )
 }
@@ -161,7 +162,7 @@ const GridLinesFragmentShaderPlane: FC = () => {
 }
 
 const CanvasWrapper: FC<PropsWithChildren> = ({ children }) => (
-  <section className="relative h-[704px] w-full">
+  <section className="relative h-[704px] max-h-[70vh] w-full">
     <Canvas
       className=""
       gl={{

@@ -21,11 +21,11 @@ const BlogLayout: FC<PropsWithChildren<BlogProps>> = ({ children, metadata, ...a
   return (
     <>
       <JSONSchema {...metadata} />
-      <main className="flex w-full flex-col items-center bg-off-black font-sans">
+      <main className="w-full bg-off-black font-sans">
         <BlogHeader {...articleProps} />
 
         {/* // https://github.com/tailwindlabs/tailwindcss-typography */}
-        <article className="prose w-full max-w-[1024px] text-pretty bg-white px-12 py-16 text-black">
+        <article className="prose-sm mx-auto w-full !max-w-[1024px] overflow-hidden text-pretty bg-white px-4 py-12 text-black md:prose md:px-12">
           {children}
 
           {/* TODO: CTA * Thank you block */}
