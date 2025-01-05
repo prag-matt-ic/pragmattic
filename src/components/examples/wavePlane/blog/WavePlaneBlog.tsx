@@ -176,7 +176,7 @@ const CanvasWrapper: FC<PropsWithChildren> = ({ children }) => (
   </section>
 )
 
-const RotatedPlaneCanvas: FC = () => {
+export const RotatedPlaneCanvas: FC = () => {
   return (
     <CanvasWrapper>
       <RotatedPlane />
@@ -184,7 +184,7 @@ const RotatedPlaneCanvas: FC = () => {
   )
 }
 
-const BasicFragmentShaderPlaneCanvas: FC = () => {
+export const BasicFragmentShaderPlaneCanvas: FC = () => {
   return (
     <CanvasWrapper>
       <BasicFragmentShaderPlane />
@@ -192,7 +192,7 @@ const BasicFragmentShaderPlaneCanvas: FC = () => {
   )
 }
 
-const GradientFragmentShaderPlaneCanvas: FC = () => {
+export const GradientFragmentShaderPlaneCanvas: FC = () => {
   return (
     <CanvasWrapper>
       <GradientFragmentShaderPlane />
@@ -200,17 +200,10 @@ const GradientFragmentShaderPlaneCanvas: FC = () => {
   )
 }
 
-const GridLinesFragmentShaderPlaneCanvas: FC = () => {
+export const GridLinesFragmentShaderPlaneCanvas: FC = () => {
   return (
     <CanvasWrapper>
       <GridLinesFragmentShaderPlane />
     </CanvasWrapper>
   )
-}
-
-export {
-  BasicFragmentShaderPlaneCanvas,
-  RotatedPlaneCanvas,
-  GradientFragmentShaderPlaneCanvas,
-  GridLinesFragmentShaderPlaneCanvas,
 }
