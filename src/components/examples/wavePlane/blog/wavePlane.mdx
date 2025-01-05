@@ -291,7 +291,7 @@ declare module '@react-three/fiber' {
 
 // Now we can use our custom shader material in the WavePlane component:
 
-const WavePlane: FC<Props> = ({ screenHeights, loopScroll, showGrid, gridSize, colourPalette }) => {
+const WavePlane: FC = () => {
    const viewport = useThree((s) => s.viewport)
 
   const planeWidth = useMemo(() => Math.round(viewport.width + 2), [viewport.width])
@@ -470,14 +470,14 @@ In order to utilise GSAP ScrollTrigger, we need to register the plugins at the t
 ```tsx title="WavePlane.tsx"
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import ScrollTrigger from 'gsap/src/ScrollTrigger'
+import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 ```
 
 ### Passing the scroll progress to the shader
 
-Let's create a ref for storing the scrollProgress, and set it inside the [useGSAP hook](https://gsap.com/resources/react-basics/) via a ScrollTrigger.
+Let's create a ref for storing the scrollProgress, and update it inside the [useGSAP hook](https://gsap.com/resources/react-basics/) via a ScrollTrigger.
 
 If you revisit the [live demo](/examples/wave-plane) you can scroll til your heart's content. Literally, forever! That's because I've also added an infinite scroll loop inside the ScrollTrigger.
 
@@ -509,18 +509,18 @@ If you revisit the [live demo](/examples/wave-plane) you can scroll til your hea
 ```
 
 #### Summary
-- We've setup our ScrollTrigger to start at 0 (top of the page) and end at the max scroll position (bottom of the page)
+- The ScrollTrigger starts at 0 (top of the page) and ends at the max scroll position (bottom of the page)
 - We update the scrollProgress value inside the onUpdate function. The progress ranges from 0 to 1.
 - For infinite scrolling. When the progress = 1, we increment scrollLoop, reset scrollProgress to 0, and scroll to the top of the window.
-- We update the shader's uScrollProgress uniform inside useFrame. By adding the scrollLoop count we make a smooth transiton between the bottom and the top of the page after we loop.
+- We update the shader's uScrollProgress uniform inside useFrame. By adding the scrollLoop count we ensure the value passed to the shader never jumps back to 0.
 
-Now that we have a live scroll progress value, we can incorporate it into our shaders to add an extra level of interaction.
+Now that we have a working scroll progress value, we can incorporate it into our shaders.
 
 
 ### Incorporating scroll progress into the shaders
 
-We can use the scroll progress uniform (uScrollProgress) to influence the noise and the line positions.
-This creates the impression of the plane moving towards us as we scroll.
+We want to use the scroll progress uniform (uScrollProgress) to influence the noise and the line positions.
+This will give the impression of the plane moving as we scroll.
 
 ````glsl title="Vertex Shader wavePlane.vert" /uScrollProgress/
     vec3 noiseInput = vec3(position.x / 4.0,( position.y / 4.0) + uScrollProgress, uTime * 0.2);
@@ -547,10 +547,10 @@ You can find the [final code here](https://github.com/prag-matt-ic/pragmattic/tr
 
 ## Conclusion
 
-I've found learning about shaders to be an extremely rewarding experience. They unlock so many creative possibilities.
-At my startup Timeboxx I've written a background shader, and it really elevates the design in ways not otherwise possible.
+I hope that you've found this article useful, and that it's inspired you to dive deeper on your own personal journey.
 
-I hope that you've found this article useful, and that it's inspired you to dive deeper in your own personal journey.
+I've found learning about shaders to be an extremely rewarding experience. They unlock so many creative possibilities.
+At my startup Timeboxx I've written a background shader - and it really elevates the design in ways not otherwise possible.
 
 
 #### Credits
