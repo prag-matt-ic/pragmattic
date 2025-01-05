@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { type FC, type ReactNode } from 'react'
 
 import avatarPic from '@/assets/avatar.jpg'
@@ -34,23 +35,25 @@ const BlogHeader: FC<BlogHeaderProps> = ({ title, tags, demoUrl, date }) => {
             {title}
           </h1>
 
-          <div className="relative flex w-fit items-center gap-3 text-sm font-medium text-white">
+          <div className="relative flex w-fit items-center gap-3 font-medium text-white/90">
             <Image
               src={avatarPic}
               width={80}
               height={80}
               alt="Matthew Frawley"
-              className="size-10 overflow-hidden rounded-full object-cover md:size-12"
+              className="size-12 overflow-hidden rounded-full object-cover md:size-14"
             />
             <span>Matthew Frawley</span>
             <span>{formattedDate}</span>
           </div>
 
           {!!demoUrl && (
-            <Button variant="outlined" colour="secondary" href={demoUrl}>
-              View it live
-              <Image src={openNewIcon} alt="open" className="size-4" />
-            </Button>
+            <Link href={demoUrl} passHref target="_blank" rel="noopener noreferrer">
+              <Button variant="outlined" colour="secondary">
+                Live demo
+                <Image src={openNewIcon} alt="open" className="size-4" />
+              </Button>
+            </Link>
           )}
         </div>
       </header>

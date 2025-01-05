@@ -34,3 +34,8 @@ mark[data-highlighted-chars] {
 span[data-highlighted-line] {
   background-color: rgba(255, 255, 255, 0.06);
 }
+
+figcaption[data-rehype-pretty-code-title] {
+  font-size: 14px;
+  font: var(--font-mono);
+}
