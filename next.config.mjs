@@ -13,14 +13,16 @@ const nextConfig = {
   },
 }
 
+// https://rehype-pretty.pages.dev/
+
 const options = {
-  theme: 'github-dark',
+  theme: 'github-dark-dimmed',
+  keepBackground: false,
   defaultLang: {
     inline: 'plaintext',
   },
 }
 
-// https://rehype-pretty.pages.dev/
 const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
