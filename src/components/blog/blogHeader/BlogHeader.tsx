@@ -4,9 +4,9 @@ import React, { type FC, type ReactNode } from 'react'
 
 import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
+import Button from '@/components/buttons/Button'
 
 import HeaderCanvas from './HeaderCanvas'
-import Button from '@/components/buttons/Button'
 
 type BlogHeaderProps = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
 

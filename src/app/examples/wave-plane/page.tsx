@@ -75,9 +75,9 @@ const BlogLayout: FC<PropsWithChildren<BlogProps>> = ({ children, metadata, ...a
           {children}
         </article>
 
-        <section>
+        {/* <section>
           <a>View the code on Github</a>
-        </section>
+        </section> */}
       </main>
     </>
   )

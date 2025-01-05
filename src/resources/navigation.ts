@@ -11,7 +11,7 @@ export enum ExamplePathname {
   StarsParticles = '/examples/stars-particles',
   FBOEffects = '/examples/fbo-effects',
   InfiniteMarquee = '/examples/infinite-scrolling-marquee',
-  WavePlane = '/examples/wave-plane/demo',
+  WavePlane = '/examples/wave-plane',
   RayMarching = '/examples/raymarching',
   // Rebuilds
   StripeHeader = '/rebuilds/stripe',

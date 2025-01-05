@@ -5,6 +5,7 @@ import { Kumbh_Sans } from 'next/font/google'
 
 import CustomCursor from '@/components/Cursor'
 import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
 const fontSans = Kumbh_Sans({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className={`${fontSans.variable} w-full bg-black font-sans antialiased`}>
         <Nav />
         {children}
+        <Footer />
         <CustomCursor />
       </body>
     </html>
