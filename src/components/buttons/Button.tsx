@@ -32,7 +32,7 @@ const VARIANT_CLASSES: Record<
   },
   outlined: {
     primary: 'border border-green text-white bg-black/30 hover:border-white',
-    secondary: 'border border-light text-white hover:text-white bg-black/30',
+    secondary: 'border border-light text-white bg-black/50 hover:bg-black/80',
   },
   text: {
     primary: 'text-white hover:text-green',

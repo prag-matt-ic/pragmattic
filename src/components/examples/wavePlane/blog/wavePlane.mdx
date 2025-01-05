@@ -1,13 +1,13 @@
 import WavePlane from '../WavePlane'
 import { RotatedPlaneCanvas, BasicFragmentShaderPlaneCanvas, GradientFragmentShaderPlaneCanvas, GridLinesFragmentShaderPlaneCanvas } from './WavePlaneBlog'
 
-<section className='w-full relative h-[620px]'>
+<section className='w-full relative h-[704px]'>
   <WavePlane  />
 </section>
 
 ## Pretty cool, right? 
 
-This project is a great way to learn about <b>custom ThreeJS shaders</b> and how to use them in a <b>Next.js Typescript app</b>.<br/>
+This project is a great way to learn about <b>ThreeJS shader materials</b> and how to use them in a <b>Next.js Typescript app</b>.<br/>
 As a bonus we'll be adding some scroll based interaction using <b>GSAP ScrollTrigger</b> to make the plane move as you scroll.
 
 ## Getting Started
@@ -39,7 +39,6 @@ declare module '*.glsl' {
 }
 ```
 
-
 ### Configure Next.js for Vertex and Fragment Shaders
 
 We need to update our Next.js config file to handle importing GLSL files and applying glslify transformations.
@@ -47,8 +46,7 @@ We need to update our Next.js config file to handle importing GLSL files and app
 The [glslify package](https://github.com/glslify/glslify) allows us to import and export GLSL files in a modular way. With it we can import a noise function from the glsl-noise node module right inside our shaders.
 
 
-<code>next.config.mjs</code>
-```javascript
+```javascript title="next.config.mjs"
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -68,8 +66,7 @@ export default nextConfig
 
 The [Canvas](https://r3f.docs.pmnd.rs/api/canvas) is the root component for your React ThreeJS scene.
 
-```tsx
-
+```tsx title="WavePlaneCanvas.tsx" showLineNumbers
 import { type FC } from 'react'
 import { Canvas } from '@react-three/fiber'
 
@@ -92,20 +89,19 @@ const WavePlaneCanvas: FC = () => {
 ```
 
 
-## Building The WavePlane Component
+## Building our WavePlane Component
 
 ### Rotated Plane with Dynamic Size
 
-The Wave Plane component is essentially just a plane geometry rotated 90 degrees on the x-axis to form a floor surface.
+The <code>WavePlane</code> component is essentially a plane geometry rotated 90 degrees on the x-axis to form a floor surface.
 
 The width and height are set dynamically based on the viewport size. The viewport size is obtained via the <code>useThree</code> hook - which can only be called from inside the <code>Canvas</code> component.
 
-We need to ensure there are enough segments for the vertices to displace smoothly. So the number of segments is a multiple of the plane size. If we were to leave this value at 1, we wouldn't see any distortion. Increasing the number of plane segments gives us a smoother wave effect at the cost of performance.
+We need to ensure there are enough segments for the vertices to displace smoothly. So the number of segments is a multiple of the plane size. If we were to leave this value at 1, we wouldn't see any distortion. Increasing the number of plane segments gives us a smoother geometry at the cost of performance.
 
 The values are memoized with React's <code>useMemo</code> to prevent unnecessary re-renders - they will only recalculate when the viewport size changes.
 
-<code>WavePlane.tsx</code>
-```tsx
+```tsx title="WavePlane.tsx" showLineNumbers
 // Relevant Imports
 import { type FC, useRef, useMemo } from 'react'
 import { useThree } from '@react-three/fiber'
@@ -126,7 +122,6 @@ const WavePlane: FC<Props> = () => {
     </mesh>
   )
 }
-
 ```
 
 ### Result
@@ -157,7 +152,7 @@ The fragment shader is responsible for determining the colour of the pixel. This
 
 The following is an annotated version of a basic vertex shader for ThreeJS.
  
-```glsl
+```glsl title="Default vertex shader"
 // Declare a varying variable to pass UV coordinates to the fragment shader
 varying vec2 vUv;
 
@@ -192,19 +187,19 @@ In order to create the wave effect, we'll import a noise function to displace th
 
 #### Getting Noisey
 
-Noise functions generate random values based on a given input. They are invaluable for creating organic looking effects such as clouds and terrain.
+Noise functions generate random values based on an input. They are invaluable for creating organic looking effects such as clouds, terrain and waves.
 We'll be using the Simplex 3D noise function which accepts a vec3 (3D vector) as input. By inputting the current position, we'll get a different noise value depending where on the plane we are.
 
-<b>Vertex Shader</b> <code>wavePlane.vert</code>
-```glsl
+
+```glsl title="Vertex Shader wavePlane.vert" showLineNumbers
 // Import the noise function from the glsl-noise node module
 #pragma glslify: noise = require('glsl-noise/simplex/3d')
 
-// Relevant uniforms
+// Uniforms received from the React component
 uniform float uTime;
 uniform float uScrollProgress; // Used later
 
-// Varyings for passing information to the fragment shader
+// Varyings for passing info to the fragment shader
 varying vec2 vUv;
 varying float vTerrainHeight;
 
@@ -230,35 +225,32 @@ void main() {
 ```
 
 #### Our vertex shader code is similar to the boilerplate with a few additions
-- We create a noise input vec3 (noiseInput) using the X and Y positions of the vertex and the time uniform (uTime). We dividing the X and Y positions to make the waves smaller. (Try changing that value!)
-- By adding uTime as the 3rd input vector we get a value that continously changes as the elapsed time increases
-- We generate the noise value (n) using the imported noise function
-- We normalise the noise value (-1 to 1) to between 0 and 1, as we only want to add to the Z position
-- We clone the incoming position and add the noise value to the Z
-- We use the new position (newPosition) instead to calculate the model, view and projected positions
-- We pass the terrain height (vTerrainHeight) to the fragment shader so it can be used for colouring
+- We create a noise input vec3 (noiseInput) using the X and Y positions of the vertex and the time uniform (uTime). We divide the X and Y positions to make the waves smaller. (Try changing that value!)
+- By adding uTime as the third input vector we get a value that continously changes as the elapsed time increases.
+- We generate the noise value (n) using the imported noise function.
+- We normalise the noise value (-1 to 1) to between 0 and 1, as we only want to add to the Z position.
+- We clone the incoming position and add the noise value to the Z.
+- We use the new position (newPosition) instead to calculate the model, view and projected positions.
+- We pass the terrain height (vTerrainHeight) to the fragment shader so it can be used for colouring.
 
 
 ## A Basic Fragment Shader
 
 All fragment shaders needs to output a vec4 colour value (rgba). As a minimal test for our vertex shader we can output a solid grey colour for now.
 
-<b>Fragment Shader</b> <code>wavePlane.frag</code>
-```glsl
+```glsl title="Basic Fragment Shader wavePlane.frag"
 void main() { 
   gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
 }
 ```
-
 
 ## React Three Shader Material Setup
 
 The [shaderMaterial](https://drei.docs.pmnd.rs/shaders/shader-material) takes three inputs: initial uniforms, a vertex shader, and a fragment shader. 
 We now have our vertex shader written and a basic fragment shader to test that it's working.
 
-<code>WavePlane.tsx</code>
-```tsx
-// Relevant Imports
+```tsx {7-36,48-53,59-68} title="WavePlane.tsx" showLineNumbers
+// Other imports are omitted for brevity
 import { shaderMaterial } from '@react-three/drei'
 import { Canvas, extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
 import { COSINE_GRADIENTS } from '@thi.ng/color'
@@ -316,7 +308,6 @@ const WavePlane: FC<Props> = ({ screenHeights, loopScroll, showGrid, gridSize, c
     <mesh position={[0, -viewport.height / 2.5, -1]} rotation={[-0.5 * Math.PI, 0, 0]}>
       <planeGeometry args={[planeSize, planeSize, planeSegments, planeSegments]} />
 
-      // Our custom shader material
       <wavePlaneShaderMaterial
         ref={shaderMaterial}
         key={WavePlaneShaderMaterial.key}
@@ -348,16 +339,14 @@ Now we can see that our once flat plane is being distorted by the noise function
 
 <em>Let's start to make it look more interesting!</em>
 
-### Colour Palette
+#### Colour Palette
 We're passing in a colour palette uniform (uColourPalette) which is an array of four vec3 colours. These presets are imported from the [@thi.ng/color](https://github.com/thi-ng/cgg) package in the React Component.
 We can use a cosine gradient function to interpolate between these colours based on the terrain height (vTerrainHeight). This will give us a smooth gradient that changes with the wave.
 
-### Fog Effect
+#### Fog Effect
 I think it's a good idea to mask the edges of the plane. In essence we're adding a soft circular fog.
 
-
-<b>Fragment Shader</b> <code>wavePlane.frag</code>
-```glsl
+```glsl title="Fragment Shader wavePlane.frag" showLineNumbers
 uniform float uTime;
 uniform float uScrollProgress;
 uniform vec3 uColourPalette[4];
@@ -407,12 +396,27 @@ void main() {
 The grid lines add a cool retro effect to the plane. 
 We can draw them by using the UV coordinate and the grid size uniform:
 
-<b>Fragment Shader</b> <code>wavePlane.frag</code>
-```glsl
-// ... As before ....
+```glsl {19-21,28-42} title="Fragment Shader wavePlane.frag" showLineNumbers 
+// Wave Plane Fragment shader
+uniform float uTime;
+uniform float uScrollOffset;
+uniform vec3 uColourPalette[4];
+uniform bool uShowGrid;
+uniform float uGridSize;
 
-float brightenValue(in float value) {
-   return clamp(value + 0.25, 0.0, 1.0);
+varying vec2 vUv; 
+varying float vTerrainHeight; 
+
+// Constants
+const vec4 BG_COLOUR = vec4(0.0, 0.0, 0.0, 1.0);
+
+// Colour palette values taken from: http://dev.thi.ng/gradients/
+vec3 cosineGradientColor(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
+  return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
+}
+
+float brightenValue(in float colour) {
+   return clamp(colour + 0.25, 0.0, 1.0);
 }
 
 void main() {
@@ -461,8 +465,7 @@ void main() {
 
 In order to utilise GSAP ScrollTrigger, we need to register the plugins at the top of the file:
 
-<code>WavePlane.tsx</code>
-```tsx
+```tsx title="WavePlane.tsx"
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/src/ScrollTrigger'
@@ -474,9 +477,9 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 Let's create a ref for storing the scrollProgress, and set it inside the [useGSAP hook](https://gsap.com/resources/react-basics/) via a ScrollTrigger.
 
-If you revisit the [live demo](/examples/wave-plane/demo) you can scroll til your heart's content. Literally, forever! That's because I've also added an infinite scroll loop inside the ScrollTrigger.
+If you revisit the [live demo](/examples/wave-plane) you can scroll til your heart's content. Literally, forever! That's because I've also added an infinite scroll loop inside the ScrollTrigger.
 
-```tsx
+```tsx title="WavePlane.tsx"
   const scrollProgress = useRef(0) // value between 0 and 1 representing the window scroll progress
   const scrollLoop = useRef(0) // number of times the scroll has looped - used to ensure a smooth transition from bottom to top
 
@@ -517,15 +520,13 @@ Now that we have a live scroll progress value, we can incorporate it into our sh
 We can use the scroll progress uniform (uScrollProgress) to influence the noise and the line positions.
 This creates the impression of the plane moving towards us as we scroll.
 
-<b>Vertex Shader</b> <code>wavePlane.vert</code>
-````glsl
+````glsl title="Vertex Shader wavePlane.vert" /uScrollProgress/
     vec3 noiseInput = vec3(position.x / 4.0,( position.y / 4.0) + uScrollProgress, uTime * 0.2);
 ````
 
 - In the vertex shader, we're already adding uScrollProgress to the Y position of the noise input.
 
-<b>Fragment Shader</b> <code>wavePlane.frag</code>
-````glsl
+````glsl title="Fragment Shader wavePlane.frag" /uScrollProgress/
     float yOffset = uScrollProgress * 6.0;
     float linePosY = fract(vUv.y * uGridSize + yOffset); // <- Move the horizontal lines by adding the scroll offset
 ````
@@ -533,19 +534,21 @@ This creates the impression of the plane moving towards us as we scroll.
 - Now in the fragment shader we can add uScrollProgress to the linePosY calculation. This moves the lines up and down as the scroll progress changes.
 
 
-### [Final Result](/examples/wave-plane/demo)
+### [Final Result ↗](/examples/wave-plane)
 
 You can find the full code for this project in my public [Github repo here](https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/wavePlane).
 
-<section className='w-full relative h-[620px]'>
+<section className='w-full relative h-[704px]'>
   <WavePlane  />
 </section>
 
 
 ## Conclusion
 
-I hope this article has been useful. 
-If you've coded along (and I've made things clear enough!) you should now have your own wave plane with scroll interaction.
+I've found learning about shaders to be an extremely rewarding experience. They unlock so many creative possibilities.
+At my startup Timeboxx I've written a background shader, and it really elevates the design in ways not otherwise possible.
+
+I hope that you've found this article useful, and that it's inspired you to dive deeper in your own personal journey.
 
 
 #### Credits

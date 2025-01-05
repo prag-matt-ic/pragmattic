@@ -161,7 +161,7 @@ const GridLinesFragmentShaderPlane: FC = () => {
 }
 
 const CanvasWrapper: FC<PropsWithChildren> = ({ children }) => (
-  <section className="relative h-[620px] w-full">
+  <section className="relative h-[704px] w-full">
     <Canvas
       className=""
       gl={{

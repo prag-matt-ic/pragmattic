@@ -5,7 +5,6 @@ uniform vec3 uColourPalette[4];
 uniform bool uShowGrid;
 uniform float uGridSize;
 
-// Received from the vertex shader
 varying vec2 vUv; 
 varying float vTerrainHeight; 
 
