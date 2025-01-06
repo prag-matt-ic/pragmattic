@@ -348,7 +348,7 @@ We can use a cosine gradient function to interpolate between these colours based
 #### Fog Effect
 I think it's a good idea to mask the edges of the plane. In essence we're adding a soft circular fog.
 
-```glsl title="Fragment Shader wavePlane.frag" showLineNumbers
+```glsl {15-17, 21-22, 25-27} title="Fragment Shader wavePlane.frag" showLineNumbers
 uniform float uTime;
 uniform float uScrollProgress;
 uniform vec3 uColourPalette[4];
@@ -375,7 +375,6 @@ void main() {
   // Fade out towards the edges in a soft circular shape
   float distanceToCenter = distance(vUv, vec2(0.5, 0.5));
   float fogAmount = smoothstep(0.35, 0.5, distanceToCenter);
-
   finalColor = mix(finalColor, BG_COLOUR, fogAmount);
 
   gl_FragColor = finalColor;
