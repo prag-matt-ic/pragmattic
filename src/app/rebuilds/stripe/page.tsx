@@ -2,15 +2,15 @@ import Image, { type StaticImageData } from 'next/image'
 import { type FC } from 'react'
 import { twJoin } from 'tailwind-merge'
 
-import airbnbLogo from '@/assets/rebuilds/airbnb.svg'
-import amazonLogo from '@/assets/rebuilds/amazon.svg'
-import anthropicLogo from '@/assets/rebuilds/anthropic.svg'
-import googleLogo from '@/assets/rebuilds/google.svg'
-import marriottLogo from '@/assets/rebuilds/marriott.svg'
-import openAiLogo from '@/assets/rebuilds/openai.svg'
-import phoneImg from '@/assets/rebuilds/phone.svg'
-import shopifyLogo from '@/assets/rebuilds/shopify.svg'
-import urbnLogo from '@/assets/rebuilds/urbn.svg'
+import airbnbLogo from '@/assets/rebuilds/stripe/airbnb.svg'
+import amazonLogo from '@/assets/rebuilds/stripe/amazon.svg'
+import anthropicLogo from '@/assets/rebuilds/stripe/anthropic.svg'
+import googleLogo from '@/assets/rebuilds/stripe/google.svg'
+import marriottLogo from '@/assets/rebuilds/stripe/marriott.svg'
+import openAiLogo from '@/assets/rebuilds/stripe/openai.svg'
+import phoneImg from '@/assets/rebuilds/stripe/phone.svg'
+import shopifyLogo from '@/assets/rebuilds/stripe/shopify.svg'
+import urbnLogo from '@/assets/rebuilds/stripe/urbn.svg'
 import GLSLCanvas from '@/components/glsl/GLSLCanvas'
 
 // Rebuild of the Stripe home page header using Tailwind CSS and React (November 2024)
@@ -23,7 +23,7 @@ export default function StripeHeaderRebuild() {
 
   return (
     <>
-      <main className="relative min-h-screen w-full overflow-x-hidden bg-white text-black">
+      <main className="relative min-h-screen w-full overflow-x-hidden bg-white pb-20 text-black">
         {/* Layer beneath the canvas */}
         <div className="pointer-events-none absolute flex h-full w-full flex-col items-center px-5">
           {/* Pinstripe lines created using borders */}
