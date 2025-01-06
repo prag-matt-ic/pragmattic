@@ -1,11 +1,11 @@
 import { headers } from 'next/headers'
 
+import CustomCursor from '@/components/Cursor'
 import HomeCanvas from '@/components/home/HomeCanvas'
 import HomeFooter from '@/components/home/HomeFooter'
 import HomeHeader from '@/components/home/HomeHeader'
 import HomeScrollManager from '@/components/home/HomeScrollManager'
 import { HomeProvider } from '@/hooks/home/HomeProvider'
-import CustomCursor from '@/components/Cursor'
 
 export default async function HomePage() {
   const headersList = headers()
