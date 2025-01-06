@@ -9,9 +9,8 @@ import { twJoin } from 'tailwind-merge'
 
 import logo from '@/assets/brand/pragmattic.svg'
 import menuIcon from '@/assets/icons/menu.svg'
+import Button from '@/components/buttons/Button'
 import Menu from '@/components/Menu'
-
-import Button from './buttons/Button'
 
 const Nav: FC = () => {
   const pathname = usePathname()
