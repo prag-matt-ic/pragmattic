@@ -10,7 +10,7 @@ type Props = {
   }
 }
 
-const LAST_UPDATED = '2025-01-05'
+const LAST_UPDATED = '2025-01-06'
 
 const BLOG_METADATA: BlogMetadata = {
   title: 'Build an animated wave plane in a Next.js Typescript app with React Three Fiber and custom shader material',
