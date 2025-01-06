@@ -14,7 +14,7 @@ const BlogHeader: FC<BlogHeaderProps> = ({ title, tags, demoUrl, date }) => {
   return (
     <>
       <header className="relative flex w-full select-none">
-        <div className="relative z-10 mx-auto flex size-full max-w-[1024px] flex-col items-center space-y-5 bg-gradient-to-t from-black/30 to-black/0 to-40% px-12 pb-20 pt-40">
+        <div className="relative z-10 mx-auto flex size-full max-w-[1024px] flex-col items-center space-y-5 bg-gradient-to-t from-light/30 to-light/0 to-40% px-12 pb-20 pt-40">
           <div className="flex flex-wrap justify-center gap-2">
             {tags.map((tag) => (
               <span
