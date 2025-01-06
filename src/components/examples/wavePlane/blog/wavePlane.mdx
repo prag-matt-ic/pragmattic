@@ -193,7 +193,7 @@ Noise functions generate random values based on an input. They are invaluable fo
 We'll be using the Simplex 3D noise function which accepts a vec3 (3D vector) as input. By inputting the current position, we'll get a different noise value depending where on the plane we are.
 
 
-```glsl title="Vertex Shader wavePlane.vert" showLineNumbers
+```glsl {10, 14-19, 26} title="Vertex Shader wavePlane.vert" showLineNumbers 
 // Import the noise function from the glsl-noise node module
 #pragma glslify: noise = require('glsl-noise/simplex/3d')
 

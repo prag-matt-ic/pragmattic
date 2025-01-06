@@ -1,6 +1,8 @@
 import React, { type FC, type PropsWithChildren } from 'react'
 
-import BlogHeader from '@/components/blog/blogHeader/BlogHeader'
+import BlogHeader from '@/components/blog/BlogHeader'
+
+import BlogBackground from './blogBackground/BlogBackground'
 
 export type BlogMetadata = {
   title: string
@@ -21,11 +23,12 @@ const BlogLayout: FC<PropsWithChildren<BlogProps>> = ({ children, metadata, ...a
   return (
     <>
       <JSONSchema {...metadata} />
-      <main className="w-full bg-off-black font-sans">
+      <BlogBackground />
+      <main className="relative w-full font-sans">
         <BlogHeader {...articleProps} />
 
         {/* // https://github.com/tailwindlabs/tailwindcss-typography */}
-        <article className="prose-sm mx-auto w-full !max-w-[1024px] overflow-hidden text-pretty bg-white px-4 py-12 text-black md:prose md:px-12">
+        <article className="prose-sm mx-auto w-full !max-w-[1024px] overflow-hidden text-pretty bg-white px-4 py-12 text-black md:prose prose-pre:bg-off-black md:px-12">
           {children}
 
           {/* TODO: CTA * Thank you block */}

@@ -13,7 +13,7 @@ type Props = {
 const LAST_UPDATED = '2025-01-05'
 
 const BLOG_METADATA: BlogMetadata = {
-  title: 'Build an animated wave plane using React Three Fiber and custom shaders in a Next.js Typescript app',
+  title: 'Build an animated wave plane in a Next.js Typescript app with React Three Fiber and custom shader material',
   description:
     'This simple project is a great way to learn about ThreeJS shaders and how to use them in a React Typescript environment.',
   date: LAST_UPDATED,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 export default function WavePlaneBlogPage({ params }: Props) {
   return (
     <BlogLayout
-      title="Animated wave plane with custom shaders"
+      title="Build an animated wave plane in Next.js (Typescript) with React Three Fiber and custom shader material"
       date={LAST_UPDATED}
       tags={['threejs', 'vertex shader', 'fragment shader', 'noise', 'react', 'nextjs']}
       demoUrl="/examples/wave-plane"

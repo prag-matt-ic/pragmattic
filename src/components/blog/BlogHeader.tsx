@@ -7,28 +7,25 @@ import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
 import Button from '@/components/buttons/Button'
 
-import HeaderCanvas from './HeaderCanvas'
-
 type BlogHeaderProps = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
 
 const BlogHeader: FC<BlogHeaderProps> = ({ title, tags, demoUrl, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>
-      <header className="relative flex w-full select-none bg-off-black">
-        <HeaderCanvas />
-        <div className="relative z-10 flex size-full flex-col items-center space-y-5 px-12 pb-20 pt-40">
+      <header className="relative flex w-full select-none">
+        <div className="relative z-10 mx-auto flex size-full max-w-[1024px] flex-col items-center space-y-5 bg-gradient-to-t from-black/30 to-black/0 to-40% px-12 pb-20 pt-40">
           <div className="flex flex-wrap justify-center gap-2">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-sm bg-mid px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-white/80 shadow-sm">
+                className="rounded-sm bg-black px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-white/70 shadow-md">
                 #{tag}
               </span>
             ))}
           </div>
           <h1
-            className="max-w-[1024px] text-center text-5xl font-extrabold leading-snug tracking-tight text-white"
+            className="text-balance text-center text-5xl font-extrabold leading-snug tracking-tight text-white"
             style={{
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
             }}>

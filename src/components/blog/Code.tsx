@@ -22,7 +22,7 @@ const CodeBlock: FC<PropsWithChildren<HTMLAttributes<HTMLPreElement>>> = ({ chil
   }
 
   return (
-    <pre {...attributes} ref={pre} className={twMerge('relative overflow-x-auto bg-off-black', className)}>
+    <pre {...attributes} ref={pre} className={twMerge('relative overflow-x-auto', className)}>
       {children}
       <button
         aria-label="Copy code"
