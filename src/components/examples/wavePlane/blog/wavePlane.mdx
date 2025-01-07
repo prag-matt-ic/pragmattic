@@ -14,7 +14,7 @@ As a bonus we'll be adding some scroll based interaction using <b>GSAP ScrollTri
 
 ### Install the necessary dependencies into your Next.js project
 
-<i>At the time of writing Next v15 (React 19) and React Three Fiber (v8) don't play well together - so you may need to use Next v14.</i>
+<i>At the time of writing Next v15 (React 19) and React Three Fiber (v8) don't play well together - so you may need to be running Next v14.</i>
 
 ```bash
 npm i @gsap/react @react-three/drei @react-three/fiber gsap @thi.ng/color glslify glslify-loader glsl-noise raw-loader
@@ -227,7 +227,7 @@ void main() {
 ```
 
 #### Our vertex shader code is similar to the boilerplate with a few additions
-- We create a noise input vec3 (noiseInput) using the X and Y positions of the vertex and the time uniform (uTime). We divide the X and Y positions to make the waves smaller. (Try changing that value!)
+- We create a noise input vec3 (noiseInput) using the X and Y positions of the vertex and the time uniform (uTime). We divide the X and Y positions to make the waves larger. (Try changing that value!)
 - By adding uTime as the third input vector we get a value that continously changes as the elapsed time increases.
 - We generate the noise value (n) using the imported noise function.
 - We normalise the noise value (-1 to 1) to between 0 and 1, as we only want to add to the Z position.
@@ -248,8 +248,9 @@ void main() {
 
 ## React Three Shader Material Setup
 
+We now have our vertex shader written, and a basic fragment shader to test that it's working - let's setup our custom shader material.
 The [shaderMaterial](https://drei.docs.pmnd.rs/shaders/shader-material) takes three inputs: initial uniforms, a vertex shader, and a fragment shader. 
-We now have our vertex shader written and a basic fragment shader to test that it's working.
+
 
 ```tsx {7-36,48-53,59-68} title="WavePlane.tsx" showLineNumbers
 // Other imports are omitted for brevity
@@ -313,8 +314,8 @@ const WavePlane: FC = () => {
       <wavePlaneShaderMaterial
         ref={shaderMaterial}
         key={WavePlaneShaderMaterial.key}
+        // Uniforms
         uTime={0}
-        // Default values for now
         uScrollProgress={0}
         uColourPalette={DEFAULT_COLOUR_PALETTE}
         uShowGrid={true}
