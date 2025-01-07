@@ -15,9 +15,9 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   }>
 
 const SIZE_CLASSES: Record<Size, string> = {
-  small: 'py-1.5 px-4 text-sm',
+  small: 'py-1.5 px-4 text-xs sm:text-sm',
   medium: 'py-2 px-6 text-sm sm:text-base sm:px-8',
-  large: 'py-4 px-10 text-lg',
+  large: 'py-3 px-8 text-base sm:text-lg',
 } as const
 
 const VARIANT_CLASSES: Record<
@@ -48,7 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
       ref={ref}
       {...rest}
       className={twMerge(
-        'pointer-events-auto flex select-none items-center justify-center gap-3 overflow-hidden whitespace-nowrap rounded-full font-sans font-medium leading-none tracking-wide transition-colors duration-300',
+        'pointer-events-auto flex select-none items-center justify-center gap-3 overflow-hidden whitespace-nowrap rounded-full font-sans font-semibold leading-none tracking-wide transition-colors duration-300',
         SIZE_CLASSES[size],
         VARIANT_CLASSES[variant][colour],
         className,

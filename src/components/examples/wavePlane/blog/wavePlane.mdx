@@ -24,7 +24,7 @@ npm i @gsap/react @react-three/drei @react-three/fiber gsap @thi.ng/color glslif
 
 Create a root <code>shader.d.ts</code> file to prevent Typescript from throwing errors when importing GLSL files. <br/>This declaration file informs Typescript that .frag, .vert and .glsl files should be treated like strings.
 
-```typescript
+```typescript title="shader.d.ts"
 declare module '*.frag' {
   const value: string
   export default value
@@ -69,7 +69,7 @@ export default nextConfig
 The [Canvas](https://r3f.docs.pmnd.rs/api/canvas) is the root component for your React ThreeJS scene.
 Remember that Next.js components are server-side by default, so you need to add the ['use client'](https://nextjs.org/docs/app/building-your-application/rendering/client-components#using-client-components-in-nextjs) directive in each of your Three component files.
 
-```tsx title="WavePlaneCanvas.tsx" showLineNumbers
+```tsx title="WavePlaneCanvas.tsx" showLineNumbers {1}
 'use client'
 import { type FC } from 'react'
 import { Canvas } from '@react-three/fiber'
@@ -154,7 +154,7 @@ The fragment shader is responsible for determining the colour of the pixel. This
 
 ### Boilerplate Vertex Shader for ThreeJS 
 
-The following is an annotated version of a basic vertex shader for ThreeJS.
+The following is an annotated version of a minimal vertex shader for ThreeJS.
  
 ```glsl title="Default vertex shader"
 // Declare a varying variable to pass UV coordinates to the fragment shader
@@ -182,7 +182,7 @@ void main() {
     gl_Position = projectedPosition;
 }
 ```
-<i>Note: If you are using a ScreenQuad instead of a Plane - like some of my other examples - there's a simpler shader which reduces the number of transformations needed.</i>
+<i>Note: If you are using a ScreenQuad instead - like some of my other examples - there's a simplified shader which reduces the number of transformations.</i>
 
 
 ### Transforming the vertices using a noise function

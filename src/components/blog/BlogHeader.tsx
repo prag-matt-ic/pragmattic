@@ -7,9 +7,10 @@ import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
 import Button from '@/components/buttons/Button'
 
-type BlogHeaderProps = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
+type Props = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
 
-const BlogHeader: FC<BlogHeaderProps> = ({ title, tags, demoUrl, date }) => {
+// TODO: update sizing for mobile viewing...
+const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>

@@ -5,12 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type FC, useState } from 'react'
-import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
 import logo from '@/assets/brand/pragmattic.svg'
 import menuIcon from '@/assets/icons/menu.svg'
-import Button from '@/components/buttons/Button'
 import Menu from '@/components/Menu'
 
 import WorkTogether from './workTogether/WorkTogether'
@@ -19,7 +17,6 @@ const Nav: FC = () => {
   const pathname = usePathname()
   const isRebuildPage = pathname.includes('rebuild')
   const [isMenuShowing, setIsMenuShowing] = useState(false)
-  const [isWorkTogetherShowing, setIsWorkTogetherShowing] = useState(false)
 
   useGSAP(() => {
     if (isRebuildPage) return
@@ -43,14 +40,14 @@ const Nav: FC = () => {
             alt="Pragmattic"
             src={logo}
             height={20}
-            className={twJoin('h-11 transition-opacity duration-200', isRebuildPage ? 'opacity-0' : 'opacity-100')}
+            className={twJoin('transition-opacity duration-200 sm:h-5', isRebuildPage ? 'opacity-0' : 'opacity-100')}
           />
         </Link>
 
         <div className="relative flex items-center gap-2">
           <WorkTogether />
-          <button className="p-2" onClick={() => setIsMenuShowing((prev) => !prev)}>
-            <Image src={menuIcon} alt="menu" width={32} height={32} />
+          <button className="p-1" onClick={() => setIsMenuShowing((prev) => !prev)}>
+            <Image src={menuIcon} alt="menu" width={24} height={24} />
           </button>
         </div>
       </nav>
@@ -60,5 +57,3 @@ const Nav: FC = () => {
 }
 
 export default Nav
-
-// href="mailto:pragmattic.ltd@gmail.com&subject=Let's%20work%20together"
