@@ -1,7 +1,7 @@
-import { autoUpdate, offset, shift, useFloating, useInteractions, useMergeRefs } from '@floating-ui/react'
+import { autoUpdate, offset, shift, useFloating, useInteractions } from '@floating-ui/react'
 import { useDismiss } from '@floating-ui/react'
 import { useHover } from '@mantine/hooks'
-import { type FC, useRef, useState } from 'react'
+import { type FC, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
@@ -28,9 +28,6 @@ const WorkTogether: FC<Props> = ({}) => {
   const dismiss = useDismiss(context)
   const { getReferenceProps, getFloatingProps } = useInteractions([dismiss])
 
-  const container = useRef<HTMLDivElement>(null)
-  const ref = useMergeRefs<HTMLDivElement>([refs.setFloating, container])
-
   return (
     <>
       <Button
@@ -44,11 +41,11 @@ const WorkTogether: FC<Props> = ({}) => {
       <Transition
         in={isShowing}
         timeout={{ enter: 0, exit: 200 }}
-        nodeRef={container}
+        nodeRef={refs.floating}
         mountOnEnter={true}
         unmountOnExit={true}>
         <div
-          ref={ref}
+          ref={refs.setFloating}
           {...getFloatingProps()}
           style={floatingStyles}
           id="work-together"
@@ -57,7 +54,7 @@ const WorkTogether: FC<Props> = ({}) => {
           <Canvas
             key="work-together-canvas"
             className="pointer-events-none !fixed inset-0 overflow-hidden"
-            eventSource={container.current!}
+            eventSource={refs.floating.current!}
             gl={{ alpha: false, antialias: false }}>
             <OrthographicCamera makeDefault position={[0, 0, 0]} />
             <View.Port />

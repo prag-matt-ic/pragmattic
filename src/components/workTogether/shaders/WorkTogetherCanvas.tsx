@@ -8,7 +8,7 @@ import { type FC, useRef } from 'react'
 import React from 'react'
 import { Color, ShaderMaterial } from 'three'
 
-import { BLACK_VEC3, CYAN_VEC3, GREEN_VEC3, LIGHT_VEC3, OFF_BLACK_VEC3, ORANGE_VEC3 } from '@/resources/colours'
+import { BLACK_VEC3, CYAN_VEC3, GREEN_VEC3, LIGHT_VEC3, ORANGE_VEC3 } from '@/resources/colours'
 
 import agencyFragment from './agency.frag'
 import developerFragment from './developer.frag'
