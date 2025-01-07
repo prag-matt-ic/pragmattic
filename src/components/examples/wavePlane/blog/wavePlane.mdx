@@ -466,9 +466,23 @@ void main() {
 
 ## Scroll Based Interaction
 
-In order to utilise GSAP ScrollTrigger, we need to register the plugins at the top of the file:
+#### Make the page scrollable
+There will be no scroll unless you <b>set an explicit height on your <code>main</code> element</b>.<br/> 
+For example:
 
-```tsx title="WavePlane.tsx"
+```tsx title="page.tsx"
+export default function WavePlanePage() {
+  return (
+    <main className="h-[1000vh] w-full">
+      <WavePlaneCanvas />
+    </main>
+  )
+}
+```
+
+In order to utilise GSAP ScrollTrigger, we need to <b>register plugins</b> at the top of the component:
+
+```tsx title="WavePlane.tsx" {5}
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
