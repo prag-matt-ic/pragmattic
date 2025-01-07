@@ -22,8 +22,6 @@ const BLOG_METADATA: BlogMetadata = {
   url: `${process.env.NEXT_PUBLIC_BASE_URL}${BlogPathname.NextJsShaderSetup}`,
 }
 
-console.log(`HELLOOOOO ${process.env.NEXT_PUBLIC_BASE_URL}${BlogPathname.NextJsShaderSetup}`)
-
 export const metadata: Metadata = {
   title: BLOG_METADATA.title,
   description: BLOG_METADATA.description,
