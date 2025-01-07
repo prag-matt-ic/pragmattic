@@ -1,5 +1,3 @@
-// gradient.frag
-
 #pragma glslify: noise = require('glsl-noise/simplex/3d')
 
 uniform sampler2D uTexture;

@@ -13,7 +13,7 @@ import { ShaderMaterial, Vector3 } from 'three'
 import fragmentShader from './gradient.frag'
 import vertexShader from './gradient.vert'
 
-// Component for rendering colourful animated gradient background that scrolls with the
+// Component for rendering colourful animated gradient background that moves up and down with the user scroll
 
 // Remember to register GSAP plugins
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -27,7 +27,7 @@ type Uniforms = {
   uUvDistortionIntensity: number
 }
 
-const DEFAULT_COLOUR_PALETTE: Vector3[] = COSINE_GRADIENTS['heat1'].map((color) => new Vector3(...color))
+const DEFAULT_COLOUR_PALETTE: Vector3[] = COSINE_GRADIENTS['orange-magenta-blue'].map((color) => new Vector3(...color))
 
 const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,
@@ -41,6 +41,12 @@ const INITIAL_UNIFORMS: Uniforms = {
 const ScrollingBgGradientMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
 
 extend({ ScrollingBgGradientMaterial })
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    scrollingBgGradientMaterial: ShaderMaterialProps & Partial<Uniforms>
+  }
+}
 
 type Props = {
   screens: number
@@ -128,14 +134,6 @@ function useConfig() {
   const colourPaletteVec3 = COSINE_GRADIENTS[paletteKey as CosineGradientPreset].map((color) => new Vector3(...color))
 
   return { colourPalette: colourPaletteVec3, timeMultiplier, scale, distortionIterations, distortionIntensity }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      scrollingBgGradientMaterial: ShaderMaterialProps & Uniforms
-    }
-  }
 }
 
 //  // Generate brand colour palette

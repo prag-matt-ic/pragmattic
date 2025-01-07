@@ -54,10 +54,8 @@ const ScreenQuadShader: FC = () => {
 
 export default ScreenQuadShader
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      screenQuadShaderMaterial: ShaderMaterialProps & Uniforms
-    }
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    screenQuadShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
   }
 }

@@ -4,6 +4,11 @@ export enum Pathname {
   Examples = '/example',
 }
 
+export enum BlogPathname {
+  WavePlane = '/blog/wave-plane',
+  NextJsShaderSetup = '/blog/nextjs-setup-glsl-shaders',
+}
+
 export enum ExamplePathname {
   ImageSequence = '/examples/scroll-driven-image-sequence',
   ScrollingBackgroundShader = '/examples/scrolling-background-shader',

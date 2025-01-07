@@ -36,7 +36,6 @@ void main() {
     float lineAlphaX = 1.0 - step(lineThickness, linePosX);
 
     float lineAlpha = max(lineAlphaY, lineAlphaX);
-
     vec4 lineColour = vec4(brightenValue(colour.r), brightenValue(colour.g), brightenValue(colour.b), 1.0);
     finalColour = mix(finalColour, lineColour, lineAlpha);
   }

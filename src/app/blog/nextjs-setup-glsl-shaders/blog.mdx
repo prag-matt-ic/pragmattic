@@ -1,0 +1,176 @@
+Let's walk through the necessary setup for working with GLSL shaders in Next.js, React Three Fiber and TypeScript.<br/>
+This configuration allows you to use `glslify` and load `.frag`, `.vert`, or `.glsl` files without compile-time errors.<br/>
+We'll also cover Typescript inside the React Component.
+
+
+## 1. Install Dependencies
+Add the packages required to load and process GLSL files:
+
+```bash
+npm install raw-loader glslify glslify-loader
+```
+
+#### [glslify-loader](https://www.npmjs.com/package/glslify-loader)
+Loader for Webpack that processes GLSL files using glslify.
+
+#### [glslify](https://github.com/glslify/glslify)
+Resolves `#pragma glslify` statements, allowing us to import/export from inside GLSL files.
+
+
+## 2. Configure Your Next.js Build
+By default, Next.js won't know what to do with `.frag`, `.vert`, or `.glsl` files. 
+We need to tell Webpack how to handle them. In Next.js you can modify the webpack configuration inside next.config.js (or next.config.mjs).
+
+```javascript title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+
+const nextConfig = {
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(glsl|vs|fs|vert|frag)$/,
+      use: ['raw-loader', 'glslify', 'glslify-loader'],
+    })
+    return config
+  },
+}
+
+export default nextConfig
+```
+
+## 3. Add a Type Declaration in your root directory
+
+This file tells TypeScript that the GLSL extensions should be treated as string modules.
+
+```typescript title="shader.d.ts"
+declare module '*.frag' {
+  const value: string;
+  export default value;
+}
+
+declare module '*.vert' {
+  const value: string;
+  export default value;
+}
+
+declare module '*.glsl' {
+  const value: string;
+  export default value;
+}
+```
+
+## 4. Importing and exporting inside shader files
+
+Now you can import other GLSL files inside your shader files.<br/>
+For example, you might want to use a noise function from the `glsl-noise` package:
+
+```glsl title="shader.frag"
+#pragma glslify: noise = require('glsl-noise/simplex/3d')
+```
+
+You can also export functions/variables for re-use:
+
+```glsl title="myfunction.glsl" showLineNumbers {12}
+#pragma glslify: rotation3dZ = require(glsl-rotate/rotation-3d-z)
+#pragma glslify: rotation3dY = require(glsl-rotate/rotation-3d-y)
+#pragma glslify: rotation3dX = require(glsl-rotate/rotation-3d-x)
+
+vec3 customRotate(inout vec3 position, in float angle) {
+    position *= rotation3dZ(-angle * 2.0);
+    position *= rotation3dY(angle * 4.0);
+    position *= rotation3dX(-angle);
+    return position;
+}
+
+#pragma glslify: export(customRotate)
+```
+
+
+## 5. Setting up your component
+
+We're all setup to import shader files in your React components and create our custom shaderMaterial using the `@react-three/drei` helper function.
+
+```tsx title="MyShaderComponent.tsx"
+'use client'
+import { shaderMaterial } from '@react-three/drei';
+import { extend, useFrame } from '@react-three/fiber';
+import { ShaderMaterial } from 'three';
+import { type FC } from 'react';
+
+import vertexShader from './shader.vert';
+import fragmentShader from './shader.frag';
+
+type Uniforms {
+  uTime: number
+}
+
+const DEFAULT_UNIFORMS: Uniforms = {
+  uTime: 0
+}
+
+const MyShaderMaterial = shaderMaterial(
+  DEFAULT_UNIFORMS,
+  vertex,
+  fragment
+);
+
+extend({ MyShaderMaterial });
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    myShaderMaterial: ShaderMaterialProps & Uniforms
+  }
+}
+
+// ... Component below
+```
+
+```tsx title="MyShaderComponent.tsx" {2,6,12-16}
+const MyShaderComponent: FC = () => {
+  const shaderMaterial = useRef<ShaderMaterial & Uniforms>(null)
+
+  useFrame(({ clock }) => {
+    if (!shaderMaterial.current) return
+    shaderMaterial.current.uTime = clock.elapsedTime
+  })
+
+  return (
+    <mesh>
+      <planeGeometry args={[1,1,1,1]} />
+      <myShaderMaterial
+        attach="material" // Not needed but added for reference
+        ref={shaderMaterial}
+        key={MyShaderMaterial.key}
+        uTime={0}
+      
+      />
+    </mesh>
+  )
+}
+```
+
+### Summary
+- Use `ShaderMaterial` from three and our `Uniforms` type for the shader material ref
+- Update frequently changing uniform(s) inside the `useFrame` hook
+- Attach the shader material to a mesh
+- Add a `key` prop to enable hot-reloading when the shader code is edited
+
+
+## Bonus: Some Useful GLSL Packages
+
+Depending on your goals, you may also find some of these handy:
+- [glsl-noise](https://www.npmjs.com/package/glsl-noise) - Perlin noise, simplex noise, and other noise functions
+- [glsl-constants](https://www.npmjs.com/package/glsl-constants) - Constants such as PI
+- [glsl-blend](https://www.npmjs.com/package/glsl-blend) - Photoshop blend modes including overlay, screen, multiply
+- [glsl-easings](https://www.npmjs.com/package/glsl-easings) - Easing functions for animation timings
+- [glsl-fast-gaussian-blur](https://www.npmjs.com/package/glsl-fast-gaussian-blur) - For texture blurring
+- [glsl-rotate](https://www.npmjs.com/package/glsl-rotate) - 2D and 3D rotation functions
+
+
+## Summary
+In just a few steps your Next.js TypeScript app is all set up to work with GLSL shaders in React Three Fiber.
+
+Explore a working example here: [Scrolling Background Gradient](https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/scrollingBackgroundGradient/ScrollingBackgroundGradient.tsx)
+
+Happy shader coding!
+
+

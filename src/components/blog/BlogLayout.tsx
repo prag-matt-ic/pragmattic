@@ -15,7 +15,7 @@ type BlogProps = {
   title: string
   date: string
   tags: string[]
-  demoUrl: string
+  demoUrl?: string
   metadata: BlogMetadata
 }
 

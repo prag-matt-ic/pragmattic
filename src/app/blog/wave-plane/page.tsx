@@ -2,7 +2,9 @@ import { type Metadata } from 'next'
 import React from 'react'
 
 import BlogLayout, { type BlogMetadata } from '@/components/blog/BlogLayout'
-import Article from '@/components/examples/wavePlane/blog/wavePlane.mdx'
+import { BlogPathname } from '@/resources/navigation'
+
+import Content from './blog.mdx'
 
 type Props = {
   params: {
@@ -17,7 +19,7 @@ const BLOG_METADATA: BlogMetadata = {
   description:
     'This simple project is a great way to learn about ThreeJS shaders and how to use them in a React Typescript environment.',
   date: LAST_UPDATED,
-  url: 'https://pragmattic.vercel.app/examples/wave-plane',
+  url: `${process.env.NEXT_PUBLIC_BASE_URL}${BlogPathname.WavePlane}`,
 }
 
 export const metadata: Metadata = {
@@ -33,7 +35,7 @@ export default function WavePlaneBlogPage({ params }: Props) {
       tags={['threejs', 'vertex shader', 'fragment shader', 'noise', 'react', 'nextjs']}
       demoUrl="/examples/wave-plane"
       metadata={BLOG_METADATA}>
-      <Article />
+      <Content />
     </BlogLayout>
   )
 }

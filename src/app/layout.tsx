@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: { template: '%s | Pragmattic', default: 'Pragmattic | Design and Engineering' },
   description:
     'Helping teams build interactive 3D experiences, launch web and mobile apps, and streamline their workflows using AI.',
+  authors: [{ name: 'Matthew Frawley' }],
 }
 
 export default function RootLayout({
