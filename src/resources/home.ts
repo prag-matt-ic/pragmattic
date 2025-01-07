@@ -1,6 +1,6 @@
 import { Color } from 'three'
 
-import { CYAN_VEC3, GREEN_VEC3, ORANGE_VEC3 } from './colours'
+import { CYAN_VEC3_RGB, GREEN_VEC3_RGB, ORANGE_VEC3_RGB } from './colours'
 
 export enum SceneSection {
   Purpose = 'purpose',
@@ -9,9 +9,7 @@ export enum SceneSection {
 }
 
 export const SECTION_COLOURS: Record<SceneSection, Color> = {
-  [SceneSection.Purpose]: GREEN_VEC3,
-  [SceneSection.Design]: ORANGE_VEC3,
-  [SceneSection.Engineering]: CYAN_VEC3,
+  [SceneSection.Purpose]: GREEN_VEC3_RGB,
+  [SceneSection.Design]: ORANGE_VEC3_RGB,
+  [SceneSection.Engineering]: CYAN_VEC3_RGB,
 }
-
-export const POINT_VEC3 = new Color('#9A93A9')

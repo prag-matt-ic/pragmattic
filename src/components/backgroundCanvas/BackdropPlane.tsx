@@ -6,6 +6,8 @@ import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React, { type FC, useRef } from 'react'
 import { Color, ShaderMaterial, Texture } from 'three'
 
+import { BLACK_VEC3_RGB, LIGHT_VEC3_RGB } from '@/resources/colours'
+
 // Create custom shader.d.ts file for .vert and .frag files
 import fragmentShader from './backdropPlane.frag'
 import vertexShader from './backdropPlane.vert'
@@ -27,8 +29,8 @@ const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,
   uAspectRatio: 1,
   uScrollOffset: 0,
-  uLightColour: new Color('#2E2A37').convertLinearToSRGB(),
-  uDarkColour: new Color('#0A090C').convertLinearToSRGB(),
+  uLightColour: LIGHT_VEC3_RGB,
+  uDarkColour: BLACK_VEC3_RGB,
   uTexture: null,
 }
 

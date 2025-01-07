@@ -67,8 +67,10 @@ export default nextConfig
 ## React Three Fiber Canvas Setup
 
 The [Canvas](https://r3f.docs.pmnd.rs/api/canvas) is the root component for your React ThreeJS scene.
+Remember that Next.js components are server-side by default, so you need to add the ['use client'](https://nextjs.org/docs/app/building-your-application/rendering/client-components#using-client-components-in-nextjs) directive in each of your Three component files.
 
 ```tsx title="WavePlaneCanvas.tsx" showLineNumbers
+'use client'
 import { type FC } from 'react'
 import { Canvas } from '@react-three/fiber'
 

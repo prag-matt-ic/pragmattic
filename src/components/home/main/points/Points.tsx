@@ -5,7 +5,8 @@ import React, { type FC, useEffect, useMemo, useRef } from 'react'
 import { AdditiveBlending, BufferAttribute, Color, MathUtils, ShaderMaterial } from 'three'
 
 import { useHomeStore } from '@/hooks/home/HomeProvider'
-import { POINT_VEC3, SceneSection, SECTION_COLOURS } from '@/resources/home'
+import { MID_VEC3_RGB } from '@/resources/colours'
+import { SceneSection, SECTION_COLOURS } from '@/resources/home'
 
 import pointsFragmentShader from './points.frag'
 import pointsVertexShader from './points.vert'
@@ -30,21 +31,21 @@ const getColours = (count: number, activeSection: SceneSection | null): Float32A
 
   if (activeSection === null) {
     for (let i = 0; i < count; i++) {
-      colours.set([...POINT_VEC3], i * 3)
+      colours.set([...MID_VEC3_RGB], i * 3)
     }
     return colours
   }
 
   // Random value between 6 and 10 for the coloured particle
   const randomColourIndex = Math.floor(Math.random() * 6) + 4
-  const activeColour = new Color(activeSection ? SECTION_COLOURS[activeSection] : POINT_VEC3)
+  const activeColour = new Color(activeSection ? SECTION_COLOURS[activeSection] : MID_VEC3_RGB)
   activeColour.convertLinearToSRGB()
 
   for (let i = 0; i < count; i++) {
     if (i % randomColourIndex === 0) {
       colours.set([...activeColour], i * 3)
     } else {
-      colours.set([...POINT_VEC3], i * 3)
+      colours.set([...MID_VEC3_RGB], i * 3)
     }
   }
   return colours

@@ -8,12 +8,12 @@ import { type FC, useRef } from 'react'
 import React from 'react'
 import { Color, ShaderMaterial } from 'three'
 
-import { BLACK_VEC3, CYAN_VEC3, GREEN_VEC3, LIGHT_VEC3, ORANGE_VEC3 } from '@/resources/colours'
+import { BLACK_VEC3_RGB, CYAN_VEC3_RGB, GREEN_VEC3_RGB, LIGHT_VEC3_RGB, ORANGE_VEC3_RGB } from '@/resources/colours'
 
 import agencyFragment from './agency.frag'
 import developerFragment from './developer.frag'
-import startupFragment from './startup.frag'
 import vertexShader from './screen.vert'
+import startupFragment from './startup.frag'
 
 export type WorkTogetherShader = 'agency' | 'startup' | 'developer'
 
@@ -28,23 +28,23 @@ type Uniforms = {
 const AGENCY_UNIFORMS: Uniforms = {
   uTime: 0,
   uIsHovered: false,
-  uLightColour: LIGHT_VEC3,
-  uDarkColour: BLACK_VEC3,
-  uActiveColour: ORANGE_VEC3,
+  uLightColour: LIGHT_VEC3_RGB,
+  uDarkColour: BLACK_VEC3_RGB,
+  uActiveColour: ORANGE_VEC3_RGB,
 }
 const STARTUP_UNIFORMS: Uniforms = {
   uTime: 0,
   uIsHovered: false,
-  uLightColour: LIGHT_VEC3,
-  uDarkColour: BLACK_VEC3,
-  uActiveColour: GREEN_VEC3,
+  uLightColour: LIGHT_VEC3_RGB,
+  uDarkColour: BLACK_VEC3_RGB,
+  uActiveColour: GREEN_VEC3_RGB,
 }
 const DEVELOPER_UNIFORMS: Uniforms = {
   uTime: 0,
   uIsHovered: false,
-  uLightColour: LIGHT_VEC3,
-  uDarkColour: BLACK_VEC3,
-  uActiveColour: CYAN_VEC3,
+  uLightColour: LIGHT_VEC3_RGB,
+  uDarkColour: BLACK_VEC3_RGB,
+  uActiveColour: CYAN_VEC3_RGB,
 }
 
 const AgencyShaderMaterial = shaderMaterial(AGENCY_UNIFORMS, vertexShader, agencyFragment)

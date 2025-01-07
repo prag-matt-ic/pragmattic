@@ -7,7 +7,8 @@ import CustomShaderMaterial from 'three-custom-shader-material'
 
 import { TORUS_ARGS } from '@/components/home/main/torusResources'
 import { useHomeStore } from '@/hooks/home/HomeProvider'
-import { POINT_VEC3, SceneSection, SECTION_COLOURS } from '@/resources/home'
+import { OFF_BLACK_VEC3_RGB } from '@/resources/colours'
+import { SceneSection, SECTION_COLOURS } from '@/resources/home'
 
 import fragmentShader from './torus.frag'
 import vertexShader from './torus.vert'
@@ -74,7 +75,7 @@ type UniformValues = {
 const PURPOSE_UNIFORMS: UniformValues = {
   uTime: { value: 0 },
   uRotateAngle: { value: 0 },
-  uColour: { value: POINT_VEC3 },
+  uColour: { value: OFF_BLACK_VEC3_RGB },
   uActiveColour: { value: SECTION_COLOURS[SceneSection.Purpose] },
   uActiveProgress: { value: 0 },
   uRadius: { value: TORUS_ARGS.purpose[0] },
@@ -84,7 +85,7 @@ const PURPOSE_UNIFORMS: UniformValues = {
 const DESIGN_UNIFORMS: UniformValues = {
   uTime: { value: 0 },
   uRotateAngle: { value: 0 },
-  uColour: { value: POINT_VEC3 },
+  uColour: { value: OFF_BLACK_VEC3_RGB },
   uActiveColour: { value: SECTION_COLOURS[SceneSection.Design] },
   uActiveProgress: { value: 0 },
   uRadius: { value: TORUS_ARGS.design[0] },
@@ -94,7 +95,7 @@ const DESIGN_UNIFORMS: UniformValues = {
 const ENGINEERING_UNIFORMS: UniformValues = {
   uTime: { value: 0 },
   uRotateAngle: { value: 0 },
-  uColour: { value: POINT_VEC3 },
+  uColour: { value: OFF_BLACK_VEC3_RGB },
   uActiveColour: { value: SECTION_COLOURS[SceneSection.Engineering] },
   uActiveProgress: { value: 0 },
   uRadius: { value: TORUS_ARGS.engineering[0] },

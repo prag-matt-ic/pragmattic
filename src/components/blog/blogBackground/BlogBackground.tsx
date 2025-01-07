@@ -4,7 +4,7 @@ import { Canvas, extend, type ShaderMaterialProps, useFrame } from '@react-three
 import React, { type FC, useRef } from 'react'
 import { Color, ShaderMaterial } from 'three'
 
-import { BLACK_VEC3, LIGHT_VEC3, MID_VEC3 } from '@/resources/colours'
+import { BLACK_VEC3_RGB, LIGHT_VEC3_RGB, MID_VEC3_RGB } from '@/resources/colours'
 
 import fragmentShader from './bg.frag'
 import vertexShader from './bg.vert'
@@ -18,9 +18,9 @@ type Uniforms = {
 
 const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,
-  uLightColour: LIGHT_VEC3.convertLinearToSRGB(),
-  uMidColour: MID_VEC3.convertLinearToSRGB(),
-  uDarkColour: BLACK_VEC3.convertLinearToSRGB(),
+  uLightColour: LIGHT_VEC3_RGB,
+  uMidColour: MID_VEC3_RGB,
+  uDarkColour: BLACK_VEC3_RGB,
 }
 
 const BlogBackgroundShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)

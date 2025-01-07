@@ -6,7 +6,6 @@ import React, { type FC, PropsWithChildren, useMemo, useRef } from 'react'
 import { ShaderMaterial, Vector3 } from 'three'
 
 import PointerCamera from '@/components/PointerCamera'
-import { GREEN_VEC3 } from '@/resources/colours'
 
 import vertexShader from '../wavePlane.vert'
 import basicFragmentShader from './basic.frag'

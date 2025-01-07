@@ -5,7 +5,7 @@ import { extend, type ShaderMaterialProps, useFrame, useThree } from '@react-thr
 import React, { type FC, useRef } from 'react'
 import { Color, ShaderMaterial } from 'three'
 
-import { BLACK_VEC3, LIGHT_VEC3, MID_VEC3, OFF_BLACK_VEC3 } from '@/resources/colours'
+import { BLACK_VEC3_RGB, LIGHT_VEC3_RGB, MID_VEC3_RGB, OFF_BLACK_VEC3_RGB } from '@/resources/colours'
 
 import bgFragment from './background.frag'
 import bgVertex from './background.vert'
@@ -22,10 +22,10 @@ type Uniforms = {
 const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,
   uAspect: 1,
-  uLightColour: LIGHT_VEC3,
-  uMidColour: MID_VEC3,
-  uOffBlackColour: OFF_BLACK_VEC3,
-  uBlackColour: BLACK_VEC3,
+  uLightColour: LIGHT_VEC3_RGB,
+  uMidColour: MID_VEC3_RGB,
+  uOffBlackColour: OFF_BLACK_VEC3_RGB,
+  uBlackColour: BLACK_VEC3_RGB,
 }
 
 const HomeBackgroundShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, bgVertex, bgFragment)
