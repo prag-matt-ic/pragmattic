@@ -9,24 +9,23 @@ import Button from '@/components/buttons/Button'
 
 type Props = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
 
-// TODO: update sizing for mobile viewing...
 const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>
       <header className="relative flex w-full select-none">
-        <div className="relative z-10 mx-auto flex size-full max-w-[1024px] flex-col items-center space-y-5 bg-gradient-to-t from-light/40 to-light/0 to-30% px-12 pb-20 pt-40">
-          <div className="flex flex-wrap justify-center gap-2">
+        <div className="relative z-10 mx-auto flex size-full max-w-[1024px] flex-col items-center space-y-5 bg-gradient-to-t from-light/40 to-light/0 to-30% px-4 pb-20 pt-24 sm:px-12 sm:pt-40">
+          <div className="flex flex-wrap justify-center gap-1.5">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-sm bg-black px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-white/70 shadow-md">
+                className="rounded-sm bg-black px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-white/70 shadow-sm">
                 #{tag}
               </span>
             ))}
           </div>
           <h1
-            className="text-balance text-center text-5xl font-extrabold leading-snug tracking-tight text-white"
+            className="text-balance text-center text-2xl font-extrabold tracking-tight text-white sm:text-4xl sm:leading-snug md:text-5xl md:leading-snug"
             style={{
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
             }}>

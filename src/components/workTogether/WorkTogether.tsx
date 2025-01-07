@@ -12,9 +12,7 @@ import Button from '@/components/buttons/Button'
 
 import { WorkTogetherAnimation, type WorkTogetherShader } from './shaders/WorkTogetherCanvas'
 
-type Props = {}
-
-const WorkTogether: FC<Props> = ({}) => {
+const WorkTogether: FC = () => {
   const [isShowing, setIsShowing] = useState(false)
 
   const { refs, floatingStyles, context } = useFloating({
@@ -35,8 +33,18 @@ const WorkTogether: FC<Props> = ({}) => {
         {...getReferenceProps()}
         variant="filled"
         size="small"
+        className={isShowing ? 'bg-white' : ''}
         onClick={() => setIsShowing((prev) => !prev)}>
         Work together
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={twJoin('-mr-2 transition-transform duration-200', isShowing && 'rotate-180')}>
+          <path d="M12 15L7 10H17L12 15Z" className="fill-black" />
+        </svg>
       </Button>
       <Transition
         in={isShowing}
