@@ -1,16 +1,16 @@
 import { autoUpdate, offset, shift, useFloating, useInteractions } from '@floating-ui/react'
 import { useDismiss } from '@floating-ui/react'
 import { useHover } from '@mantine/hooks'
+import { OrthographicCamera, View } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import Link from 'next/link'
 import { type FC, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
 import Button from '@/components/buttons/Button'
 
-import { type WorkTogetherShader, WorkTogetherAnimation } from './shaders/WorkTogetherCanvas'
-import { OrthographicCamera, View } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-import Link from 'next/link'
+import { WorkTogetherAnimation, type WorkTogetherShader } from './shaders/WorkTogetherCanvas'
 
 type Props = {}
 
@@ -104,7 +104,7 @@ const ContentCard: FC<CardProps> = ({ shader, title, description, href }) => {
       <div
         ref={ref}
         className={twJoin('group flex items-center', shader !== 'developer' && 'border-b border-b-off-black')}>
-        <View id={shader} visible className="size-[120px] shrink-0 sm:size-[132px] md:size-[148px]">
+        <View id={shader} visible className="size-[104px] shrink-0 sm:size-[120px] md:size-[148px]">
           <WorkTogetherAnimation type={shader} isHovered={isHovered} />
         </View>
         <div className="px-4">
