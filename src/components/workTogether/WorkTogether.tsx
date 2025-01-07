@@ -1,4 +1,4 @@
-import { autoUpdate, offset, shift, useFloating, useInteractions } from '@floating-ui/react'
+import { autoUpdate, FloatingPortal, offset, shift, useFloating, useInteractions } from '@floating-ui/react'
 import { useDismiss } from '@floating-ui/react'
 import { useHover } from '@mantine/hooks'
 import { OrthographicCamera, View } from '@react-three/drei'
@@ -46,48 +46,51 @@ const WorkTogether: FC = () => {
           <path d="M12 15L7 10H17L12 15Z" className="fill-black" />
         </svg>
       </Button>
-      <Transition
-        in={isShowing}
-        timeout={{ enter: 0, exit: 200 }}
-        nodeRef={refs.floating}
-        mountOnEnter={true}
-        unmountOnExit={true}>
-        <div
-          ref={refs.setFloating}
-          {...getFloatingProps()}
-          style={floatingStyles}
-          id="work-together"
-          className="fixed z-[200] max-w-[calc(100%-16px)] select-none overflow-hidden rounded-lg border border-off-black bg-black shadow-2xl">
-          {/* Views from inside the content cards are rendered using this single canvas */}
-          <Canvas
-            key="work-together-canvas"
-            className="pointer-events-none !fixed inset-0 overflow-hidden"
-            eventSource={refs.floating.current!}
-            gl={{ alpha: false, antialias: false }}>
-            <OrthographicCamera makeDefault position={[0, 0, 0]} />
-            <View.Port />
-          </Canvas>
 
-          <ContentCard
-            shader="agency"
-            title="For Agencies"
-            description="Discuss a project or business partnership"
-            href="mailto:pragmattic.ltd@gmail.com?subject=Agency%20partnership"
-          />
-          <ContentCard
-            shader="startup"
-            title="For Startups"
-            description="Discuss a new product or MVP launch"
-            href="mailto:pragmattic.ltd@gmail.com?subject=Product%20launch"
-          />
-          <ContentCard
-            shader="developer"
-            title="For Developers"
-            description="Discuss work opportunities or team training"
-            href="mailto:pragmattic.ltd@gmail.com?subject=Developer%20Collaboration"
-          />
-        </div>
-      </Transition>
+      <FloatingPortal>
+        <Transition
+          in={isShowing}
+          timeout={{ enter: 0, exit: 200 }}
+          nodeRef={refs.floating}
+          mountOnEnter={true}
+          unmountOnExit={true}>
+          <div
+            ref={refs.setFloating}
+            {...getFloatingProps()}
+            style={floatingStyles}
+            id="work-together"
+            className="fixed z-[1000] max-w-[calc(100%-16px)] select-none overflow-hidden rounded-lg border border-off-black bg-black shadow-2xl">
+            {/* Views from inside the content cards are rendered using this single canvas */}
+            <Canvas
+              key="work-together-canvas"
+              className="pointer-events-none !fixed inset-0 overflow-hidden"
+              eventSource={refs.floating.current!}
+              gl={{ alpha: false, antialias: false }}>
+              <OrthographicCamera makeDefault position={[0, 0, 0]} />
+              <View.Port />
+            </Canvas>
+
+            <ContentCard
+              shader="agency"
+              title="For Agencies"
+              description="Discuss a project or business partnership"
+              href="mailto:pragmattic.ltd@gmail.com?subject=Agency%20partnership"
+            />
+            <ContentCard
+              shader="startup"
+              title="For Startups"
+              description="Discuss a new product or MVP launch"
+              href="mailto:pragmattic.ltd@gmail.com?subject=Product%20launch"
+            />
+            <ContentCard
+              shader="developer"
+              title="For Developers"
+              description="Discuss work opportunities or team training"
+              href="mailto:pragmattic.ltd@gmail.com?subject=Developer%20Collaboration"
+            />
+          </div>
+        </Transition>
+      </FloatingPortal>
     </>
   )
 }
