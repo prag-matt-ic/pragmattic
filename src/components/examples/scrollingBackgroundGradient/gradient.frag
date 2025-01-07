@@ -14,7 +14,7 @@ varying vec2 vUv;
 
 // Color palette function
 // http://dev.thi.ng/gradients/
-vec3 cosineGradientColor(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
+vec3 cosineGradientColour(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
   return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
 }
 
@@ -26,7 +26,7 @@ void main() {
   uv *= uUvScale;
 
   // Basic implementation of cosine gradient
-  // vec3 colour = cosineGradientColor(uv.y, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
+  // vec3 colour = cosineGradientColour(uv.y, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
 
   // Distort the uv coordinates with noise iterations
   for (float i = 0.0; i < uUvDistortionIterations; i++) {
@@ -34,7 +34,7 @@ void main() {
   }
 
   float colourInput = noise(vec3(uv, sin(uTime))) * 0.5 + 0.5;
-  vec3 colour = cosineGradientColor(colourInput, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
+  vec3 colour = cosineGradientColour(colourInput, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
 
   gl_FragColor = vec4(colour, 1.0);
 }

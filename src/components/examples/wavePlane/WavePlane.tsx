@@ -31,7 +31,7 @@ const INITIAL_UNIFORMS: Uniforms = {
   uScrollProgress: 0,
   uColourPalette: DEFAULT_COLOUR_PALETTE,
   uShowGrid: true,
-  uGridSize: 16,
+  uGridSize: 24,
 }
 
 const WavePlaneShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
@@ -116,7 +116,7 @@ function useConfig() {
     },
     gridSize: {
       label: 'Grid Size',
-      value: 16.0,
+      value: 24,
       step: 1,
       min: 4,
       max: 64,

@@ -17,7 +17,7 @@ As a bonus we'll be adding some scroll based interaction using <b>GSAP ScrollTri
 <i>At the time of writing Next 15 (which uses React 19) and React Three Fiber (v8) don't play well together - so you may need to be running Next 14.</i>
 
 ```bash
-npm i @gsap/react @react-three/drei @react-three/fiber gsap @thi.ng/color glslify glslify-loader glsl-noise raw-loader
+npm i @gsap/react @react-three/drei @react-three/fiber gsap "@thi.ng/color" glslify glslify-loader glsl-noise raw-loader
 ```
 
 ### Configure Typescript for GLSL shader imports
@@ -279,7 +279,7 @@ const INITIAL_UNIFORMS: Uniforms = {
   uScrollProgress: 0,
   uColourPalette: DEFAULT_COLOUR_PALETTE,
   uShowGrid: true,
-  uGridSize: 16,
+  uGridSize: 24,
 }
 
 const WavePlaneShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
@@ -366,21 +366,21 @@ varying float vTerrainHeight;
 const vec4 BG_COLOUR = vec4(0.0, 0.0, 0.0, 1.0);
 
 // Colour palette values taken from: http://dev.thi.ng/gradients/
-vec3 cosineGradientColor(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
+vec3 cosineGradientColour(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
   return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
 }
 
 void main() {
   // Colour the surface based on the height of the terrain
-  vec3 colour = cosineGradientColor(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
-  vec4 finalColor = vec4(colour, 1.0);
+  vec3 colour = cosineGradientColour(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
+  vec4 finalColour = vec4(colour, 1.0);
 
   // Fade out towards the edges in a soft circular shape
   float distanceToCenter = distance(vUv, vec2(0.5, 0.5));
   float fogAmount = smoothstep(0.35, 0.5, distanceToCenter);
-  finalColor = mix(finalColor, BG_COLOUR, fogAmount);
+  finalColour = mix(finalColour, BG_COLOUR, fogAmount);
 
-  gl_FragColor = finalColor;
+  gl_FragColor = finalColour;
 }
 ```
 
@@ -400,7 +400,7 @@ void main() {
 The grid lines add a cool retro effect to the plane. 
 We can draw them by using the UV coordinate and the grid size uniform:
 
-```glsl {19-21,28-42} title="Fragment Shader wavePlane.frag" showLineNumbers 
+```glsl {19-21,28-41} title="Fragment Shader wavePlane.frag" showLineNumbers 
 // Wave Plane Fragment shader
 uniform float uTime;
 uniform float uScrollProgress;
@@ -415,7 +415,7 @@ varying float vTerrainHeight;
 const vec4 BG_COLOUR = vec4(0.0, 0.0, 0.0, 1.0);
 
 // Colour palette values taken from: http://dev.thi.ng/gradients/
-vec3 cosineGradientColor(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
+vec3 cosineGradientColour(in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d) {
   return clamp(a + b * cos(6.28318 * (c * t + d)), 0.0, 1.0);
 }
 
@@ -425,32 +425,31 @@ float brightenValue(in float colour) {
 
 void main() {
   // Colour the surface based on the height of the terrain
-  vec3 colour = cosineGradientColor(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
-  vec4 finalColor = vec4(colour, 1.0);
+  vec3 colour = cosineGradientColour(vTerrainHeight, uColourPalette[0], uColourPalette[1], uColourPalette[2], uColourPalette[3]);
+  vec4 finalColour = vec4(colour, 1.0);
 
   // Draw the grid lines
   if (uShowGrid) {
-    // horizontal lines
     float lineThickness = 0.001 * uGridSize;
+    // horizontal lines
     float linePosY = fract(vUv.y * uGridSize);
     float lineAlphaY = 1.0 - step(lineThickness, linePosY);
     // vertical lines
     float linePosX = fract(vUv.x * uGridSize);
     float lineAlphaX = 1.0 - step(lineThickness, linePosX);
-
+    // Combine the two line alphas and create line colour
     float lineAlpha = max(lineAlphaY, lineAlphaX);
-
-    vec4 lineColor = vec4(brightenValue(colour.r), brightenValue(colour.g), brightenValue(colour.b), 1.0);
-    finalColor = mix(finalColor, lineColor, lineAlpha);
+    vec4 lineColour = vec4(brightenValue(colour.r), brightenValue(colour.g), brightenValue(colour.b), 1.0);
+    finalColour = mix(finalColour, lineColour, lineAlpha); // Use line colour when line is visible
   }
 
   // Fade out towards the edges in a soft circular shape
   float distanceToCenter = distance(vUv, vec2(0.5));
   float fogAmount = smoothstep(0.35, 0.5, distanceToCenter);
 
-  finalColor = mix(finalColor, BG_COLOUR, fogAmount);
+  finalColour = mix(finalColour, BG_COLOUR, fogAmount);
 
-  gl_FragColor = finalColor;
+  gl_FragColor = finalColour;
 }
 ```
 
@@ -492,7 +491,7 @@ If you revisit the [live demo](/examples/wave-plane) you can scroll til your hea
       start: 0,
       end: 'max',
       onUpdate: ({ progress }) => {
-        if (loopScroll && progress === 1) {
+        if (progress === 1) {
           scrollLoop.current++
           scrollProgress.current = 0
           window.scrollTo(0, 0)
@@ -506,15 +505,15 @@ If you revisit the [live demo](/examples/wave-plane) you can scroll til your hea
   useFrame(({ clock }) => {
     if (!shaderMaterial.current) return
     shaderMaterial.current.uTime = clock.elapsedTime
-    shaderMaterial.current.uScrollProgress = (scrollProgress.current + scrollLoop.current) * screenHeights
+    shaderMaterial.current.uScrollProgress = scrollProgress.current + scrollLoop.current
   })
 ```
 
 #### Summary
 - The ScrollTrigger starts at 0 (top of the page) and ends at the max scroll position (bottom of the page)
 - We update the scrollProgress value inside the onUpdate function. The progress ranges from 0 to 1.
-- For infinite scrolling. When the progress = 1, we increment scrollLoop, reset scrollProgress to 0, and scroll to the top of the window.
-- We update the shader's uScrollProgress uniform inside useFrame. By adding the scrollLoop count we ensure the value passed to the shader never jumps back to 0.
+- For infinite scrolling. When progress = 1, we increment scrollLoop, reset scrollProgress to 0, and scroll to the top of the window.
+- We update the shader's uScrollProgress uniform inside useFrame. By adding the scrollLoop count we ensure the value passed to the shader always increases instead of jumping back to 0.
 
 Now that we have a working scroll progress value, we can incorporate it into our shaders.
 
@@ -532,7 +531,7 @@ This will give the impression of the plane moving as we scroll.
 
 ````glsl title="Fragment Shader wavePlane.frag" /uScrollProgress/
     float yOffset = uScrollProgress * 6.0;
-    float linePosY = fract(vUv.y * uGridSize + yOffset); // <- Move the horizontal lines by adding the scroll offset
+    float linePosY = fract(vUv.y * uGridSize + yOffset); // move the horizontal lines using scroll progress
 ````
 
 - Now in the fragment shader we can add uScrollProgress to the linePosY calculation. This moves the lines up and down as the scroll progress changes.
