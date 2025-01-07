@@ -33,7 +33,7 @@ const Nav: FC = () => {
 
   return (
     <>
-      <nav className="fixed left-0 right-0 top-0 z-[500] flex items-center justify-between py-1.5 pl-6 pr-4 md:py-2">
+      <nav className="fixed left-0 right-0 top-0 z-[500] flex items-center justify-between py-1.5 pl-6 pr-4 md:py-2.5">
         <div id="nav-bg" className="absolute inset-0 bg-black opacity-0" />
         <Link href="/" className="relative">
           <Image

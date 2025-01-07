@@ -70,7 +70,7 @@ const HomeScrollManager: FC = () => {
 
   return (
     <nav className="fixed bottom-0 left-6 top-0 z-[100] hidden items-center justify-center sm:flex xl:left-8">
-      <div id="scroll-bar" className="relative w-2.5 rounded-full bg-light/30 xl:w-3">
+      <div id="scroll-bar" className="relative w-1 rounded-full bg-light/30 xl:w-2">
         <div className={spacerClasses} />
         <button
           className={twJoin(
@@ -98,7 +98,7 @@ const HomeScrollManager: FC = () => {
         />
         <div className={spacerClasses} />
 
-        <div id="scroll-indicator" className="absolute left-1 top-0 size-5 xl:size-6">
+        <div id="scroll-indicator" className="absolute left-1 top-0 size-4 xl:size-5">
           {/* Bounce this on the X axis */}
           <Image src={positionArrow} alt="arrow" className="size-full -translate-y-1/2" />
         </div>
