@@ -52,7 +52,7 @@ The [glslify package](https://github.com/glslify/glslify) allows us to import an
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.(glsl|vs|fs|vert|frag)$/,
       use: ['raw-loader', 'glslify', 'glslify-loader'],
