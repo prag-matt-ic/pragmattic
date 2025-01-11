@@ -60,7 +60,12 @@ const Nav: FC = () => {
         </div>
 
         <div className="relative flex items-center gap-2 md:gap-4">
-          <Link href={Pathname.Blog} className={twJoin('font-semibold text-white')}>
+          <Link
+            href={Pathname.Blog}
+            className={twJoin(
+              'font-semibold',
+              pathname.includes(Pathname.Blog) ? 'text-green' : 'text-white hover:text-green',
+            )}>
             Blog
           </Link>
           <WorkTogether />

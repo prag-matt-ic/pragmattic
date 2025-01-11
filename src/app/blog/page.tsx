@@ -5,6 +5,10 @@ import React, { FC, PropsWithChildren, ReactNode } from 'react'
 import BlogBackgroundCanvas from '@/components/blog/blogBackground/BlogBackground'
 import { GridLinesFragmentShaderPlaneCanvas } from '@/components/examples/wavePlane/blog/WavePlaneBlog'
 import { BlogPathname } from '@/resources/navigation'
+import { Canvas } from '@react-three/fiber'
+import ScrollingBackgroundGradient, {
+  ScrollBackgroundGradientCanvas,
+} from '@/components/examples/scrollingBackgroundGradient/ScrollingBackgroundGradient'
 
 type Props = {
   params: {
@@ -39,8 +43,9 @@ export default function BlogPage({ params }: Props) {
           <LinkCard
             href={BlogPathname.NextJsShaderSetup}
             heading="Next.js GLSL shader setup guide"
-            description="Setup guide for working with GLSL shaders in Next.js, React Three Fiber and TypeScript."
-          />
+            description="Setup guide for working with GLSL shaders in Next.js, React Three Fiber and TypeScript.">
+            <ScrollBackgroundGradientCanvas />
+          </LinkCard>
         </section>
 
         {/* TODO: add links to examples */}
@@ -60,7 +65,7 @@ const LinkCard: FC<PropsWithChildren<LinkCardProps>> = ({ children, href, headin
     <Link
       href={href}
       className="flex items-center gap-4 rounded-lg border-black bg-black/20 p-4 hover:bg-black/40 lg:gap-12">
-      <div className="relative aspect-square size-96 overflow-hidden rounded shadow-lg">{children}</div>
+      <div className="relative aspect-square size-96 overflow-hidden rounded">{children}</div>
       <div className="max-w-2xl space-y-3">
         <h3 className="text-xl font-bold">{heading}</h3>
         <p className="text-white/70">{description}</p>

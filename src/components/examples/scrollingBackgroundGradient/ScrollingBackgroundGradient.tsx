@@ -2,7 +2,7 @@
 
 import { useGSAP } from '@gsap/react'
 import { ScreenQuad, shaderMaterial } from '@react-three/drei'
-import { extend, type ShaderMaterialProps, useFrame } from '@react-three/fiber'
+import { Canvas, extend, type ShaderMaterialProps, useFrame } from '@react-three/fiber'
 import { COSINE_GRADIENTS, type CosineGradientPreset } from '@thi.ng/color'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
@@ -27,7 +27,7 @@ type Uniforms = {
   uUvDistortionIntensity: number
 }
 
-const DEFAULT_COLOUR_PALETTE: Vector3[] = COSINE_GRADIENTS['orange-magenta-blue'].map((color) => new Vector3(...color))
+const DEFAULT_COLOUR_PALETTE: Vector3[] = COSINE_GRADIENTS['heat1'].map((color) => new Vector3(...color))
 
 const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,
@@ -52,10 +52,40 @@ type Props = {
   screens: number
 }
 
-const ScrollingBackgroundGradient: FC<Props> = ({ screens }) => {
+const ScrollingBackgroundGradientWithControls: FC<Props> = (props) => {
+  const { colourPalette, timeMultiplier, scale, distortionIterations, distortionIntensity } = useConfig()
+  return (
+    <ScrollingBackgroundGradient
+      {...props}
+      colourPalette={colourPalette}
+      timeMultiplier={timeMultiplier}
+      scale={scale}
+      distortionIterations={distortionIterations}
+      distortionIntensity={distortionIntensity}
+    />
+  )
+}
+
+export default ScrollingBackgroundGradientWithControls
+
+type Config = {
+  colourPalette: Vector3[]
+  timeMultiplier: number
+  scale: number
+  distortionIterations: number
+  distortionIntensity: number
+}
+
+const ScrollingBackgroundGradient: FC<Props & Config> = ({
+  screens,
+  colourPalette,
+  timeMultiplier,
+  scale,
+  distortionIntensity,
+  distortionIterations,
+}) => {
   const gradientShader = useRef<ShaderMaterial & Partial<Uniforms>>(null)
   const scrollProgress = useRef(0)
-  const { colourPalette, timeMultiplier, scale, distortionIterations, distortionIntensity } = useConfig()
 
   useFrame(({ clock }) => {
     if (!gradientShader.current) return
@@ -68,6 +98,7 @@ const ScrollingBackgroundGradient: FC<Props> = ({ screens }) => {
       start: 0,
       end: 'max',
       onUpdate: ({ progress }) => {
+        // TODO: add looping scroll.
         scrollProgress.current = progress * screens
       },
     })
@@ -90,9 +121,7 @@ const ScrollingBackgroundGradient: FC<Props> = ({ screens }) => {
   )
 }
 
-export default ScrollingBackgroundGradient
-
-function useConfig() {
+function useConfig(): Config {
   // Config for the shader
   const { paletteKey, timeMultiplier, scale, distortionIterations, distortionIntensity } = useControls({
     paletteKey: {
@@ -134,6 +163,26 @@ function useConfig() {
   const colourPaletteVec3 = COSINE_GRADIENTS[paletteKey as CosineGradientPreset].map((color) => new Vector3(...color))
 
   return { colourPalette: colourPaletteVec3, timeMultiplier, scale, distortionIterations, distortionIntensity }
+}
+
+export const ScrollBackgroundGradientCanvas: FC = () => {
+  return (
+    <Canvas
+      className="absolute aspect-square"
+      gl={{
+        alpha: false,
+        antialias: false,
+      }}>
+      <ScrollingBackgroundGradient
+        screens={0.5}
+        colourPalette={DEFAULT_COLOUR_PALETTE}
+        timeMultiplier={0.2}
+        scale={1}
+        distortionIterations={5}
+        distortionIntensity={0.3}
+      />
+    </Canvas>
+  )
 }
 
 //  // Generate brand colour palette
