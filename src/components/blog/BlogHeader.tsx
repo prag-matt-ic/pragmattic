@@ -7,6 +7,8 @@ import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
 import Button from '@/components/buttons/Button'
 
+import Tag from './Tag'
+
 type Props = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
 
 const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
@@ -14,16 +16,13 @@ const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
   return (
     <>
       <header className="relative flex w-full select-none">
-        <div className="relative z-10 mx-auto flex size-full max-w-[1024px] flex-col items-center space-y-5 bg-gradient-to-t from-light/40 to-light/0 to-30% px-4 pb-20 pt-24 sm:px-12 sm:pt-40">
+        <div className="relative z-10 mx-auto flex size-full max-w-5xl flex-col items-center space-y-5 bg-gradient-to-t from-light/40 to-light/0 to-30% px-4 pb-20 pt-24 sm:px-12 sm:pt-40">
           <div className="flex flex-wrap justify-center gap-1.5">
             {tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-sm bg-black px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-white/70 shadow-sm">
-                #{tag}
-              </span>
+              <Tag key={tag} name={tag} />
             ))}
           </div>
+
           <h1
             className="text-balance text-center text-2xl font-extrabold tracking-tight text-white sm:text-4xl sm:leading-snug md:text-5xl md:leading-snug"
             style={{
@@ -41,6 +40,7 @@ const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
               className="size-12 overflow-hidden rounded-full object-cover md:size-14"
             />
             <span>Matthew Frawley</span>
+            <span className="text-3xl">•</span>
             <span>{formattedDate}</span>
           </div>
 

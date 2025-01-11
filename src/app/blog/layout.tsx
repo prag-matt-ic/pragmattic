@@ -1,6 +1,12 @@
 import './code.css'
 
-// Just used to import CSS for now
+import BlogBackgroundCanvas from '@/components/blog/blogBackground/BlogBackground'
+
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <>
+      <BlogBackgroundCanvas />
+      {children}
+    </>
+  )
 }

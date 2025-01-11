@@ -10,11 +10,10 @@ Add the packages required to load and process GLSL files:
 npm install raw-loader glslify glslify-loader
 ```
 
-#### [glslify-loader](https://www.npmjs.com/package/glslify-loader)
-Loader for Webpack that processes GLSL files using glslify.
-
-#### [glslify](https://github.com/glslify/glslify)
-Resolves `#pragma glslify` statements, allowing us to import/export from inside GLSL files.
+<Aside>
+*[glslify](https://github.com/glslify/glslify)* Resolves `#pragma glslify` statements, allowing us to import/export from inside GLSL files<br/>
+*[glslify-loader](https://www.npmjs.com/package/glslify-loader)* Loader for Webpack that processes GLSL files using glslify
+</Aside>
 
 
 ## 2. Configure Your Next.js Build
@@ -149,14 +148,14 @@ const MyShaderComponent: FC = () => {
 ```
 
 ### Summary
-- Use `ShaderMaterial` from three and our `Uniforms` type for the shader material ref
+- Use `ShaderMaterial` from Three and our `Uniforms` type for the shader material ref
 - Update frequently changing uniform(s) inside the `useFrame` hook
 - Attach the shader material to a mesh
 - Add a `key` prop to enable hot-reloading when the shader code is edited
 
 
+<Aside>
 ## Bonus: Some Useful GLSL Packages
-
 Depending on your goals, you may also find some of these handy:
 - [glsl-noise](https://www.npmjs.com/package/glsl-noise) - Perlin noise, simplex noise, and other noise functions
 - [glsl-constants](https://www.npmjs.com/package/glsl-constants) - Constants such as PI
@@ -164,7 +163,7 @@ Depending on your goals, you may also find some of these handy:
 - [glsl-easings](https://www.npmjs.com/package/glsl-easings) - Easing functions for animation timings
 - [glsl-fast-gaussian-blur](https://www.npmjs.com/package/glsl-fast-gaussian-blur) - For texture blurring
 - [glsl-rotate](https://www.npmjs.com/package/glsl-rotate) - 2D and 3D rotation functions
-
+</Aside>
 
 ## Summary
 In just a few steps your Next.js TypeScript app is all set up to work with GLSL shaders in React Three Fiber.

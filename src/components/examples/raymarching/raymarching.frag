@@ -188,6 +188,12 @@ void main() {
 
   vec3 colour = shapeID == 1. ? vec3(0.3, 0.5, 0.4) : vec3(0.2, 0.3, 0.4);
 
+  // Exit out if we reached max distance
+  if (t >= MAX_DISTANCE) {
+    gl_FragColor = vec4(colour,1.0);
+    return;
+  }
+
 
   float light1Dif = getLight(p, vec3(-1.0, 2., 3.), 10.0);
   // float light2Dif = getLight(p, vec3(0.0, 2.0, 2.0), 20.0);

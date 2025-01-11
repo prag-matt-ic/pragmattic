@@ -178,6 +178,11 @@ void main() {
     float td = rayMarch(ro, rd, colour); // Total distance travelled
     vec3 p = ro + rd * td; // Position of the hit
 
+    if (td >= MAX_DISTANCE) {
+        gl_FragColor = vec4(colour, 1.0);
+        return;
+    }
+
     float diffuse = getLight(p, ro, vec3(0.0, 2.0, -1.0), 2.0);
     colour *= diffuse;
 

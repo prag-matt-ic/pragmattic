@@ -1,7 +1,7 @@
 #pragma glslify: noise = require('glsl-noise/simplex/3d')
 #define MAX_ITERATIONS 20
 #define MIN_DISTANCE 0.001
-#define MAX_DISTANCE 5.00
+#define MAX_DISTANCE 5.0
 
 uniform float uTime;
 uniform bool uIsHovered;
@@ -160,6 +160,12 @@ void main() {
 
     float td = rayMarch(ro, rd); // Total distance travelled
     vec3 p = ro + rd * td; // Position of the hit
+
+    // calculate lighting if we hit something
+    if (td >= MAX_DISTANCE) {
+        gl_FragColor = vec4(uDarkColour, 1.0);
+        return;
+    }
 
     float diffuse = getLight(p, ro, vec3(1.25, 2.5, 0.0), 6.0);
 

@@ -2,7 +2,7 @@
 import { useGSAP } from '@gsap/react'
 import { ScreenQuad, shaderMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { extend, ShaderMaterialProps } from '@react-three/fiber'
+import { extend, type ShaderMaterialProps } from '@react-three/fiber'
 import gsap from 'gsap'
 import { type FC, useRef } from 'react'
 import React from 'react'
@@ -68,7 +68,7 @@ type Props = {
 
 export const WorkTogetherAnimation: FC<Props> = ({ type, isHovered }) => {
   const material = useRef<ShaderMaterial & Uniforms>(null)
-  const time = useRef({ value: 0 }) // Time value for the shader - accelerates when hovered
+  const time = useRef({ value: 0 }) // Time value for the shader accelerates when hovered
 
   useGSAP(() => {
     gsap.to(time.current, {
@@ -78,39 +78,24 @@ export const WorkTogetherAnimation: FC<Props> = ({ type, isHovered }) => {
     })
   }, [isHovered])
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!material.current) return
     material.current.uTime = time.current.value
+    material.current.uIsHovered = isHovered
   })
 
   return (
     <ScreenQuad>
       {type === 'agency' && (
-        <agencyShaderMaterial
-          ref={material}
-          key={StartupShaderMaterial.key}
-          uTime={0}
-          uIsHovered={false}
-          transparent={false}
-          depthTest={false}
-        />
+        <agencyShaderMaterial ref={material} key={AgencyShaderMaterial.key} transparent={false} depthTest={false} />
       )}
       {type === 'startup' && (
-        <startupShaderMaterial
-          ref={material}
-          key={StartupShaderMaterial.key}
-          uTime={0}
-          uIsHovered={false}
-          transparent={false}
-          depthTest={false}
-        />
+        <startupShaderMaterial ref={material} key={StartupShaderMaterial.key} transparent={false} depthTest={false} />
       )}
       {type === 'developer' && (
         <developerShaderMaterial
           ref={material}
-          key={StartupShaderMaterial.key}
-          uTime={0}
-          uIsHovered={false}
+          key={DeveloperShaderMaterial.key}
           transparent={false}
           depthTest={false}
         />

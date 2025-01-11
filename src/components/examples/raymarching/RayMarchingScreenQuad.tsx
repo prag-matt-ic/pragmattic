@@ -10,8 +10,6 @@ import { ShaderMaterial, Vector2 } from 'three'
 import rayMarchingFragment from './raybox.frag'
 import vertexShader from './screen.vert'
 
-// Boilerplate for creating a screen quad shader - ideal for backgrounds, post-processing effects, etc.
-
 type Uniforms = {
   uTime: number
   uAspect: number
@@ -29,6 +27,12 @@ const INITIAL_UNIFORMS: Uniforms = {
 const RayMarchingShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, rayMarchingFragment)
 
 extend({ RayMarchingShaderMaterial })
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    rayMarchingShaderMaterial: ShaderMaterialProps & Uniforms
+  }
+}
 
 const RayMarchingScreenQuadShader: FC = () => {
   const { viewport } = useThree()
@@ -76,9 +80,3 @@ const RayMarchingScreenQuadShader: FC = () => {
 }
 
 export default RayMarchingScreenQuadShader
-
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    rayMarchingShaderMaterial: ShaderMaterialProps & Uniforms
-  }
-}

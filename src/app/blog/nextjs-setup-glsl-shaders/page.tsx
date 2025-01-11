@@ -2,6 +2,7 @@ import { type Metadata } from 'next'
 import React from 'react'
 
 import BlogLayout, { type BlogMetadata } from '@/components/blog/BlogLayout'
+import { TagName } from '@/resources/blog/blog'
 import { BlogPathname } from '@/resources/navigation'
 
 import Content from './blog.mdx'
@@ -12,7 +13,7 @@ type Props = {
   }
 }
 
-const LAST_UPDATED = '2025-01-07'
+const LAST_UPDATED = '2025-01-10'
 
 const BLOG_METADATA: BlogMetadata = {
   title: 'Configure your Next.js Typescript project for custom shader materials and glsify in React Three Fiber',
@@ -32,7 +33,14 @@ export default function ShaderSetupBlogPage({ params }: Props) {
     <BlogLayout
       title="Configure your Next.js Typescript project for custom shader materials and glsify in React Three Fiber"
       date={LAST_UPDATED}
-      tags={['threejs', 'nextjs', 'shaders', 'typescript']}
+      tags={[
+        TagName.Tutorial,
+        TagName.NextJS,
+        TagName.ThreeJS,
+        TagName.Typescript,
+        'glslify',
+        'custom shader material',
+      ]}
       metadata={BLOG_METADATA}>
       <Content />
     </BlogLayout>

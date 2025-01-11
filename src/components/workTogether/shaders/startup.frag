@@ -1,9 +1,9 @@
 // STARTUP WORK TOGETHER SHADER
 #pragma glslify: noise = require('glsl-noise/simplex/3d')
 
-#define MAX_ITERATIONS 32
+#define MAX_ITERATIONS 30
 #define MIN_DISTANCE 0.001
-#define MAX_DISTANCE 6.00
+#define MAX_DISTANCE 6.0
 
 uniform float uTime;
 uniform bool uIsHovered;
@@ -54,7 +54,6 @@ float getDistance (in vec3 p) {
     float dPlane = p.y;
 
     float t = getSinTime();
-    // Move from -0.5 to 1.0
     float y = t * 2.8 - 1.3;
     float radius = 1.2 - 0.7 * t;
 
@@ -164,16 +163,18 @@ void main() {
     float td = rayMarch(ro, rd); // Total distance travelled
     vec3 p = ro + rd * td; // Position of the hit
 
+    if (td >= MAX_DISTANCE) {
+        gl_FragColor = vec4(uDarkColour, 1.0);
+        return;
+    }
+
     float diffuse = getLight(p, ro, vec3(1.2, 3.0, 0.0), 4.0);
 
     float t = getSinTime();
     vec3 sphereColour = mix(uLightColour, uIsHovered ? uActiveColour : uLightColour, t);
     sphereColour *= diffuse;
 
-    // If distance == max distance, we didn't hit anything = color the background
-    vec3 colour = mix(uDarkColour, sphereColour, step(td, MAX_DISTANCE));
-
-    gl_FragColor = vec4(colour, 1.0);
+    gl_FragColor = vec4(sphereColour, 1.0);
 }
 
 

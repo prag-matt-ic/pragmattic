@@ -11,6 +11,7 @@ import vertexShader from '../wavePlane.vert'
 import basicFragmentShader from './basic.frag'
 import gradientFragmentShader from './gradient.frag'
 import gridFragmentShader from './grid.frag'
+import { twMerge } from 'tailwind-merge'
 
 // Components used in the blog to show incremental development
 
@@ -160,14 +161,13 @@ const GridLinesFragmentShaderPlane: FC = () => {
   )
 }
 
-const CanvasWrapper: FC<PropsWithChildren> = ({ children }) => (
-  <section className="relative h-[704px] max-h-[70vh] w-full">
+const CanvasWrapper: FC<PropsWithChildren & { sectionClassName?: string }> = ({ children, sectionClassName }) => (
+  <section className={twMerge('relative h-[704px] max-h-[70vh] w-full', sectionClassName)}>
     <Canvas
-      className=""
+      className="absolute inset-0"
       gl={{
         alpha: false,
         antialias: false,
-        powerPreference: 'high-performance',
       }}>
       <color attach="background" args={['#000']} />
       {children}
@@ -200,9 +200,9 @@ export const GradientFragmentShaderPlaneCanvas: FC = () => {
   )
 }
 
-export const GridLinesFragmentShaderPlaneCanvas: FC = () => {
+export const GridLinesFragmentShaderPlaneCanvas: FC<{ sectionClassName?: string }> = ({ sectionClassName }) => {
   return (
-    <CanvasWrapper>
+    <CanvasWrapper sectionClassName={sectionClassName}>
       <GridLinesFragmentShaderPlane />
     </CanvasWrapper>
   )

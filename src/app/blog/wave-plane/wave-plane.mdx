@@ -20,6 +20,18 @@ As a bonus we'll be adding some scroll based interaction using <b>GSAP ScrollTri
 npm i @gsap/react @react-three/drei @react-three/fiber gsap "@thi.ng/color" glslify glslify-loader glsl-noise raw-loader
 ```
 
+<Aside title='So... what are the packages for?'>
+- *[@react-three/fiber](https://www.npmjs.com/package/@react-three/fiber)*: React renderer for Three.js that lets you build 3D scenes using declarative React components<br/>
+- *[@react-three/drei](https://www.npmjs.com/package/@react-three/drei)*: A collection of useful abstractions and helpers for React Three Fiber<br/>
+- *[gsap](https://www.npmjs.com/package/gsap)*: Versatile animation library<br/>
+- *[@gsap/react](https://www.npmjs.com/package/@gsap/react)*: Hooks for using GSAP in React<br/>
+- *[@thi.ng/color](https://www.npmjs.com/package/@thi.ng/color)*: Colour manipulation and conversion utilities<br/>
+- *[raw-loader](https://www.npmjs.com/package/raw-loader)*: Webpack loader for importing files as a strings<br/>
+- *[glslify-loader](https://www.npmjs.com/package/glslify-loader)*: A webpack loader that integrates glslify<br/>
+- *[glslify](https://www.npmjs.com/package/glslify)*: Resolves `#pragma glslify` statements, allowing us to import/export from inside GLSL files<br/>
+- *[glsl-noise](https://www.npmjs.com/package/glsl-noise)*: Noise functions perfect for procedural textures and effects
+</Aside>
+
 ### Configure Typescript for GLSL shader imports
 
 Create a root <code>shader.d.ts</code> file to prevent Typescript from throwing errors when importing GLSL files. <br/>This declaration file informs Typescript that .frag, .vert and .glsl files should be treated like strings.

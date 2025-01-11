@@ -2,9 +2,10 @@ import { type Metadata } from 'next'
 import React from 'react'
 
 import BlogLayout, { type BlogMetadata } from '@/components/blog/BlogLayout'
+import { TagName } from '@/resources/blog/blog'
 import { BlogPathname } from '@/resources/navigation'
 
-import Content from './blog.mdx'
+import Content from './wave-plane.mdx'
 
 type Props = {
   params: {
@@ -32,7 +33,15 @@ export default function WavePlaneBlogPage({ params }: Props) {
     <BlogLayout
       title="Build an animated wave plane in Next.js (Typescript) with React Three Fiber and custom shader material"
       date={LAST_UPDATED}
-      tags={['threejs', 'vertex shader', 'fragment shader', 'noise', 'react', 'nextjs']}
+      tags={[
+        TagName.Tutorial,
+        TagName.NextJS,
+        TagName.ThreeJS,
+        TagName.Typescript,
+        TagName.VertexShader,
+        TagName.FragmentShader,
+        'noise',
+      ]}
       demoUrl="/examples/wave-plane"
       metadata={BLOG_METADATA}>
       <Content />
