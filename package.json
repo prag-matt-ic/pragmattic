@@ -46,6 +46,7 @@
     "react-transition-group": "^4.4.5",
     "rehype-pretty-code": "^0.14.0",
     "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.0",
     "sharp": "^0.33.4",
     "tailwind-merge": "^2.3.0",
     "three": "^0.167.1",

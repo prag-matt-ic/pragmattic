@@ -21,8 +21,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre: (props) => {
       return <CodeBlock {...props} />
     },
-
-    // Custom Aside component which doesn't need importing in each MDX file
+    // Custom components which don't need importing in each MDX file
+    Quote: ({ children, author, ...props }) => {
+      return (
+        <blockquote
+          {...props}
+          className={twMerge('not-prose my-4 border-l-2 border-light/20 px-4 py-2', props?.className)}>
+          <span className="font-medium italic">&quot;{children}&quot;</span>
+          {author && <span className="text-mid"> - {author}</span>}
+        </blockquote>
+      )
+    },
     Aside: ({ children, title, ...props }) => {
       return (
         <aside
@@ -32,7 +41,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             props?.className,
           )}>
           {!!title && (
-            <header className="flex w-full items-center gap-2 bg-mid/5 px-4 py-2">
+            <header className="not-prose flex w-full items-center gap-2 bg-mid/5 px-4 py-2">
               <Image src={infoIcon} alt="info" className="!m-0 size-5" />
               <h4 className="!my-0 leading-none text-mid">{title}</h4>
             </header>

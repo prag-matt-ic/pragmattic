@@ -2,6 +2,7 @@
 
 import createMDX from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
+import remarkGFM from 'remark-gfm'
 
 const nextConfig = {
   webpack: (config) => {
@@ -26,7 +27,7 @@ const options = {
 const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [],
+    remarkPlugins: [remarkGFM],
     rehypePlugins: [[rehypePrettyCode, options]],
   },
 })

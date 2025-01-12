@@ -2,7 +2,8 @@
 import { shaderMaterial } from '@react-three/drei'
 import { Canvas, extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
 import { COSINE_GRADIENTS } from '@thi.ng/color'
-import React, { type FC, PropsWithChildren, useMemo, useRef } from 'react'
+import React, { type FC, type PropsWithChildren, useMemo, useRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 import { ShaderMaterial, Vector3 } from 'three'
 
 import PointerCamera from '@/components/PointerCamera'
@@ -11,7 +12,6 @@ import vertexShader from '../wavePlane.vert'
 import basicFragmentShader from './basic.frag'
 import gradientFragmentShader from './gradient.frag'
 import gridFragmentShader from './grid.frag'
-import { twMerge } from 'tailwind-merge'
 
 // Components used in the blog to show incremental development
 
