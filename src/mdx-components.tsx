@@ -28,7 +28,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <aside
           {...props}
           className={twMerge(
-            'shadow-inner-lg overflow-hidden rounded-md border border-light/10 bg-mid/5 text-base prose-headings:my-2',
+            'shadow-inner-lg overflow-hidden rounded-md border border-light/10 bg-mid/5 prose-headings:my-2',
             props?.className,
           )}>
           {!!title && (

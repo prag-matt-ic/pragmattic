@@ -146,21 +146,24 @@ const WavePlane: FC = () => {
  
 ## The Custom Shader Material
 
-Now we're ready to create our custom shader material.
+*Now we're ready to create our custom shader material!*
 
+<Aside title="Prerequisites">
 #### Uniforms
 Uniforms are variables passed into the shader from Javascript.
-As the name suggests, they are the same for each vertex or fragment in the shader.
+As the name suggests, they remain constant (uniform) for all vertices and fragments during each draw call.
 It's good practice to define your uniforms as a type to mitigate errors.
 
 #### Vertex Shader
-The vertex shader runs simaltaneously for each point on the plane.
-The vertex shader is responsible for transforming the vertices of the geometry. We'll use it to distort our plane to create the wave effect.
+The vertex shader is executed in parallel for each vertex (corner) of the geometry.
+It's responsible for transforming vertex positions. For this project we can use it to displace the plane vertices using a noise algorithm.
+The vertex shader can output data (via varyings) to the fragment shader.
 
 #### Fragment Shader
-The fragment shader runs in parallel for each pixel on the plane.
-The fragment shader is responsible for determining the colour of the pixel. This will allow us to shade the plane based on the height of the wave.
-
+The fragment shader is executed in parallel for each fragment (pixel) on the geometry.
+It determines the final colour of each pixel.
+In this project we can use it to shade the plane based on uniforms and varyings.
+</Aside>
 
 ## The Vertex Shader
 
@@ -168,7 +171,7 @@ The fragment shader is responsible for determining the colour of the pixel. This
 
 The following is an annotated version of a minimal vertex shader for ThreeJS.
  
-```glsl title="Default vertex shader"
+```glsl title="Default vertex shader for 3D objects"
 // Declare a varying variable to pass UV coordinates to the fragment shader
 varying vec2 vUv;
 
@@ -194,7 +197,7 @@ void main() {
     gl_Position = projectedPosition;
 }
 ```
-<i>Note: If you are using a ScreenQuad instead - like some of my other examples - there's a simplified shader which reduces the number of transformations.</i>
+<i>Note: If you are using a 2D ScreenQuad instead - like some of my other examples - there's a simplified shader which reduces the number of transformations.</i>
 
 
 ### Transforming the vertices using a noise function
@@ -479,8 +482,7 @@ void main() {
 ## Scroll Based Interaction
 
 #### Make the page scrollable
-There will be no scroll unless you <b>set an explicit height on your <code>main</code> element</b>.<br/> 
-For example:
+There will be no scroll unless you <b>set an explicit height on your <code>main</code> element</b>. For example:
 
 ```tsx title="page.tsx"
 export default function WavePlanePage() {
@@ -492,7 +494,7 @@ export default function WavePlanePage() {
 }
 ```
 
-In order to utilise GSAP ScrollTrigger, we need to <b>register plugins</b> at the top of the component:
+In order to utilise GSAP ScrollTrigger, we need to <b>register the plugins</b> at the top of the component:
 
 ```tsx title="WavePlane.tsx" {5}
 import { useGSAP } from '@gsap/react'
