@@ -2,7 +2,7 @@
 import { autoUpdate, FloatingPortal, offset, shift, useFloating, useInteractions } from '@floating-ui/react'
 import { useDismiss } from '@floating-ui/react'
 import { useHover } from '@mantine/hooks'
-import { OrthographicCamera, View } from '@react-three/drei'
+import { OrthographicCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import gsap from 'gsap'
 import Link from 'next/link'
@@ -76,16 +76,6 @@ const WorkTogether: FC = () => {
             {...getFloatingProps()}
             style={floatingStyles}
             className="absolute z-[1000] max-w-[calc(100%-16px)] select-none overflow-hidden rounded-lg border border-off-black bg-black opacity-0 shadow-2xl">
-            {/* Views from inside the content cards are rendered using this single canvas */}
-            <Canvas
-              key="work-together-canvas"
-              className="pointer-events-none !absolute inset-0 overflow-hidden"
-              eventSource={refs.floating.current!}
-              gl={{ alpha: false, antialias: false }}>
-              <OrthographicCamera makeDefault />
-              <View.Port />
-            </Canvas>
-
             <ContentCard
               shader="agency"
               title="Agency"
@@ -131,9 +121,15 @@ const ContentCard: FC<CardProps> = ({ shader, title, description, href }) => {
       <div
         ref={ref}
         className={twJoin('group flex items-center', shader !== 'developer' && 'border-b border-b-off-black')}>
-        <View frames={Infinity} visible={true} className="aspect-square size-[104px] sm:size-[120px] md:size-[148px]">
-          <WorkTogetherAnimation type={shader} isHovered={isHovered} />
-        </View>
+        <div className="relative aspect-square size-[104px] overflow-hidden sm:size-[120px] md:size-[148px] xl:size-[160px]">
+          <Canvas
+            key="work-together-canvas"
+            className="pointer-events-none !absolute inset-0 overflow-hidden"
+            gl={{ alpha: false, antialias: false }}>
+            <OrthographicCamera makeDefault />
+            <WorkTogetherAnimation type={shader} isHovered={isHovered} />
+          </Canvas>
+        </div>
         <div className="px-4 lg:px-6">
           <h3 className={twJoin('text-xs uppercase transition-colors duration-300', TITLE_CLASSNAMES[shader])}>
             {title}

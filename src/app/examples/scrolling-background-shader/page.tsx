@@ -13,7 +13,7 @@ import ScrollingBackgroundGradient from '@/components/examples/scrollingBackgrou
 // 4. Add noise and time to the shader
 // 5. Add config controls using Leva
 
-const SCREENS = 30
+const SCREENS = 5
 
 export default function ScrollingBackgroundShaderExample() {
   return (
@@ -25,17 +25,11 @@ export default function ScrollingBackgroundShaderExample() {
           antialias: false,
           powerPreference: 'high-performance',
         }}>
-        <ScrollingBackgroundGradient screens={SCREENS - 1} />
+        <ScrollingBackgroundGradient screens={SCREENS - 1} loopScroll={true} />
       </Canvas>
 
-      {/* {new Array(SCREENS).fill(0).map((_, i) => (
-        <div key={i} className="relative z-50 h-screen outline outline-2 outline-white/50" />
-      ))} */}
-
-      {/* Controls */}
-      <Leva titleBar={{ position: { x: -8, y: 64 } }} />
-
       <ScrollDownArrow />
+      <Leva titleBar={{ position: { x: -8, y: 64 } }} />
     </main>
   )
 }

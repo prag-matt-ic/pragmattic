@@ -3,7 +3,7 @@ import React from 'react'
 
 import BlogLayout, { type BlogMetadata } from '@/components/blog/BlogLayout'
 import { TagName } from '@/resources/blog/blog'
-import { BlogPathname } from '@/resources/navigation'
+import { BlogPathname, ExamplePathname } from '@/resources/navigation'
 
 import Content from './next-shaders.mdx'
 
@@ -41,6 +41,7 @@ export default function ShaderSetupBlogPage({ params }: Props) {
         'glslify',
         'custom shader material',
       ]}
+      demoUrl={ExamplePathname.ScrollingBackgroundShader}
       metadata={BLOG_METADATA}>
       <Content />
     </BlogLayout>

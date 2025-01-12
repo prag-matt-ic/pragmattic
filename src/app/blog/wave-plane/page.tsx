@@ -3,7 +3,7 @@ import React from 'react'
 
 import BlogLayout, { type BlogMetadata } from '@/components/blog/BlogLayout'
 import { TagName } from '@/resources/blog/blog'
-import { BlogPathname } from '@/resources/navigation'
+import { BlogPathname, ExamplePathname } from '@/resources/navigation'
 
 import Content from './wave-plane.mdx'
 
@@ -42,7 +42,7 @@ export default function WavePlaneBlogPage({ params }: Props) {
         TagName.FragmentShader,
         'noise',
       ]}
-      demoUrl="/examples/wave-plane"
+      demoUrl={ExamplePathname.WavePlane}
       metadata={BLOG_METADATA}>
       <Content />
     </BlogLayout>

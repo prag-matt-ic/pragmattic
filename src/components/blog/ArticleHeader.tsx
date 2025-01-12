@@ -48,7 +48,11 @@ const ArticleHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
             <Link href={demoUrl} passHref target="_blank" rel="noopener noreferrer">
               <Button variant="outlined" colour="secondary">
                 Live demo
-                <Image src={openNewIcon} alt="open" className="size-4" />
+                <Image
+                  src={openNewIcon}
+                  alt="open"
+                  className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-1"
+                />
               </Button>
             </Link>
           )}

@@ -50,6 +50,7 @@ declare module '@react-three/fiber' {
 
 type Props = {
   screens: number
+  loopScroll?: boolean
 }
 
 const ScrollingBackgroundGradientWithControls: FC<Props> = (props) => {
@@ -78,6 +79,7 @@ type Config = {
 
 const ScrollingBackgroundGradient: FC<Props & Config> = ({
   screens,
+  loopScroll = false,
   colourPalette,
   timeMultiplier,
   scale,
@@ -86,23 +88,29 @@ const ScrollingBackgroundGradient: FC<Props & Config> = ({
 }) => {
   const gradientShader = useRef<ShaderMaterial & Partial<Uniforms>>(null)
   const scrollProgress = useRef(0)
-
-  useFrame(({ clock }) => {
-    if (!gradientShader.current) return
-    gradientShader.current.uTime = clock.elapsedTime * timeMultiplier
-    gradientShader.current.uScrollProgress = scrollProgress.current
-  })
+  const scrollLoop = useRef(0)
 
   useGSAP(() => {
     ScrollTrigger.create({
       start: 0,
       end: 'max',
       onUpdate: ({ progress }) => {
-        // TODO: add looping scroll.
-        scrollProgress.current = progress * screens
+        if (loopScroll && progress === 1) {
+          scrollLoop.current++
+          scrollProgress.current = 0
+          window.scrollTo(0, 0)
+          return
+        }
+        scrollProgress.current = progress
       },
     })
-  }, [screens])
+  }, [loopScroll])
+
+  useFrame(({ clock }) => {
+    if (!gradientShader.current) return
+    gradientShader.current.uTime = clock.elapsedTime * timeMultiplier
+    gradientShader.current.uScrollProgress = (scrollProgress.current + scrollLoop.current) * screens
+  })
 
   return (
     <ScreenQuad>

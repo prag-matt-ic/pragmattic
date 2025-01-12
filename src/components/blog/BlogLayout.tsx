@@ -1,6 +1,6 @@
 import React, { type FC, type PropsWithChildren } from 'react'
 
-import ArticleHeader from '@/components/blog/BlogHeader'
+import ArticleHeader from '@/components/blog/ArticleHeader'
 import BlogNavTitle from '@/components/blog/BlogNavTitle'
 
 export type BlogMetadata = {
@@ -59,7 +59,7 @@ const JSONSchema: FC<BlogMetadata> = ({ title, description, date, url }) => {
           url: url,
           author: {
             '@type': 'Person',
-            name: 'Matthew Frawley (pragmattic)',
+            name: 'Matthew Frawley',
           },
         }),
       }}

@@ -48,7 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
       ref={ref}
       {...rest}
       className={twMerge(
-        'pointer-events-auto flex select-none items-center justify-center overflow-hidden whitespace-nowrap rounded-full font-sans font-semibold leading-none tracking-wide transition-colors duration-300',
+        'group pointer-events-auto flex select-none items-center justify-center overflow-hidden whitespace-nowrap rounded-full font-sans font-semibold leading-none tracking-wide transition-colors duration-300',
         SIZE_CLASSES[size],
         VARIANT_CLASSES[variant][colour],
         className,
