@@ -43,8 +43,8 @@ const config: Config = {
     function ({ addUtilities, theme }: any) {
       const newUtilities = {
         '.horizontal-padding': {
-          paddingLeft: '1.5rem', // px-6 equivalent
-          paddingRight: '1.5rem',
+          paddingLeft: '24px', // px-6 equivalent
+          paddingRight: '24px',
           '@screen md': {
             paddingLeft: '3rem', // md:px-12 equivalent
             paddingRight: '3rem',

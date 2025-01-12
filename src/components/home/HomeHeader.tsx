@@ -3,6 +3,9 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import SplitText from 'gsap/dist/SplitText'
 import React, { type FC, useEffect, useRef, useState } from 'react'
+import { twJoin } from 'tailwind-merge'
+
+import ClientLogos from './ClientLogos'
 
 const HomeHeader: FC = () => {
   const container = useRef<HTMLDivElement>(null)
@@ -18,13 +21,12 @@ const HomeHeader: FC = () => {
 
       gsap.fromTo(
         '#home-header',
-        { opacity: 0, scale: 0.7 },
+        { opacity: 0 },
         {
           opacity: 1,
           scale: 1,
-          duration: 2.0,
-          delay: 0.3,
-          ease: 'elastic.out(2.0,0.75)',
+          duration: 1.0,
+          delay: 0.1,
         },
       )
 
@@ -53,6 +55,14 @@ const HomeHeader: FC = () => {
             { scale: 0.9, opacity: 0, duration: 0.1 },
           ],
         })
+        .to(
+          '#client-logos',
+          {
+            opacity: 0,
+            duration: 0.1,
+          },
+          '-=0.1',
+        )
     },
     { scope: container, dependencies: [] },
   )
@@ -104,12 +114,14 @@ const HomeHeader: FC = () => {
     }
   }, [isCyclingText, splitTexts])
 
+  const headingClasses = 'text-3xl font-extrabold tracking-tight md:text-6xl xl:text-7xl !leading-[1.3]'
+
   return (
     <div ref={container} className="pointer-events-none relative z-20 h-[1000px] w-full">
       <header
         id="home-header"
-        className="flex h-lvh w-full select-none flex-col items-center justify-center px-4 pb-10 text-center text-white opacity-0 sm:pb-0 md:pb-16">
-        <h1 className="relative text-3xl font-extrabold tracking-tight md:text-6xl xl:text-7xl">
+        className="flex h-lvh w-full select-none flex-col items-center justify-center px-4 text-center text-white opacity-0 sm:pb-20">
+        <h1 className={twJoin(headingClasses, 'relative')}>
           Helping innovative teams
           <br />
           <span className="relative inline-block h-24 w-full text-green md:h-32">
@@ -118,9 +130,10 @@ const HomeHeader: FC = () => {
             <span className="mission absolute inset-0 py-2">launch web and mobile apps</span>
           </span>
         </h1>
-        <h2 className="absolute max-w-4xl scale-110 text-balance p-4 text-4xl font-extrabold !leading-[1.3] tracking-tight opacity-0 md:text-6xl xl:text-7xl">
+        <h2 className={twJoin(headingClasses, 'absolute max-w-4xl scale-110 text-balance opacity-0')}>
           with bespoke design and engineering
         </h2>
+        <ClientLogos />
       </header>
     </div>
   )

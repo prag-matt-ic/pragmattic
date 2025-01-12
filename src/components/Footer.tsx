@@ -21,8 +21,8 @@ const Footer: FC = () => {
 
   return (
     <footer className="relative z-50 grid w-full grid-cols-1 items-center gap-3 bg-black py-3 text-xs horizontal-padding md:grid-cols-3 md:gap-4">
-      <span className="order-3 text-balance text-center font-mono text-light md:order-1 md:text-left">
-        © 2025 Pragmattic Ltd. All Rights Reserved.
+      <span className="order-3 whitespace-nowrap text-center font-mono text-light md:order-1 md:text-left">
+        © {new Date().getFullYear()} Pragmattic Ltd. All Rights Reserved.
       </span>
       <span className="order-2 text-balance text-center font-mono text-light">
         💡 Do what you can, with all that you have
