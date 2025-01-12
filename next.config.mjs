@@ -4,7 +4,7 @@ import createMDX from '@next/mdx'
 import rehypePrettyCode from 'rehype-pretty-code'
 
 const nextConfig = {
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.(glsl|vs|fs|vert|frag)$/,
       use: ['raw-loader', 'glslify', 'glslify-loader'],

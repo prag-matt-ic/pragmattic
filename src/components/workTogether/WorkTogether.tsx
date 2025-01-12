@@ -22,8 +22,8 @@ const WorkTogether: FC = () => {
     placement: 'bottom',
     transform: false,
     open: isShowing,
-    onOpenChange: setIsShowing,
     middleware: [shift({ padding: 8 }), offset({ mainAxis: 8 })],
+    onOpenChange: setIsShowing,
     whileElementsMounted: autoUpdate,
   })
   const dismiss = useDismiss(context)
@@ -50,7 +50,7 @@ const WorkTogether: FC = () => {
         size="small"
         className={isShowing ? 'bg-white' : ''}
         onClick={() => setIsShowing((prev) => !prev)}>
-        talk to Matt
+        Talk to Matt
         <svg
           width="24"
           height="24"

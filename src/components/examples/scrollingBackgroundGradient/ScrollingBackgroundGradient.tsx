@@ -168,7 +168,7 @@ function useConfig(): Config {
 export const ScrollBackgroundGradientCanvas: FC = () => {
   return (
     <Canvas
-      className="absolute aspect-square"
+      className="absolute"
       gl={{
         alpha: false,
         antialias: false,

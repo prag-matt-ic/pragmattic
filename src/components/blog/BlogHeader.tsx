@@ -11,13 +11,13 @@ import Tag from './Tag'
 
 type Props = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
 
-const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
+const ArticleHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>
       <header className="relative flex w-full select-none">
-        <div className="relative z-10 mx-auto flex size-full max-w-5xl flex-col items-center space-y-5 bg-gradient-to-t from-light/40 to-light/0 to-30% px-4 pb-20 pt-24 sm:px-12 sm:pt-40">
-          <div className="flex flex-wrap justify-center gap-1.5">
+        <div className="relative z-10 mx-auto flex size-full max-w-5xl flex-col items-center space-y-5 bg-gradient-to-t from-light/40 to-light/0 to-30% px-4 pb-20 pt-28 sm:px-12 sm:pt-40">
+          <div className="hidden flex-wrap justify-center gap-1.5 sm:flex">
             {tags.map((tag) => (
               <Tag key={tag} name={tag} />
             ))}
@@ -31,13 +31,13 @@ const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
             {title}
           </h1>
 
-          <div className="relative flex w-fit items-center gap-3 font-medium text-white/90">
+          <div className="relative flex w-fit items-center gap-2 whitespace-nowrap text-sm font-medium text-white/90 sm:gap-3 sm:text-base">
             <Image
               src={avatarPic}
               width={80}
               height={80}
               alt="Matthew Frawley"
-              className="size-12 overflow-hidden rounded-full object-cover md:size-14"
+              className="size-10 overflow-hidden rounded-full object-cover md:size-14"
             />
             <span>Matthew Frawley</span>
             <span className="text-3xl">•</span>
@@ -58,4 +58,4 @@ const BlogHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
   )
 }
 
-export default BlogHeader
+export default ArticleHeader
