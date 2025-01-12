@@ -68,5 +68,3 @@ const JSONSchema: FC<BlogMetadata> = ({ title, description, date, url }) => {
 }
 
 export default BlogLayout
-
-//https://github.com/vercel/examples/blob/main/solutions/blog/app/blog/%5Bslug%5D/page.tsx

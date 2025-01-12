@@ -5,7 +5,7 @@ import BlogLayout, { type BlogMetadata } from '@/components/blog/BlogLayout'
 import { TagName } from '@/resources/blog/blog'
 import { BlogPathname } from '@/resources/navigation'
 
-import Content from './blog.mdx'
+import Content from './next-shaders.mdx'
 
 type Props = {
   params: {
