@@ -1,24 +1,24 @@
 import { type Metadata } from 'next'
 import Link from 'next/link'
-import React, { type FC, type PropsWithChildren, ReactNode } from 'react'
+import React, { type FC, type PropsWithChildren, type ReactNode } from 'react'
 
 import BlogBackgroundCanvas from '@/components/blog/blogBackground/BlogBackground'
 import { ScrollBackgroundGradientCanvas } from '@/components/examples/scrollingBackgroundGradient/ScrollingBackgroundGradient'
 import { GridLinesFragmentShaderPlaneCanvas } from '@/components/examples/wavePlane/blog/WavePlaneBlog'
-import { BlogPathname } from '@/resources/navigation'
-
-type Props = {
-  params: {
-    slug: string
-  }
-}
+import { BLOG_METADATA } from '@/resources/blog/content/blog'
+import { BlogSlug, Pathname } from '@/resources/navigation'
 
 export const metadata: Metadata = {
   title: 'Blog by Matthew Frawley',
-  description: '',
+  description:
+    'A growing collection of guides, patterns, and fun stuff I&apos;ve been doing in the web design and engineering space',
+}
+const BLOG_CARD_COMPONENTS: Record<BlogSlug, ReactNode> = {
+  [BlogSlug.WavePlane]: <GridLinesFragmentShaderPlaneCanvas sectionClassName="overflow-hidden size-full" />,
+  [BlogSlug.NextJsShaderSetup]: <ScrollBackgroundGradientCanvas />,
 }
 
-export default function BlogPage({ params }: Props) {
+export default function BlogPage() {
   return (
     <>
       <BlogBackgroundCanvas />
@@ -32,18 +32,14 @@ export default function BlogPage({ params }: Props) {
         </header>
 
         <section className="w-full space-y-12 pb-24 horizontal-padding">
-          <ArticleCard
-            href={BlogPathname.WavePlane}
-            heading="Animated wave plane in Next.js Typescript app with React Three Fiber and custom shader material"
-            description="This project is a great way to learn about ThreeJS shader materials and how to use them in Next.js with Typescript">
-            <GridLinesFragmentShaderPlaneCanvas sectionClassName="overflow-hidden size-full" />
-          </ArticleCard>
-          <ArticleCard
-            href={BlogPathname.NextJsShaderSetup}
-            heading="Next.js GLSL shader setup guide"
-            description="Setup guide for working with GLSL shaders in Next.js, React Three Fiber and TypeScript.">
-            <ScrollBackgroundGradientCanvas />
-          </ArticleCard>
+          {Object.values(BLOG_METADATA).map((metadata) => {
+            const { slug, title, description } = metadata
+            return (
+              <BlogPostCard key={slug} href={`${Pathname.Blog}/${slug}`} heading={title} description={description}>
+                {BLOG_CARD_COMPONENTS[slug as BlogSlug]}
+              </BlogPostCard>
+            )
+          })}
         </section>
 
         {/* TODO: add links to examples */}
@@ -52,13 +48,13 @@ export default function BlogPage({ params }: Props) {
   )
 }
 
-type LinkCardProps = {
-  href: BlogPathname
+type CardProps = {
+  href: string
   heading: ReactNode
   description: ReactNode
 }
 
-const ArticleCard: FC<PropsWithChildren<LinkCardProps>> = ({ children, href, heading, description }) => {
+const BlogPostCard: FC<PropsWithChildren<CardProps>> = ({ children, href, heading, description }) => {
   return (
     <Link
       href={href}

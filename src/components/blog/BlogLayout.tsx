@@ -1,30 +1,19 @@
 import React, { type FC, type PropsWithChildren } from 'react'
 
-import ArticleHeader from '@/components/blog/ArticleHeader'
+import BlogPostHeader from '@/components/blog/ArticleHeader'
 import BlogNavTitle from '@/components/blog/BlogNavTitle'
+import { type BlogMetadata } from '@/resources/blog/content/blog'
+import { Pathname } from '@/resources/navigation'
 
-export type BlogMetadata = {
-  title: string
-  description: string
-  date: string
-  url: string
-}
+type Props = PropsWithChildren<BlogMetadata>
 
-type BlogProps = {
-  title: string
-  date: string
-  tags: string[]
-  demoUrl?: string
-  metadata: BlogMetadata
-}
-
-const BlogLayout: FC<PropsWithChildren<BlogProps>> = ({ children, metadata, ...articleProps }) => {
+const BlogLayout: FC<PropsWithChildren<Props>> = ({ children, ...metadata }) => {
   return (
     <>
       <JSONSchema {...metadata} />
-      <BlogNavTitle title={articleProps.title} />
+      <BlogNavTitle title={metadata.title} />
       <main className="relative w-full font-sans">
-        <ArticleHeader {...articleProps} />
+        <BlogPostHeader {...metadata} />
 
         {/* // https://github.com/tailwindlabs/tailwindcss-typography */}
         <article className="prose-sm mx-auto w-full !max-w-5xl overflow-hidden text-pretty bg-white px-4 py-12 text-black md:prose prose-pre:bg-off-black md:px-12">
@@ -40,7 +29,8 @@ const BlogLayout: FC<PropsWithChildren<BlogProps>> = ({ children, metadata, ...a
   )
 }
 
-const JSONSchema: FC<BlogMetadata> = ({ title, description, date, url }) => {
+const JSONSchema: FC<BlogMetadata> = ({ title, description, date, slug }) => {
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL}${Pathname.Blog}/${slug}`
   return (
     <script
       type="application/ld+json"

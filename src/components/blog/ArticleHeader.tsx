@@ -1,17 +1,15 @@
 import { format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { type FC, type ReactNode } from 'react'
+import React, { type FC } from 'react'
 
 import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
+import Tag from '@/components/blog/Tag'
 import Button from '@/components/buttons/Button'
+import { BlogMetadata } from '@/resources/blog/content/blog'
 
-import Tag from './Tag'
-
-type Props = { title: ReactNode; date: string; tags: string[]; demoUrl?: string }
-
-const ArticleHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
+const BlogPostHeader: FC<BlogMetadata> = ({ title, tags, demoPathname, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>
@@ -44,8 +42,8 @@ const ArticleHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
             <span>{formattedDate}</span>
           </div>
 
-          {!!demoUrl && (
-            <Link href={demoUrl} passHref target="_blank" rel="noopener noreferrer">
+          {!!demoPathname && (
+            <Link href={demoPathname} passHref target="_blank" rel="noopener noreferrer">
               <Button variant="outlined" colour="secondary">
                 Live demo
                 <Image
@@ -62,4 +60,4 @@ const ArticleHeader: FC<Props> = ({ title, tags, demoUrl, date }) => {
   )
 }
 
-export default ArticleHeader
+export default BlogPostHeader

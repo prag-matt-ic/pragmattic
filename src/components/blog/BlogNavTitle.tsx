@@ -1,9 +1,9 @@
 'use client'
-import React, { type FC, useEffect } from 'react'
+import React, { type FC, type ReactNode, useEffect } from 'react'
 
 import useNavStore from '@/hooks/useNavStore'
 
-type Props = { title: string }
+type Props = { title: ReactNode }
 
 const BlogNavTitle: FC<Props> = ({ title }) => {
   const setNavChildren = useNavStore((s) => s.setChildren)
