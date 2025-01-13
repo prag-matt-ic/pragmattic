@@ -7,6 +7,7 @@ export enum Pathname {
 export enum BlogPathname {
   WavePlane = '/blog/wave-plane',
   NextJsShaderSetup = '/blog/nextjs-setup-glsl-shaders',
+  ImageSequenceHeader = '/blog/scroll-driven-image-sequence-header',
   AppDevelopmentGuide = '/blog/app-development-guide',
 }
 

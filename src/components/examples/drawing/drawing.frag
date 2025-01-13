@@ -9,7 +9,7 @@ uniform sampler2D uPrevTexture;
 
 const vec3 BRUSH_COLOUR = vec3(1.0, 0.4, 0.4);
 const float RADIUS = 0.002;
-const float FEATHER = 0.0005;
+const float FEATHER = 0.005;
 
 varying vec2 vUv;
 
