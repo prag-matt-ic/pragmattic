@@ -43,6 +43,7 @@ const JSONSchema: FC<BlogMetadata> = ({ title, description, date, slug }) => {
           datePublished: date,
           dateModified: date,
           description: description,
+          image: 'https://pragmattic.vercel.app/og?title=Blog',
           // image: post.metadata.image
           //   ? `${baseUrl}${post.metadata.image}`
           //   : `/og?title=${encodeURIComponent(post.metadata.title)}`,
