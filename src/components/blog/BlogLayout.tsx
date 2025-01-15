@@ -3,7 +3,6 @@ import React, { type FC, type PropsWithChildren } from 'react'
 import BlogPostHeader from '@/components/blog/ArticleHeader'
 import BlogNavTitle from '@/components/blog/BlogNavTitle'
 import { type BlogMetadata } from '@/resources/blog/content/blog'
-import { Pathname } from '@/resources/navigation'
 
 type Props = PropsWithChildren<BlogMetadata>
 
@@ -30,7 +29,8 @@ const BlogLayout: FC<PropsWithChildren<Props>> = ({ children, ...metadata }) => 
 }
 
 const JSONSchema: FC<BlogMetadata> = ({ title, description, date, slug }) => {
-  const url = `${process.env.NEXT_PUBLIC_BASE_URL}${Pathname.Blog}/${slug}`
+  const url = `https://pragmattic.vercel.app/blog/${slug}`
+  console.warn('JSONSchema', { url, slug })
   return (
     <script
       type="application/ld+json"
