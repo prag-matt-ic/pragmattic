@@ -16,6 +16,11 @@ export const metadata: Metadata = {
 const BLOG_CARD_COMPONENTS: Record<BlogSlug, ReactNode> = {
   [BlogSlug.WavePlane]: <GridLinesFragmentShaderPlaneCanvas sectionClassName="overflow-hidden size-full" />,
   [BlogSlug.NextJsShaderSetup]: <ScrollBackgroundGradientCanvas />,
+  [BlogSlug.ImageSequenceHeader]: (
+    <video autoPlay loop muted playsInline className="-mt-9 h-[calc(100%+36px)] w-full overflow-hidden object-cover">
+      <source src="/blog/videos/scroll-driven-image-sequence.mp4" type="video/mp4" />
+    </video>
+  ),
 }
 
 export default function BlogPage() {

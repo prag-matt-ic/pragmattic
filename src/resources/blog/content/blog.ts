@@ -3,9 +3,9 @@ import { type FC } from 'react'
 import { TagName } from '@/resources/blog/content/tag'
 import { BlogSlug } from '@/resources/navigation'
 
+import ImageSequence from './posts/image-sequence.mdx'
 import NextJsShaderSetup from './posts/next-shaders.mdx'
 import WavePlane from './posts/wave-plane.mdx'
-import ImageSequence from './posts/image-sequence.mdx'
 
 export type BlogMetadata = {
   title: string
