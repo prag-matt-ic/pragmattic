@@ -9,7 +9,7 @@ import { Color } from 'three'
 // const OFF_BLACK_VEC3 = new Color('#1E1B23')
 // const BLACK_VEC3 = new Color('#0A090C')
 
-const LIGHT_VEC3_RGB = new Color('#7A718E').convertLinearToSRGB()
+const LIGHT_VEC3_RGB = new Color('#9D97AA').convertLinearToSRGB()
 const MID_VEC3_RGB = new Color('#2E2A37').convertLinearToSRGB()
 const BLACK_VEC3_RGB = new Color('#0A090C').convertLinearToSRGB()
 const OFF_BLACK_VEC3_RGB = new Color('#1E1B23').convertLinearToSRGB()

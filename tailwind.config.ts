@@ -14,7 +14,7 @@ const config: Config = {
       green: '#45F1A6',
       'green-alt': '#0DAF69',
       cyan: '#37F3FF',
-      light: '#7A718E',
+      light: '#9D97AA',
       orange: '#E5A019',
       mid: '#2E2A37',
       'off-black': '#1E1B23',

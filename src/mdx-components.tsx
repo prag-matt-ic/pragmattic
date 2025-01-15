@@ -1,9 +1,24 @@
 import type { MDXComponents } from 'mdx/types'
 import Image from 'next/image'
+import Link from 'next/link'
+import { type HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 import infoIcon from '@/assets/icons/info.svg'
 import CodeBlock from '@/components/blog/Code'
+
+const getHeadingLinkValues = (props: HTMLAttributes<HTMLHeadingElement>) => {
+  const heading = props.children as string
+  // replace spaces with hyphens and remove special characters
+  let id = heading
+    .trim()
+    .split(' ')
+    .join('-')
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9-]/g, '')
+  const href = '#' + id
+  return { heading, id, href }
+}
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -16,6 +31,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           rel="noreferrer"
           className="text-mid underline underline-offset-2 hover:text-black"
         />
+      )
+    },
+    h2: (props) => {
+      const { heading, id, href } = getHeadingLinkValues(props)
+      return (
+        <Link id={id} className="blog-heading !no-underline" href={href} data-heading={heading}>
+          <h2 {...props} className="">
+            {props.children}
+          </h2>
+        </Link>
       )
     },
     pre: (props) => {
@@ -43,7 +68,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           {!!title && (
             <header className="not-prose flex w-full items-center gap-2 bg-mid/5 px-4 py-2">
               <Image src={infoIcon} alt="info" className="!m-0 size-5" />
-              <h4 className="!my-0 leading-none text-mid">{title}</h4>
+              <h3 className="!my-0 leading-none text-mid">{title}</h3>
             </header>
           )}
           <div className="px-4">{children}</div>
