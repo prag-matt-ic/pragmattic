@@ -46,9 +46,17 @@ const BlogAsideMenu: FC<Props> = () => {
     },
   )
 
+  const scrollToTop = () => {
+    gsap.to(window, {
+      duration: 0.9,
+      ease: 'power2.out',
+      scrollTo: { y: 0 },
+    })
+  }
+
   const scrollToHeading = (id: string) => {
     gsap.to(window, {
-      duration: 0.75,
+      duration: 0.8,
       ease: 'power2.out',
       scrollTo: { y: `#${id}`, offsetY: 96 },
       onComplete: () => {
@@ -61,8 +69,10 @@ const BlogAsideMenu: FC<Props> = () => {
 
   return (
     <aside ref={container} className="sticky top-12 z-50 hidden h-fit shrink-0 px-12 pb-10 pt-16 xl:block 2xl:px-16">
-      <h4 className="mb-2 w-full text-sm uppercase tracking-wide text-light">Contents</h4>
-      <ul className="m-0 flex w-full flex-col p-0">
+      <h4 role="button" className="mb-2 w-full text-sm uppercase tracking-wide text-light" onClick={scrollToTop}>
+        Contents
+      </h4>
+      <ul className="flex w-full flex-col">
         {headingLinks.map((element, index) => {
           const heading = element.dataset.heading!
           const isActive = activeHeadingId === element.id
@@ -71,7 +81,10 @@ const BlogAsideMenu: FC<Props> = () => {
               key={index}
               role="button"
               onClick={() => scrollToHeading(element.id)}
-              className={twJoin('py-1.5 text-base font-medium', isActive ? 'font-semibold text-white' : 'text-light')}>
+              className={twJoin(
+                'py-1.5 text-base font-medium hover:text-white',
+                isActive ? 'font-semibold text-white' : 'text-light',
+              )}>
               {heading}
             </li>
           )
