@@ -9,15 +9,13 @@ import { twJoin } from 'tailwind-merge'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP, ScrollToPlugin)
 
-type Props = {}
-
-const BlogAsideMenu: FC<Props> = () => {
+const BlogAsideMenu: FC = () => {
   const [headingLinks, setHeadingLinks] = useState<HTMLAnchorElement[]>([])
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null)
   const container = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
-    // Find headings from the rich text using the class name
+    // Find headings from the MDX body using the class name applied to <h2> elements
     const richTextHeadingLinks = gsap.utils.toArray('.blog-heading') as HTMLAnchorElement[]
     if (richTextHeadingLinks.length === 0) return
     setHeadingLinks(richTextHeadingLinks)
@@ -69,12 +67,12 @@ const BlogAsideMenu: FC<Props> = () => {
 
   return (
     <aside ref={container} className="sticky top-12 z-50 hidden h-fit shrink-0 px-12 pb-10 pt-16 xl:block 2xl:px-16">
-      <h4 role="button" className="mb-2 w-full text-sm uppercase tracking-wide text-light" onClick={scrollToTop}>
+      <h4 role="button" className="mb-3 w-full text-sm uppercase tracking-wide text-light" onClick={scrollToTop}>
         Contents
       </h4>
       <ul className="flex w-full flex-col">
         {headingLinks.map((element, index) => {
-          const heading = element.dataset.heading!
+          const heading = element.dataset.heading
           const isActive = activeHeadingId === element.id
           return (
             <li

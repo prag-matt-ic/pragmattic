@@ -9,13 +9,13 @@ import CodeBlock from '@/components/blog/Code'
 
 const getHeadingLinkValues = (props: HTMLAttributes<HTMLHeadingElement>) => {
   const heading = props.children as string
-  // replace spaces with hyphens and remove special characters
-  let id = heading
+  const id = heading
     .trim()
     .split(' ')
     .join('-')
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]/g, '')
+    // Remove special characters and numbers
+    .replace(/[^a-zA-Z-]/g, '')
   const href = '#' + id
   return { heading, id, href }
 }
@@ -34,12 +34,10 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       )
     },
     h2: (props) => {
-      const { heading, id, href } = getHeadingLinkValues(props)
+      const { id, href, heading } = getHeadingLinkValues(props)
       return (
         <Link id={id} className="blog-heading !no-underline" href={href} data-heading={heading}>
-          <h2 {...props} className="">
-            {props.children}
-          </h2>
+          <h2 {...props}>{props.children}</h2>
         </Link>
       )
     },

@@ -13,7 +13,7 @@ const BlogPostHeader: FC<BlogMetadata> = ({ title, tags, demoPathname, date }) =
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>
-      <header className="relative flex w-full select-none bg-gradient-to-t from-mid to-mid/0 to-30%">
+      <header className="relative flex w-full select-none border-b border-off-black bg-gradient-to-t from-mid to-mid/0 to-30%">
         <div className="relative z-10 mx-auto flex size-full max-w-5xl flex-col items-center space-y-5 px-4 pb-20 pt-28 sm:px-12 sm:pt-40">
           <div className="hidden flex-wrap justify-center gap-1.5 sm:flex">
             {tags.map((tag) => (
