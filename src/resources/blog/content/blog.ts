@@ -5,6 +5,7 @@ import { BlogSlug } from '@/resources/navigation'
 
 import NextJsShaderSetup from './posts/next-shaders.mdx'
 import WavePlane from './posts/wave-plane.mdx'
+import ImageSequence from './posts/image-sequence.mdx'
 
 export type BlogMetadata = {
   title: string
@@ -18,6 +19,7 @@ export type BlogMetadata = {
 export const BLOG_CONTENT: Record<BlogSlug, FC> = {
   [BlogSlug.WavePlane]: WavePlane,
   [BlogSlug.NextJsShaderSetup]: NextJsShaderSetup,
+  [BlogSlug.ImageSequenceHeader]: ImageSequence,
 }
 
 export const BLOG_METADATA: Record<BlogSlug, BlogMetadata> = {
@@ -47,6 +49,14 @@ export const BLOG_METADATA: Record<BlogSlug, BlogMetadata> = {
     slug: BlogSlug.NextJsShaderSetup,
     tags: [TagName.Tutorial, TagName.NextJS, TagName.ThreeJS, TagName.Typescript, 'glslify', 'custom shader material'],
   },
+  [BlogSlug.ImageSequenceHeader]: {
+    title: 'Scroll-driven image sequence header in React with GSAP',
+    description: 'A guide to creating a scroll-driven image sequence header in React/Next.js with GSAP',
+    date: '2025-01-16',
+    demoPathname: '/examples/scroll-driven-image-sequence',
+    slug: BlogSlug.ImageSequenceHeader,
+    tags: [TagName.Tutorial, TagName.NextJS, TagName.Typescript, 'canvas', TagName.GSAP],
+  },
   // [BlogSlug.AppDevelopmentGuide]: {
   //   title: 'Marathon 1.0.0 - A complete app development guide for business and startup leaders',
   //   description: 'This comprehensive guide is geared towards those wishing to launch successful apps.',
@@ -54,10 +64,4 @@ export const BLOG_METADATA: Record<BlogSlug, BlogMetadata> = {
   //   slug: BlogSlug.AppDevelopmentGuide,
   //   tags: [TagName.Startups, TagName.ProductDevelopment],
   // },
-  //   [BlogSlug.ImageSequenceHeader]: {
-  //     title: 'Scroll-driven image sequence header in React with GSAP',
-  //     description: 'A guide to creating a scroll-driven image sequence header in React with GSAP',
-  //     date: '2025-01-13',
-  //     slug: BlogSlug.ImageSequenceHeader,
-  //   },
 }

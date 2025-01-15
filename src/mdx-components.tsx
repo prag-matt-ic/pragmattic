@@ -1,5 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
-import Image from 'next/image'
+import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import { type HTMLAttributes } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -44,7 +44,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     pre: (props) => {
       return <CodeBlock {...props} />
     },
+
     // Custom components which don't need importing in each MDX file
+    Image: (props: ImageProps) => {
+      return <Image {...props} alt={props.alt} />
+    },
     Quote: ({ children, author, ...props }) => {
       return (
         <blockquote
@@ -71,6 +75,22 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           )}
           <div className="px-4">{children}</div>
         </aside>
+      )
+    },
+    Video: ({ src, ...props }) => {
+      return (
+        <video
+          {...props}
+          controls={false}
+          loop={true}
+          autoPlay={true}
+          muted={true}
+          playsInline={true}
+          disablePictureInPicture={true}
+          className="not-prose m-0 size-auto w-full border-2 border-black bg-black">
+          Your browser does not support the video tag
+          <source src={src} type="video/mp4" />
+        </video>
       )
     },
   }

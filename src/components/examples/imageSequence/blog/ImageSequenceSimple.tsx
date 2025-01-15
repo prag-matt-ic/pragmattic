@@ -1,86 +1,3 @@
-Scroll-controlled animations can elevate your web experiences, creating interactions that are dynamic and visually stunning. This guide will walk you through building a scroll-controlled image sequence header inspired by Apple's [AirPods Pro](https://www.apple.com/uk/airpods-pro/) header.
-
-// Process
-// Install dependencies - gsap, @gsap/react, @mantine/hooks
-// Prepare image sequence frames
-// Load images, and draw first frame into canvas
-// Setup scroll trigger to update canvas images
-// Animate content in
-// Add text transitions using GSAP scroll trigger
-// Handle viewport resize
-
-
-## Install Required Dependencies
-To get started, ensure your project is set up with React and install the following packages:
-
-```bash
-npm install gsap @gsap/react @mantine/hooks
-```
-
-<Aside>
-[GSAP](): For advanced animations<br/>
-[@gsap/react](): React hooks for GSAP<br/>
-[@mantine/hooks](): Useful UI hooks, we'll be using viewport size detection and value debouncing
-</Aside>
-
-### Prepare Your Image Sequence Frames
-You'll need a series of sequentially named image files (e.g., img0001.png, img0002.png).
-If you're working with a 3D designer they'll be able to render these for you.
-
-{/* Note on image size */}
-{/* Theres a tradeoff */}
-
-If you want, you can [download mine here](https://github.com/prag-matt-ic/pragmattic/tree/main/public/images/bottle).
-
-Once ready, stick them in your `public` directory.
-
-
-### Start the Component
-
-
-
-
-
-
-
-
-### Load Images and Draw the First Frame
-The component initializes by loading the images, setting up the canvas, and drawing the first frame.
-
-```tsx
-
-```
-
-
-## Configure the Scroll Trigger
-GSAP's ScrollTrigger plugin is used to synchronize the scroll progress with the image sequence displayed on the canvas.
-
-```tsx
-```
-
-### Add Animations
-GSAP timelines control both the opacity and scaling of the canvas and other content elements as the user scrolls.
-
-```tsx
-Copy code
-gsap.timeline().to(canvas.current, { opacity: 1, duration: 0.8 });
-```
-
-### Handling Viewport Resize
-
-To ensure the header is responsive, the component recalculates the canvas dimensions and redraws the appropriate frame on viewport resize.
-
-```tsx
-Copy code
-useDidUpdate(() => {
-  const handleViewportResize = () => { ... };
-});
-```
-
-## Final Code
-Here's the complete implementation of the scroll-controlled image sequence header:
-
-```tsx title="ImageSequenceHeader.tsx"
 'use client'
 import { useGSAP } from '@gsap/react'
 import { useDebouncedValue, useDidUpdate, useViewportSize } from '@mantine/hooks'
@@ -94,12 +11,11 @@ const ImageSequenceHeader: FC = () => {
   const header = useRef<HTMLElement>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const viewportSize = useViewportSize()
-  const [debouncedViewportSize] = useDebouncedValue(viewportSize, 500)
   const [loadedImages, setLoadedImages] = useState<HTMLImageElement[]>()
 
   useEffect(() => {
     if (!canvas.current) return
-    if (viewportSize.width === 0 || viewportSiz e.height === 0) return // First render value is 0
+    if (viewportSize.width === 0 || viewportSize.height === 0) return // First render value is 0
     if (!!loadedImages) return
 
     const intialSetup = async () => {
@@ -137,12 +53,10 @@ const ImageSequenceHeader: FC = () => {
       // ScrollTrigger for updating image sequence frames
       ScrollTrigger.create({
         id: 'image-sequence',
-        start: 0,
-        end: 'bottom top',
-        scrub: true,
         trigger: header.current,
-        // Pin the content container so it doesn't scroll off the screen
-        pin: '#content-wrapper',
+        start: 0,
+        end: 'bottom top', // End when the bottom of the header reaches the top of the viewport
+        pin: '#content-wrapper', // Pin the content container so it doesn't scroll off the screen
         onUpdate: ({ progress }) => {
           const nextFrame = Math.floor(progress * loadedImages.length)
           const nextImage = loadedImages[nextFrame]
@@ -150,49 +64,14 @@ const ImageSequenceHeader: FC = () => {
           updateCanvasImage(context, canvas.current!, nextImage)
         },
       })
-
-      // Animations
-      // Animate content in
-      gsap
-        .timeline({
-          delay: 0.2,
-        })
-        .to(canvas.current, { opacity: 1, duration: 0.8 })
-        .to(canvas.current, { scale: 1, duration: 0.9, ease: 'power2.inOut' })
-        .fromTo(
-          '#heading',
-          { opacity: 0, scale: 0.8 },
-          { opacity: 1, scale: 1, duration: 0.7, ease: 'power2.inOut' },
-          '-=0.7',
-        )
-      // Scroll controlled animations for headings
-      gsap
-        .timeline({
-          defaults: {
-            ease: 'none',
-          },
-          scrollTrigger: { trigger: header.current, start: 0, end: 'bottom top', scrub: true },
-        })
-        .to('#heading', {
-          keyframes: [{ scale: 1.1 }, { scale: 1.15, opacity: 0 }],
-          duration: 0.5,
-        })
-        .to(
-          'h2',
-          {
-            keyframes: [
-              { scale: 0.9, opacity: 1, duration: 0.2 },
-              { scale: 1, opacity: 0, duration: 0.1 },
-            ],
-          },
-          '+=0.05',
-        )
     },
     {
       dependencies: [loadedImages],
       scope: header,
     },
   )
+
+  const [debouncedViewportSize] = useDebouncedValue(viewportSize, 500)
 
   useDidUpdate(() => {
     const handleViewportResize = () => {
@@ -216,24 +95,11 @@ const ImageSequenceHeader: FC = () => {
     <>
       <header ref={header} className="relative h-[200lvh] w-full select-none overflow-hidden">
         <div id="content-wrapper" className="relative z-20 flex h-lvh w-full items-center justify-center">
-          <div id="heading" className="flex w-fit flex-col gap-6 opacity-0">
-            <h1 className="whitespace-nowrap text-3xl font-extrabold leading-none tracking-tighter text-white md:text-[8.5vmax]">
-              Animate Responsibly
-            </h1>
-            <span className="block place-self-end text-right text-sm text-light">
-              Blended at{' '}
-              <a className="cursor-pointer underline hover:text-white" href="https://www.derrk.com/" rel="noreferrer">
-                DERRK.COM
-              </a>
-            </span>
-          </div>
-
-          <h2 className="absolute scale-75 text-center text-2xl font-bold leading-none tracking-tighter text-white opacity-0 md:text-[6vmax]">
-            Be principled
-          </h2>
-          <canvas ref={canvas} className="pointer-events-none absolute scale-75 bg-transparent opacity-0" />
+          <h1 className="text-3xl font-extrabold tracking-tighter text-white md:text-[8.5vmax]">Animate Responsibly</h1>
+          <canvas ref={canvas} className="pointer-events-none absolute scale-75 bg-transparent" />
         </div>
       </header>
+
       {/* Spacing */}
       <div className="h-[25vh] w-full" />
     </>
@@ -309,15 +175,3 @@ const updateCanvasImage = (
   renderingContext.clearRect(0, 0, canvas.width, canvas.height)
   renderingContext.drawImage(image, offsetX, offsetY, image.width, image.height)
 }
-```
-
-## Summary
-In this tutorial, we covered:
-
-- Setting up GSAP with React
-- Loading and managing an image sequence in a canvas.
-- Adding scroll-controlled animations.
-- Handling viewport resizing for responsiveness.
-- For a step-by-step walkthrough, watch this video tutorial.
-
-Happy animating! 🎨

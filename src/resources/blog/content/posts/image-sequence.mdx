@@ -1,0 +1,317 @@
+<Video src='/blog/videos/scroll-driven-image-sequence.mp4' />
+
+## Some Motivation 
+
+This type of scroll controlled image sequence can be found on world class sites such as Apple's [AirPods Pro](https://www.apple.com/uk/airpods-pro/) landing page. I've personally implemented something similar on a global project for a leading retail brand.
+
+In this guide I'll explain how to build this scrolling image sequence in Next.js (Typescript) with GSAP... and hopefully help you take your web experiences to the next level 🚀
+
+Shoutout to [Derek Elliott](https://www.derrk.com/) for his awesome 3D work on the bottle images 🍾
+
+<Aside title="Pros and cons of image sequences">
+**Pros:**
+- High fidelity visuals with pre-baked lighting and shadows not possible in real-time
+- Runs well on lower powered devices
+- Relatively easy to implement
+
+**Cons:**
+- Lower frame rates than a realtime 3D model or video
+- Large set of images needed for a smooth animation which can be heavy to load
+- Limited interactivty compared to 3D models (no pointer interactions)
+</Aside>
+
+## Install Dependencies
+To get started, ensure your Next.js project is setup with Tailwind CSS, and then install the following packages:
+
+```bash
+npm install gsap @gsap/react @mantine/hooks
+```
+
+[GSAP](): For advanced animations<br/>
+[@gsap/react](): React hooks for GSAP<br/>
+[@mantine/hooks](): Useful UI hooks - we'll be using viewport size detection and value debouncing
+
+
+## Prepare Your Image Sequence Frames
+
+<Image src='/blog/images/image-sequence-files.png' alt='Image sequence files' width={1200} height={800} quality={80} className='object-contain' />
+
+You'll need a series of sequentially named image files (e.g., `img0001.png`, `img0002.png`).
+If you're working with a 3D designer they'll be able to render these for you.
+
+If you want, you can [download my images from here](https://github.com/prag-matt-ic/pragmattic/tree/main/public/images/bottle).
+
+Once ready, stick them in your `public` directory so we can load them easily.
+
+*Ideally you'd also have a variety of sizes for different screen sizes, but for this project we'll just sitck to one size for simplicity.*
+
+## Component Overview and Markup
+
+In this example we'll be building a header component designed for the top of the page.<br/> 
+The header will be pinned (fixed) until the user scrolls a certain distance and the image sequence has finished.<br/> 
+The images will be rendered one by one into a canvas, with the current scroll position determining which frame to draw.
+
+Here's the initial component structure:
+
+```tsx {1, 8, 15-20}  title="ImageSequenceHeader.tsx" showLineNumbers
+'use client'
+import { useGSAP } from '@gsap/react'
+import { useDebouncedValue, useDidUpdate, useViewportSize } from '@mantine/hooks'
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/dist/ScrollTrigger'
+import React, { type FC, useEffect, useRef, useState } from 'react'
+
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+const ImageSequenceHeader: FC = () => {
+  const header = useRef<HTMLElement>(null)
+  const canvas = useRef<HTMLCanvasElement>(null)
+
+  return (
+      <header ref={header} className="relative h-[200lvh] w-full select-none overflow-hidden">
+        <div id="content-wrapper" className="relative z-20 flex h-lvh w-full items-center justify-center">
+          <h1 className="text-3xl font-extrabold tracking-tighter text-white md:text-[8.5vmax]">Animate Responsibly</h1>
+          <canvas ref={canvas} className="pointer-events-none absolute scale-75 bg-transparent" />
+        </div>
+      </header>
+      {/* Remember to ensure your page can scroll by setting a min-h on it! */}
+  )
+}
+```
+
+### Breakdown
+- We've marked the component as `client` side rendered so we can use refs and GSAP
+- We've remembered to register the relevant GSAP plugins
+- The header height is 200% of the (large) viewport height. 2 screen heights is the amount the user will scroll to complete the sequence.
+- The content wrapper (stuff that will be pinned) is full screen size
+- The canvas is positioned absolutely above the heading
+- Both the heading and canvas are centered by their parent using flex
+
+
+## Loading images and updating the canvas
+
+When the component mounts we'll load all the images and draw the first frame onto the canvas.
+We need to generate an array of image sources based on the file naming pattern. In this case we have 60 frames.
+
+```tsx title="ImageSequenceHeader.tsx"
+  // Inside our component
+ const viewportSize = useViewportSize()
+ const [loadedImages, setLoadedImages] = useState<HTMLImageElement[]>()
+
+  useEffect(() => {
+    if (!canvas.current) return
+    if (viewportSize.width === 0 || viewportSize.height === 0) return // First render value is 0
+    if (!!loadedImages) return
+
+    const intialSetup = async () => {
+      // Image Dimensions: 1920 / 1080
+      const imageAspect = 1920 / 1080
+      const imageWidth = viewportSize.width
+      const imageHeight = viewportSize.width / imageAspect
+      canvas.current!.width = viewportSize.width
+      canvas.current!.height = viewportSize.height
+
+      const imageSrcs: string[] = Array.from(
+        { length: 60 },
+        (_, i) => `/images/bottle/pragma100${i + 1 < 10 ? `0${i + 1}` : i + 1}.png`,
+      )
+
+      const images = await loadImagesAndDrawFirstFrame({
+        canvas: canvas.current!,
+        imageSrcs: imageSrcs,
+        imageWidth: imageWidth,
+        imageHeight: imageHeight,
+      })
+
+      setLoadedImages(images)
+    }
+
+    intialSetup()
+  }, [viewportSize, loadedImages])
+
+```
+
+### Summary
+- We're using the `useViewportSize` Mantine hook to get the current viewport size
+- Once we have the viewport size we calculate the image dimensions based on a 1920x1080 aspect ratio (or whatever aspect the images are)
+- We set the loaded images into state
+- We don't run this effect again once the images are loaded
+
+### Load images and draw the first frame
+
+This helper function will download all of the images, and immediately render the first one into the canvas.<br/> 
+It returns a promise of image elements which we're setting into state.
+
+```ts title="loadImagesAndDrawFirstFrame" showLineNumbers
+const loadImagesAndDrawFirstFrame = async ({
+  canvas,
+  imageSrcs,
+  imageWidth,
+  imageHeight,
+}: {
+  canvas: HTMLCanvasElement
+  imageSrcs: string[]
+  imageWidth: number
+  imageHeight: number
+}): Promise<HTMLImageElement[]> => {
+  let images: HTMLImageElement[] = []
+  let loadedCount = 0
+
+  return new Promise<HTMLImageElement[]>(async (resolve, reject) => {
+    const onImageLoad = (index: number, img: HTMLImageElement) => {
+      // Draw the first frame ASAP
+      if (index === 0) {
+        const context = canvas.getContext('2d', { alpha: true })
+        if (!context) return
+        updateCanvasImage(context, canvas, img)
+      }
+      loadedCount++
+      const hasLoadedAll = loadedCount === imageSrcs.length - 1
+      if (hasLoadedAll) resolve(images)
+    }
+
+    const retries: { [imgIndex: number]: number } = {}
+    const maxRetries = 3
+
+    const onImageError = (i: number, img: HTMLImageElement) => {
+      // Try reloading this image a couple of times. If it fails then reject.
+      if (retries[i] < maxRetries) {
+        console.warn(`Image ${i} failed to load. Retrying... ${retries[i]}`)
+        img.src = `${imageSrcs[i]}?r=${retries[i]}`
+        retries[i]++
+      } else {
+        reject()
+      }
+    }
+
+    for (let i = 0; i < imageSrcs.length - 1; i++) {
+      const img = new Image()
+      img.src = imageSrcs[i]
+      // Math.min for contain, Math.max for cover
+      const scale = Math.max(canvas!.width / imageWidth, canvas!.height / imageHeight)
+      img.width = imageWidth * scale
+      img.height = imageHeight * scale
+      img.addEventListener('load', (e: any) => onImageLoad(i, img))
+      img.addEventListener('error', (e) => onImageError(i, img))
+      images.push(img)
+    }
+  })
+}
+
+const updateCanvasImage = (
+  renderingContext: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
+  image: HTMLImageElement,
+) => {
+  if (!renderingContext || !canvas || !image) throw new Error('Unable to update canvas')
+  // If you need to center the image in the canvas:
+  const offsetX = canvas.width / 2 - image.width / 2
+  const offsetY = canvas.height / 2 - image.height / 2
+  renderingContext.clearRect(0, 0, canvas.width, canvas.height)
+  renderingContext.drawImage(image, offsetX, offsetY, image.width, image.height)
+}
+```
+
+### loadImagesAndDrawFirstFrame
+- We're looping through all the image sources and creating a HTML Image element for each
+- We attach a load event listener to each image which will call `onImageLoad` when the image is ready
+- Or it will call `onImageError` if the image fails to load
+- If an image fails to load, we retry up to 3 times before rejecting the promise
+- When the image loads, if it's the first index we draw it onto the canvas
+- Once all of the images have loaded, we resolve the promise with the array of images
+
+### updateCanvasImage
+- This function is responsible for drawing an image onto the canvas
+- It's important to first clear the entire canvas, because the images are transparent and would otherwise be drawn on top of each other.
+
+
+## Update the canvas on scroll
+
+We'll implement the `useGSAP` hook and create a `ScrollTrigger` to update the canvas image based on the scroll progress:
+
+```tsx title="ImageSequenceHeader.tsx"
+  useGSAP(
+    () => {
+      if (!canvas.current || !loadedImages) return
+      const context = canvas.current.getContext('2d', { alpha: true })
+      if (!context) return
+
+      // ScrollTrigger for updating image sequence frames
+      ScrollTrigger.create({
+        id: 'image-sequence',
+        trigger: header.current, // Use the header as the trigger element
+        start: 0, // Start at 0 scroll (top of the page)
+        end: 'bottom top', // End when the bottom of the header reaches the top of the viewport (2 screen heights)
+        pin: '#content-wrapper', // Pin the content (h1, canvas) so it doesn't scroll off the screen
+        onUpdate: ({ progress }) => {
+          // Progress ranges from 0 to 1
+          // Determine the next image to draw
+          const nextFrame = Math.floor(progress * loadedImages.length)
+          const nextImage = loadedImages[nextFrame]
+          if (!nextImage) return
+          // Note: we could track the current frame in a ref, and only update when it's changed
+          updateCanvasImage(context, canvas.current!, nextImage)
+        },
+      })
+    },
+    {
+      dependencies: [loadedImages],
+      scope: header, // Scope any query selectors to the header
+    },
+  )
+```
+
+**Now you should have a working image sequence that responds to the user's scroll!**
+
+## Handling Viewport Resizes
+
+To ensure the header canvas is responsive, we'll update it's size and redraw the current frame after a viewport resize.
+We'll use the `useDebouncedValue` Mantine hook to prevent this from firing too often.
+
+```tsx title="ImageSequenceHeader.tsx"
+  // Additional component logic for handling viewport resize
+  const [debouncedViewportSize] = useDebouncedValue(viewportSize, 500)
+
+  useDidUpdate(() => {
+    const handleViewportResize = () => {
+      if (!debouncedViewportSize.width || !debouncedViewportSize.height || !loadedImages) return
+      if (!canvas.current) return
+      if (canvas.current.width === debouncedViewportSize.width) return
+      canvas.current.width = debouncedViewportSize.width
+      canvas.current.height = debouncedViewportSize.height
+      const context = canvas.current.getContext('2d', { alpha: true })
+      if (!context) return
+      const progress = ScrollTrigger.getById('image-sequence')?.progress ?? 0
+      const nextFrame = Math.floor(progress * loadedImages.length)
+      const nextImage = loadedImages[nextFrame]
+      if (!nextImage) return
+      updateCanvasImage(context, canvas.current, nextImage)
+    }
+    handleViewportResize()
+  }, [debouncedViewportSize])
+```
+
+### Summary 
+- We pass the viewport size into `useDebouncedValue` to get a value which updates every 500ms at most
+- We use the `useDidUpdate` Mantine hook to call `handleViewportResize` when the debouncedViewportSize value changes
+- We make some checks to ensure the resize logic should run before setting the new canvas width and height
+- We access the ScrollTrigger's progress value using it's ID, and then draw what the current frame should be using the newly sized canvas
+
+**With this in place you have a responsive canvas that re-draws the current frame after resizing has ended!**
+
+
+## Full Example Code
+
+I've not covered the intro animation or the heading transitions featured in the live example.<br/>
+How would you go about adding those?<br/>
+Feel free to peruse [my code here](https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/imageSequence/ImageSequenceHeader.tsx) if you want to see how I did it.
+
+[Revisit the live example here]('/examples/scroll-driven-image-sequence')
+
+## Closing Words
+
+If you make improvements to the code I'd love to hear from you!
+
+Happy sequencing! 🎨
+
+

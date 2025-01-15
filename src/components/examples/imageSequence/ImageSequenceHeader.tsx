@@ -65,12 +65,10 @@ const ImageSequenceHeader: FC = () => {
       // ScrollTrigger for updating image sequence frames
       ScrollTrigger.create({
         id: 'image-sequence',
-        start: 0,
-        end: 'bottom top',
-        scrub: true,
         trigger: header.current,
-        // Pin the content container so it doesn't scroll off the screen
-        pin: '#content-wrapper',
+        start: 0,
+        end: 'bottom top', // End when the bottom of the header reaches the top of the viewport
+        pin: '#content-wrapper', // Pin the content container so it doesn't scroll off the screen
         onUpdate: ({ progress }) => {
           const nextFrame = Math.floor(progress * loadedImages.length)
           const nextImage = loadedImages[nextFrame]
