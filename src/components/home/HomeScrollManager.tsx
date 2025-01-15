@@ -73,6 +73,7 @@ const HomeScrollManager: FC = () => {
       <div id="scroll-bar" className="relative w-1 rounded-full bg-light/30 xl:w-2">
         <div className={spacerClasses} />
         <button
+          aria-label="Purpose"
           className={twJoin(
             buttonClasses,
             'bg-green',
@@ -81,6 +82,7 @@ const HomeScrollManager: FC = () => {
           onClick={() => onLinkClick(SceneSection.Purpose)}
         />
         <button
+          aria-label="Design"
           className={twJoin(
             buttonClasses,
             'bg-orange',
@@ -89,6 +91,7 @@ const HomeScrollManager: FC = () => {
           onClick={() => onLinkClick(SceneSection.Design)}
         />
         <button
+          aria-label="Engineering"
           className={twJoin(
             buttonClasses,
             'bg-cyan',
