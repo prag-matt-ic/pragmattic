@@ -9,7 +9,7 @@ import { twJoin } from 'tailwind-merge'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP, ScrollToPlugin)
 
-const BlogAsideMenu: FC = () => {
+const BlogHeadingsNav: FC = () => {
   const [headingLinks, setHeadingLinks] = useState<HTMLAnchorElement[]>([])
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null)
   const container = useRef<HTMLDivElement>(null)
@@ -66,7 +66,7 @@ const BlogAsideMenu: FC = () => {
   if (!headingLinks.length) return null
 
   return (
-    <aside ref={container} className="sticky top-12 z-50 hidden h-fit shrink-0 px-12 pb-10 pt-16 xl:block 2xl:px-16">
+    <nav ref={container} className="sticky top-12 z-50 hidden h-fit shrink-0 px-12 pb-10 pt-16 xl:block 2xl:px-16">
       <h4 role="button" className="mb-3 w-full text-sm uppercase tracking-wide text-light" onClick={scrollToTop}>
         Contents
       </h4>
@@ -88,8 +88,8 @@ const BlogAsideMenu: FC = () => {
           )
         })}
       </ul>
-    </aside>
+    </nav>
   )
 }
 
-export default BlogAsideMenu
+export default BlogHeadingsNav
