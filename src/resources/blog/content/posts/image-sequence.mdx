@@ -91,7 +91,7 @@ const ImageSequenceHeader: FC = () => {
 ## Loading images and updating the canvas
 
 When the component mounts we'll load all the images and draw the first frame onto the canvas.
-We need to generate an array of image sources based on the file naming pattern. In this case we have 60 frames.
+We generate an array of image sources based on the file naming pattern. In this case we have 60 frames.
 
 ```tsx title="ImageSequenceHeader.tsx"
   // Inside our component
@@ -134,13 +134,14 @@ We need to generate an array of image sources based on the file naming pattern. 
 ### Summary
 - We're using the `useViewportSize` Mantine hook to get the current viewport size
 - Once we have the viewport size we calculate the image dimensions based on a 1920x1080 aspect ratio (or whatever aspect the images are)
-- We set the loaded images into state
+- `imageSrcs` is an array generated from the file naming pattern, pointing to our assets in the public folder
+- We call `loadImagesAndDrawFirstFrame` and then set the loaded images into state *(detailed below)*
 - We don't run this effect again once the images are loaded
 
 ### Load images and draw the first frame
 
 This helper function will download all of the images, and immediately render the first one into the canvas.<br/> 
-It returns a promise of image elements which we're setting into state.
+It returns a promise of image elements which we're setting into the component's state above.
 
 ```ts title="loadImagesAndDrawFirstFrame" showLineNumbers
 const loadImagesAndDrawFirstFrame = async ({
@@ -212,15 +213,15 @@ const updateCanvasImage = (
 }
 ```
 
-### loadImagesAndDrawFirstFrame
+### `loadImagesAndDrawFirstFrame`
 - We're looping through all the image sources and creating a HTML Image element for each
 - We attach a load event listener to each image which will call `onImageLoad` when the image is ready
-- Or it will call `onImageError` if the image fails to load
+- ...or `onImageError` if the image fails to load
 - If an image fails to load, we retry up to 3 times before rejecting the promise
 - When the image loads, if it's the first index we draw it onto the canvas
 - Once all of the images have loaded, we resolve the promise with the array of images
 
-### updateCanvasImage
+### `updateCanvasImage`
 - This function is responsible for drawing an image onto the canvas
 - It's important to first clear the entire canvas, because the images are transparent and would otherwise be drawn on top of each other.
 
@@ -265,8 +266,9 @@ We'll implement the `useGSAP` hook and create a `ScrollTrigger` to update the ca
 
 ## Handling Viewport Resizes
 
-To ensure the header canvas is responsive, we'll update it's size and redraw the current frame after a viewport resize.
-We'll use the `useDebouncedValue` Mantine hook to prevent this from firing too often.
+To ensure the header canvas is responsive, we'll update it's size and redraw the current frame after a viewport resize.<br/>
+We'll use the `useDebouncedValue` Mantine hook to prevent this from firing too often.<br/>
+We'll use `useDidUpdate` so that the function doesn't run on the first render like a regular useEffect would. 
 
 ```tsx title="ImageSequenceHeader.tsx"
   // Additional component logic for handling viewport resize

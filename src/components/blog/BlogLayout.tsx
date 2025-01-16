@@ -15,7 +15,6 @@ const BlogLayout: FC<PropsWithChildren<Props>> = ({ children, ...metadata }) => 
       <main className="relative w-full font-sans">
         <BlogPostHeader {...metadata} />
 
-        {/* https://github.com/tailwindlabs/tailwindcss-typography */}
         <div className="grid grid-cols-1 grid-rows-1 xl:grid-cols-[auto_1fr]">
           <article className="prose-sm mx-auto w-full !max-w-5xl overflow-hidden text-pretty bg-white px-4 py-12 text-black md:prose prose-pre:bg-off-black md:px-12 xl:px-16 xl:py-16">
             {children}
