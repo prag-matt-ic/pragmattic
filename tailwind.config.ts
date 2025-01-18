@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import type { PluginAPI } from 'tailwindcss/types/config'
 
 const config: Config = {
   content: [
@@ -40,7 +41,7 @@ const config: Config = {
   },
   plugins: [
     require('@tailwindcss/typography'),
-    function ({ addUtilities, theme }: any) {
+    function ({ addUtilities, theme }: PluginAPI) {
       const newUtilities = {
         '.horizontal-padding': {
           paddingLeft: '24px', // px-6 equivalent
@@ -59,7 +60,6 @@ const config: Config = {
           },
         },
       }
-
       addUtilities(newUtilities)
     },
   ],
