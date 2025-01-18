@@ -21,12 +21,16 @@ const BlogLayout: FC<PropsWithChildren<Props>> = ({ children, ...metadata }) => 
             <hr />
             <h3>Thanks for reading, Matt ✌️</h3>
           </article>
+
+          {/* https://tympanus.net/codrops/author/kellymilligan/ */}
           <BlogHeadingsNav />
         </div>
       </main>
     </>
   )
 }
+
+// Senior Front-End Developer with a passion for creative coding and art. Former prepress technician and editorial designer. Blending technical expertise with artistic vision.
 
 const JSONSchema: FC<BlogMetadata> = ({ title, description, date, slug }) => {
   const url = `https://pragmattic.vercel.app/blog/${slug}`

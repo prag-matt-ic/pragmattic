@@ -7,8 +7,10 @@ uniform bool uIsPointerDown;
 uniform vec2 uPointers[24];
 uniform sampler2D uPrevTexture; 
 
-const vec3 BRUSH_COLOUR = vec3(1.0, 0.4, 0.4);
-const float RADIUS = 0.002;
+uniform float uBrushSize;
+uniform vec3 uBrushColour;
+uniform float uBrushDistortion;
+
 const float FEATHER = 0.005;
 
 varying vec2 vUv;
@@ -36,17 +38,30 @@ void main() {
 
   float coverage = 0.0;
 
+  float n1 = noise(vec3(uv.x, uv.y, uTime)) * 0.5 * uBrushDistortion;
+  float n2 = noise(vec3(uv.y, uv.x, uTime * 0.5)) * 0.5 * uBrushDistortion;
+
   // Loop through pointers and draw a circle for each one.
   for (int i = 0; i < 24; i ++) {
     vec2 pointer = (uPointers[i] + vec2(1.0)) * 0.5; // Convert pointer from [-1, 1] to [0, 1]
     pointer.x *= uAspect; // Adjust for aspect ratio
+
+    // Distort pointer if needed
+    if (uBrushDistortion > 0.0) {
+      pointer.x += n1;
+      pointer.y -= n2;
+    }
+
+    // Draw 40 sister lines around the pointer
+
+
     float dist = distance(uv, pointer);
-    float circle = 1.0 - smoothstep(RADIUS, RADIUS + FEATHER, dist);
+    float circle = 1.0 - smoothstep(uBrushSize, uBrushSize + FEATHER, dist);
     coverage = max(coverage, circle);
   }
 
   // Mix brush color with previous color based on how close we are to the segment
-  vec3 newColour = mix(prevColour.rgb, BRUSH_COLOUR, coverage);
+  vec3 newColour = mix(prevColour.rgb, uBrushColour, coverage);
 
   // Write final color
   gl_FragColor = vec4(newColour, 1.0);

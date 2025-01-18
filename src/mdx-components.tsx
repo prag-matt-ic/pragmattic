@@ -16,7 +16,7 @@ const getHeadingLinkValues = (props: HTMLAttributes<HTMLHeadingElement>) => {
     .toLowerCase()
     // Remove special characters and numbers
     .replace(/[^a-zA-Z-]/g, '')
-  const href = '#' + id
+  const href = encodeURIComponent('#' + id)
   return { heading, id, href }
 }
 

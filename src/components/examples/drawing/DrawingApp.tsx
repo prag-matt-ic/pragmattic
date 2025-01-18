@@ -1,4 +1,5 @@
 'use client'
+import { useDidUpdate } from '@mantine/hooks'
 import { OrthographicCamera, ScreenQuad, shaderMaterial } from '@react-three/drei'
 import { Canvas, extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
 import { saveAs } from 'file-saver'
@@ -11,25 +12,14 @@ import vertexShader from './screen.vert'
 import { useDoubleBufferedRenderTarget } from './useDoubleBufferedRenderTarget'
 
 const DrawingCanvas: FC = () => {
-  const [version, setVersion] = useState<string>(new Date().toISOString())
-  useControls({
-    reset: { value: false, onChange: () => setVersion(new Date().toISOString()) },
-  })
-
-  const onResetClick = (e: MouseEvent) => {
-    e.stopPropagation()
-    setVersion(new Date().toISOString())
-  }
-
-  const onDownloadPress = (e: MouseEvent) => {
-    e.stopPropagation()
+  const handleDownload = (date: Date) => {
     try {
       const canvas = document.querySelector('canvas')
       if (!canvas) throw new Error('Canvas not found')
       canvas.toBlob(
         function (blob) {
           if (!blob) return
-          saveAs(blob, `drawing-${version}.png`)
+          saveAs(blob, `drawing-${date}.png`)
         },
         'image/png',
         1,
@@ -49,7 +39,7 @@ const DrawingCanvas: FC = () => {
           powerPreference: 'high-performance',
         }}>
         <OrthographicCamera makeDefault={true} position={[0, 0, 1]} />
-        <Drawing version={version} />
+        <Drawing handleDownload={handleDownload} />
       </Canvas>
       <Leva titleBar={{ position: { x: -8, y: 64 } }} />
     </>
@@ -58,21 +48,28 @@ const DrawingCanvas: FC = () => {
 
 export default DrawingCanvas
 
-type Uniforms = {
+type DrawingUniforms = {
   uTime: number
   uAspect: number
   uIsPointerDown: boolean
   uPointers: Vector2[]
+  uBrushSize: number
+  uBrushColour: Color
+  uBrushDistortion: number
   // uPointer: Vector2
   // uPrevPointer: Vector2
   uPrevTexture: Texture | null
 }
 
-const INITIAL_UNIFORMS: Uniforms = {
+const INITIAL_UNIFORMS: DrawingUniforms = {
   uTime: 0,
   uAspect: 1.0,
   uIsPointerDown: false,
   uPointers: [],
+  uBrushSize: 0.01,
+  uBrushColour: new Color('#f00'),
+
+  uBrushDistortion: 0.0,
   // uPointer: new Vector2(0, 0),
   // uPrevPointer: new Vector2(0, 0),
   uPrevTexture: null,
@@ -99,24 +96,33 @@ extend({ DrawingShaderMaterial, ResetDrawingShaderMaterial })
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    drawingShaderMaterial: ShaderMaterialProps & Uniforms
+    drawingShaderMaterial: ShaderMaterialProps & DrawingUniforms
     resetDrawingShaderMaterial: ShaderMaterialProps & ResetUniforms
   }
 }
 
 type DrawingProps = {
-  version: string
+  handleDownload: (date: Date) => void
 }
 
-const Drawing: FC<DrawingProps> = ({ version }) => {
-  const shader = useRef<ShaderMaterial & Partial<Uniforms>>(null)
+const Drawing: FC<DrawingProps> = ({ handleDownload }) => {
+  const [version, setVersion] = useState<string>(new Date().toISOString())
+
+  const { brushSize, brushColour, brushDistortion } = useControls({
+    brushSize: { value: 20, min: 1, max: 100, step: 1 },
+    brushColour: { value: '#f00' },
+    brushDistortion: { value: 0, min: 0, max: 5, step: 1 },
+    reset: { value: false, onChange: () => setVersion(new Date().toISOString()) },
+  })
+
+  const shader = useRef<ShaderMaterial & Partial<DrawingUniforms>>(null)
   const resetShader = useRef<ShaderMaterial & Partial<ResetUniforms>>(null)
   const isPointerDown = useRef(false)
 
   const { viewport, size, gl, camera } = useThree()
   const renderTargets = useDoubleBufferedRenderTarget([size.width, size.height])
 
-  useEffect(() => {
+  useDidUpdate(() => {
     const resetOnVersionChange = () => {
       // Render black quad to both render targets
       const { targets } = renderTargets
@@ -128,7 +134,7 @@ const Drawing: FC<DrawingProps> = ({ version }) => {
       gl.setRenderTarget(null) // Reset to default framebuffer
     }
     resetOnVersionChange()
-  }, [version, camera, size.width, size.height, renderTargets, gl])
+  }, [version])
 
   useEffect(() => {
     const target = gl.domElement
@@ -152,29 +158,29 @@ const Drawing: FC<DrawingProps> = ({ version }) => {
 
   const prevPointer = useRef<Vector2>(new Vector2(0, 0))
 
-  function catmullRomPoints(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, steps = 24) {
-    const curve: Vector2[] = []
+  // function catmullRomPoints(p0: Vector2, p1: Vector2, p2: Vector2, p3: Vector2, steps = 24) {
+  //   const curve: Vector2[] = []
 
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps
-      const t2 = t * t
-      const t3 = t2 * t
+  //   for (let i = 0; i <= steps; i++) {
+  //     const t = i / steps
+  //     const t2 = t * t
+  //     const t3 = t2 * t
 
-      // Catmull–Rom basis functions
-      const b0 = 0.5 * (-t3 + 2 * t2 - t)
-      const b1 = 0.5 * (3 * t3 - 5 * t2 + 2)
-      const b2 = 0.5 * (-3 * t3 + 4 * t2 + t)
-      const b3 = 0.5 * (t3 - t2)
+  //     // Catmull–Rom basis functions
+  //     const b0 = 0.5 * (-t3 + 2 * t2 - t)
+  //     const b1 = 0.5 * (3 * t3 - 5 * t2 + 2)
+  //     const b2 = 0.5 * (-3 * t3 + 4 * t2 + t)
+  //     const b3 = 0.5 * (t3 - t2)
 
-      const x = p0.x * b0 + p1.x * b1 + p2.x * b2 + p3.x * b3
-      const y = p0.y * b0 + p1.y * b1 + p2.y * b2 + p3.y * b3
+  //     const x = p0.x * b0 + p1.x * b1 + p2.x * b2 + p3.x * b3
+  //     const y = p0.y * b0 + p1.y * b1 + p2.y * b2 + p3.y * b3
 
-      curve.push(new Vector2(x, y))
-    }
+  //     curve.push(new Vector2(x, y))
+  //   }
 
-    console.log(curve)
-    return curve
-  }
+  //   console.log(curve)
+  //   return curve
+  // }
 
   // TODO: update to store a history of multiple previous pointers
   // Then use them in the catmull-Rom function
@@ -228,8 +234,12 @@ const Drawing: FC<DrawingProps> = ({ version }) => {
         uIsPointerDown={false}
         uPrevTexture={null}
         uPointers={[]}
+        uBrushColour={new Color(brushColour)}
+        uBrushSize={brushSize / 1000}
+        uBrushDistortion={brushDistortion / 10}
       />
     </ScreenQuad>
+    // TODO: show where the brush will draw when pointer is up. (preview circle)
   )
 }
 
