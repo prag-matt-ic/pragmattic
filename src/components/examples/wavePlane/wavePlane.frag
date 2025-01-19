@@ -1,5 +1,4 @@
 // Wave Plane Fragment shader
-uniform float uTime;
 uniform float uScrollProgress;
 uniform vec3 uColourPalette[4];
 uniform bool uShowGrid;
