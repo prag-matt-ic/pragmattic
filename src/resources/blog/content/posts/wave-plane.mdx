@@ -519,6 +519,7 @@ If you revisit the [live demo](/examples/wave-plane) you can scroll til your hea
       start: 0,
       end: 'max',
       onUpdate: ({ progress }) => {
+        // Loop the scroll!
         if (progress === 1) {
           scrollLoop.current++
           scrollProgress.current = 0
@@ -528,7 +529,7 @@ If you revisit the [live demo](/examples/wave-plane) you can scroll til your hea
         scrollProgress.current = progress
       },
     })
-  }, [loopScroll])
+  }, [])
 
   useFrame(({ clock }) => {
     if (!shaderMaterial.current) return
