@@ -23,14 +23,23 @@ const getHeadingLinkValues = (props: HTMLAttributes<HTMLHeadingElement>) => {
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-    a: (props) => {
+    a: ({ children, ...props }) => {
+      if (!props.href) return null
+      const isExternal = props.href.startsWith('http')
+      if (isExternal)
+        return (
+          <a
+            {...props}
+            target="_blank"
+            rel="noreferrer"
+            className="text-mid underline underline-offset-2 hover:text-black">
+            {children}
+          </a>
+        )
       return (
-        <a
-          {...props}
-          target="_blank"
-          rel="noreferrer"
-          className="text-mid underline underline-offset-2 hover:text-black"
-        />
+        <Link href={props.href} target="_blank" className="text-mid underline underline-offset-2 hover:text-black">
+          {children}
+        </Link>
       )
     },
     h2: (props) => {

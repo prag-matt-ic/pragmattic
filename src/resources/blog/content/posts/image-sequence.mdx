@@ -6,8 +6,6 @@ This type of scroll controlled image sequence can be found on world class sites 
 
 In this guide I'll explain how to build this scrolling image sequence in Next.js (Typescript) with GSAP... and hopefully help you take your web experiences to the next level 🚀
 
-Shoutout to [Derek Elliott](https://www.derrk.com/) for his awesome 3D work on the bottle images 🍾
-
 <Aside title="Pros and cons of image sequences">
 **Pros:**
 - High fidelity visuals with pre-baked lighting and shadows not possible in real-time
@@ -21,15 +19,21 @@ Shoutout to [Derek Elliott](https://www.derrk.com/) for his awesome 3D work on t
 </Aside>
 
 ## Install Dependencies
-To get started, ensure your Next.js project is setup with Tailwind CSS, and then install the following packages:
+To get started, ensure your Next.js project is setup with Tailwind CSS. If you're starting from scratch, run the Next.js install command and enter Y to all the options.
+
+```bash
+npx create-next-app scroll-driven-image-sequence
+```
+
+Then install the following packages:
 
 ```bash
 npm install gsap @gsap/react @mantine/hooks
 ```
 
-[GSAP](): For advanced animations<br/>
-[@gsap/react](): React hooks for GSAP<br/>
-[@mantine/hooks](): Useful UI hooks - we'll be using viewport size detection and value debouncing
+[GSAP](https://gsap.com/): For advanced animations<br/>
+[@gsap/react](https://www.npmjs.com/package/@gsap/react): useGSAP is a replacement for useEffect() that automatically handles cleanup<br/>
+[@mantine/hooks](https://www.npmjs.com/package/@mantine/hooks): Useful set of UI hooks - we'll be using viewport size detection and value debouncing
 
 
 ## Prepare Your Image Sequence Frames
@@ -40,8 +44,9 @@ You'll need a series of sequentially named image files (e.g., `img0001.png`, `im
 If you're working with a 3D designer they'll be able to render these for you.
 
 If you want, you can [download my images from here](https://github.com/prag-matt-ic/pragmattic/tree/main/public/images/bottle).
+Shoutout to [Derek Elliott](https://www.derrk.com/) for his awesome 3D work on these 🍾
 
-Once ready, stick them in your `public` directory so we can load them easily.
+Once ready, stick them in a `public/images` directory to be loaded later.
 
 *Ideally you'd also have a variety of sizes for different screen sizes, but for this project we'll just sitck to one size for simplicity.*
 
@@ -74,7 +79,7 @@ const ImageSequenceHeader: FC = () => {
           <canvas ref={canvas} className="pointer-events-none absolute scale-75 bg-transparent" />
         </div>
       </header>
-      {/* Remember to ensure your page can scroll by setting a min-h on it! */}
+      // Remember to ensure your page can scroll by setting a min-h on it! 
   )
 }
 ```
@@ -116,6 +121,7 @@ We generate an array of image sources based on the file naming pattern. In this 
         (_, i) => `/images/bottle/pragma100${i + 1 < 10 ? `0${i + 1}` : i + 1}.png`,
       )
 
+      // We will cover this function in the next section...
       const images = await loadImagesAndDrawFirstFrame({
         canvas: canvas.current!,
         imageSrcs: imageSrcs,
@@ -308,8 +314,14 @@ I've not covered the intro animation or the heading transitions featured in the 
 How would you go about adding those?<br/>
 Feel free to peruse [my code here](https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/imageSequence/ImageSequenceHeader.tsx) if you want to see how I did it.
 
-[Revisit the live example here]('/examples/scroll-driven-image-sequence')
+[Revisit the live example here](/examples/scroll-driven-image-sequence)
 
 If you make improvements to the code I'd love to hear from you!
 
 And remember: **Animate Responsibly** and **Be Principled** 😉
+
+### Credits
+
+Thanks to:
+- [Derek Elliott](https://www.derrk.com/) for rendering the bottle image sequence
+- [Eduard Radd](https://www.eduardcradd.com/) for testing and helping refine this guide
