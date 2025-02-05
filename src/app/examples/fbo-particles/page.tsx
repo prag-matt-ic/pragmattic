@@ -6,7 +6,7 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React from 'react'
 
-import LoopspeedParticles from '@/components/examples/particles/loopspeed/LoopspeedParticles'
+// import LoopspeedParticles from '@/components/examples/particles/loopspeed/LoopspeedParticles'
 import ScrollDownArrow from '@/components/examples/ScrollDown'
 import PointerCamera from '@/components/PointerCamera'
 
@@ -31,7 +31,7 @@ export default function FBOParticlesPage() {
           resolution={1024}
         />
 
-        <LoopspeedParticles />
+        {/* <LoopspeedParticles /> */}
         <pointLight position={[-0.5, 2, 1]} intensity={8} />
         <PointerCamera cameraProps={{ far: 20 }} />
         {/* <OrbitControls /> */}
