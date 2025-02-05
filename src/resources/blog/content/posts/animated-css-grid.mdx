@@ -8,8 +8,8 @@ npm i tailwind-merge gsap @gsap/react
 
 ## Defining the data
 
-{/* -FEEDBACK
--  Could do with a basic setup section and conclusion
+{/* FEEDBACK
+- Could do with a basic setup section and conclusion
 - IDS were being mapped causing duplicated IDs - they need to be unique - better to use className instead e.g ‘card’ 
 - As we are using the container as useGSAP scope we can use lazy selectors like img, h5, p which is a bit simpler
 - Need to register ScrollTrigger as well as useGSAP */}
@@ -367,13 +367,8 @@ const AnimatedGrid: FC<Props> = ({ className, cards = [] }) => {
 
 ### How does this help?
 {/* These are the same thing obviously AI written needs to be more succinct */}
-Server-Side Compatibility: This setup lets your server-side logic supply dynamic data to the client-side component, enhancing scalability and maintainability.
-
 Dynamic Data Injection: The component now receives its card data via a prop (data), making it easy to pass dynamic content from a server-side parent.
-
-Type Safety: Using CardGridProps ensures each card adheres to a consistent format—minimizing errors.
-
-Reusability & Flexibility: With the data abstracted into a prop, this component is now a versatile building block that can be used across different parts of your application.
+Type Safety: Exporting the type ensures each card adheres to a consistent format—minimizing errors.
 
 
 ### Example usage:

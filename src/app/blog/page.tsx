@@ -21,6 +21,7 @@ const BLOG_CARD_COMPONENTS: Record<BlogSlug, ReactNode> = {
       <source src="/blog/videos/scroll-driven-image-sequence.mp4" type="video/mp4" />
     </video>
   ),
+  [BlogSlug.AnimatedCSSGrid]: <></>,
 }
 
 export default function BlogPage() {
@@ -38,6 +39,7 @@ export default function BlogPage() {
 
         <section className="w-full space-y-12 pb-24 horizontal-padding">
           {Object.values(BLOG_METADATA).map((metadata) => {
+            if (metadata.isDraft) return null
             const { slug, title, description } = metadata
             return (
               <BlogPostCard key={slug} href={`${Pathname.Blog}/${slug}`} heading={title} description={description}>
