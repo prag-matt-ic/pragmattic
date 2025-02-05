@@ -59,8 +59,9 @@ const threeCards = CARDS.slice(0, 3)
 export default function AnimatedGridPage() {
   return (
     <main className="w-full space-y-16 pb-40 font-sans">
-      <section className="h-lvh">
-        <ScrollDownArrow />
+      <ScrollDownArrow />
+      <section className="flex h-[80vh] flex-col justify-center horizontal-padding">
+        <h1 className="text-7xl font-black text-white">Animated CSS Grid</h1>
       </section>
       <AnimatedCSSGrid cards={CARDS} className="horizontal-padding" />
       <AnimatedCSSGrid cards={fourCards} className="horizontal-padding" />

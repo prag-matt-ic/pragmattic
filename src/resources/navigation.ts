@@ -21,6 +21,7 @@ export enum ExamplePathname {
   InfiniteMarquee = '/examples/infinite-scrolling-marquee',
   WavePlane = '/examples/wave-plane',
   RayMarching = '/examples/raymarching',
+  AnimatedCSSGrid = '/examples/animated-css-grid',
   // Rebuilds
   StripeHeader = '/rebuilds/stripe',
   VercelHeader = '/rebuilds/vercel',
@@ -34,6 +35,7 @@ type Example = {
   // blogPathname?: string
 }
 
+// TODO: add blog links here.
 export const EXAMPLES: Record<ExamplePathname, Example> = {
   [ExamplePathname.ImageSequence]: {
     title: 'Scroll-driven image sequence header',
@@ -86,6 +88,14 @@ export const EXAMPLES: Record<ExamplePathname, Example> = {
     githubUrl:
       'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/raymarching/RayMarchingScreenQuad.tsx',
   },
+  [ExamplePathname.AnimatedCSSGrid]: {
+    title: 'Animated CSS Grid using Tailwind and GSAP',
+    pathname: ExamplePathname.AnimatedCSSGrid,
+    githubUrl:
+      'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/animatedCSSGrid/AnimatedCSSGrid.tsx',
+  },
+
+  // REBUILDS
   [ExamplePathname.StripeHeader]: {
     title: 'Stripe Header Rebuild',
     pathname: ExamplePathname.StripeHeader,

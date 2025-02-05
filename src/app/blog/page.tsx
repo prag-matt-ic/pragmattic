@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { type Metadata } from 'next'
 import Link from 'next/link'
 import React, { type FC, type PropsWithChildren, type ReactNode } from 'react'
@@ -13,15 +14,20 @@ export const metadata: Metadata = {
   description:
     'A growing collection of guides, patterns, and fun stuff I&apos;ve been doing in the web design and engineering space',
 }
+
+const Video: FC<{ src: string }> = ({ src }) => {
+  return (
+    <video autoPlay loop muted playsInline className="-mt-9 h-[calc(100%+36px)] w-full overflow-hidden object-cover">
+      <source src={src} type="video/mp4" />
+    </video>
+  )
+}
+
 const BLOG_CARD_COMPONENTS: Record<BlogSlug, ReactNode> = {
   [BlogSlug.WavePlane]: <GridLinesFragmentShaderPlaneCanvas sectionClassName="overflow-hidden size-full" />,
   [BlogSlug.NextJsShaderSetup]: <ScrollBackgroundGradientCanvas />,
-  [BlogSlug.ImageSequenceHeader]: (
-    <video autoPlay loop muted playsInline className="-mt-9 h-[calc(100%+36px)] w-full overflow-hidden object-cover">
-      <source src="/blog/videos/scroll-driven-image-sequence.mp4" type="video/mp4" />
-    </video>
-  ),
-  [BlogSlug.AnimatedCSSGrid]: <></>,
+  [BlogSlug.ImageSequenceHeader]: <Video src="/blog/videos/scroll-driven-image-sequence.mp4" />,
+  [BlogSlug.AnimatedCSSGrid]: null,
 }
 
 export default function BlogPage() {
@@ -39,10 +45,15 @@ export default function BlogPage() {
 
         <section className="w-full space-y-12 pb-24 horizontal-padding">
           {Object.values(BLOG_METADATA).map((metadata) => {
-            const { slug, title, description, isDraft } = metadata
+            const { slug, title, description, date, isDraft } = metadata
             if (!!isDraft) return null
             return (
-              <BlogPostCard key={slug} href={`${Pathname.Blog}/${slug}`} heading={title} description={description}>
+              <BlogPostCard
+                key={slug}
+                href={`${Pathname.Blog}/${slug}`}
+                heading={title}
+                description={description}
+                date={date}>
                 {BLOG_CARD_COMPONENTS[slug as BlogSlug]}
               </BlogPostCard>
             )
@@ -59,9 +70,10 @@ type CardProps = {
   href: string
   heading: ReactNode
   description: ReactNode
+  date: string
 }
 
-const BlogPostCard: FC<PropsWithChildren<CardProps>> = ({ children, href, heading, description }) => {
+const BlogPostCard: FC<PropsWithChildren<CardProps>> = ({ children, href, heading, description, date }) => {
   return (
     <Link
       href={href}
@@ -70,7 +82,7 @@ const BlogPostCard: FC<PropsWithChildren<CardProps>> = ({ children, href, headin
         {children}
       </div>
       <div className="max-w-xl space-y-3 p-3 sm:p-0">
-        {/* TODO: add relative formatted date */}
+        <span className="block text-xs text-light">{format(new Date(date), 'MMM yyyy')}</span>
         <h3 className="text-lg font-bold sm:text-xl xl:text-2xl">{heading}</h3>
         <p className="text-white/70">{description}</p>
       </div>
