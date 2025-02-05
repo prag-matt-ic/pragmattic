@@ -9,6 +9,7 @@ export enum BlogSlug {
   NextJsShaderSetup = 'nextjs-setup-glsl-shaders',
   ImageSequenceHeader = 'scroll-driven-image-sequence-header',
   // AppDevelopmentGuide = 'app-development-guide',
+  AnimatedCSSGrid = 'animated-css-grid-with-tailwind-gsap',
 }
 
 export enum ExamplePathname {

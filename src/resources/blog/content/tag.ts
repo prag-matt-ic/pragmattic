@@ -4,6 +4,7 @@ export enum TagName {
   ThreeJS = 'threejs',
   NextJS = 'nextjs',
   GSAP = 'gsap',
+  Tailwind = 'tailwind',
   Typescript = 'typescript',
   VertexShader = 'vertex shader',
   FragmentShader = 'fragment shader',

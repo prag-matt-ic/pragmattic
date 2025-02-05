@@ -3,6 +3,7 @@ import { type FC } from 'react'
 import { TagName } from '@/resources/blog/content/tag'
 import { BlogSlug } from '@/resources/navigation'
 
+import AnimatedCSSGrid from './drafts/animated-css-grid.mdx'
 import ImageSequence from './posts/image-sequence.mdx'
 import NextJsShaderSetup from './posts/next-shaders.mdx'
 import WavePlane from './posts/wave-plane.mdx'
@@ -20,6 +21,7 @@ export const BLOG_CONTENT: Record<BlogSlug, FC> = {
   [BlogSlug.WavePlane]: WavePlane,
   [BlogSlug.NextJsShaderSetup]: NextJsShaderSetup,
   [BlogSlug.ImageSequenceHeader]: ImageSequence,
+  [BlogSlug.AnimatedCSSGrid]: AnimatedCSSGrid,
 }
 
 export const BLOG_METADATA: Record<BlogSlug, BlogMetadata> = {
@@ -56,6 +58,14 @@ export const BLOG_METADATA: Record<BlogSlug, BlogMetadata> = {
     demoPathname: '/examples/scroll-driven-image-sequence',
     slug: BlogSlug.ImageSequenceHeader,
     tags: [TagName.Tutorial, TagName.NextJS, TagName.Typescript, 'canvas', TagName.GSAP],
+  },
+  [BlogSlug.AnimatedCSSGrid]: {
+    title: 'Animating Your Next.js Grid: A Step-by-Step GSAP & Tailwind Tutorial',
+    description: 'A guide to ...',
+    date: '2025-02-04',
+    // demoPathname: '/examples/animated-css-grid',
+    slug: BlogSlug.AnimatedCSSGrid,
+    tags: [TagName.Tutorial, TagName.React, TagName.GSAP, TagName.Tailwind],
   },
   // [BlogSlug.AppDevelopmentGuide]: {
   //   title: 'Marathon 1.0.0 - A complete app development guide for business and startup leaders',
