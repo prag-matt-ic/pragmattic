@@ -1,28 +1,25 @@
-## Project Setup
+## Project Setup and Dependencies
 
-- Next.js 
+Once you have a Next.js project set up. You'll need these packages:
 
 ```bash
 npm i tailwind-merge gsap @gsap/react
 ```
 
-## Defining the data
+<Aside>
+- *[tailwind-merge](https://www.npmjs.com/package/tailwind-merge)*: A utility to merge Tailwind CSS classes<br/>
+- *[gsap](https://www.npmjs.com/package/gsap)*: A framework-agnostic JavaScript animation library<br/>
+- *[@gsap/react](https://www.npmjs.com/package/@gsap/react)*: A drop-in replacement for useEffect() or useLayoutEffect()
+</Aside>
 
-{/* FEEDBACK
-- Could do with a basic setup section and conclusion
-- IDS were being mapped causing duplicated IDs - they need to be unique - better to use className instead e.g ‘card’ 
-- As we are using the container as useGSAP scope we can use lazy selectors like img, h5, p which is a bit simpler
-- Need to register ScrollTrigger as well as useGSAP */}
+## Defining the data
 
 Before we dive into our JSX structure, let's create some data for our grid cards.
 
 By using an array we can map over the elements rather than writing out the same markup over and over. 
 This helps us adhere to the DRY principle of <i>Don't Repeat Yourself</i> and makes it much easier to change content and styling in the future.
 
-{/* TODO: DOWNLOAD ICONS HERE.... */}
-
-{/* // MATT: I've added a type and marked the object as 'const' */}
-{/* // Renamed 'title' to 'heading' and 'subtitle' to 'description' - you normally only have 1 title per page. */}
+**[You can download the SVG icons here](https://pragmattic.vercel.app/blog/technology-icons.zip)**
 
 ```tsx {11-15, 46-49, 58}
 import Image, { type StaticImageData } from 'next/image'
@@ -321,21 +318,65 @@ const AnimatedGrid: FC<Props> = ({ className }) => {
 
 ## Mobile friendly animations with GSAP 'matchMedia'
 
-By leveraging GSAP's `matchMedia` utility, we can run different animations based on a media query.
+By leveraging GSAP's [matchMedia](https://gsap.com/docs/v3/GSAP/gsap.matchMedia()) utility, we can run different animations based on a media query.
 
-We'll leave the desktop animation as it was - this timeline be added if the viewport is greater than 640px.
+We'll leave the desktop animation timeline as it was, but only run it if the screen width is 640px or more.
 
-Narrow views (less than 640px) would benefit from a different type of transition because there is a single column, and you can only see a couple of cards at any one time. 
+Narrow screens (less than 640px width) would benefit from a different type of transition. There is a single column, and you only see a couple of cards at any one time. 
+The grid stagger is ineffective in this scenario because by the time the user scrolls down to the latter cards, they will have already animated in.
 
-The grid stagger is ineffective because by the time the user sees the latter cards they will have already animated in.
+Instead, let's make it so that the cards animate individually as they enter the viewport. We can achieve this by creating a GSAP Tween with a scroll trigger unique to each card.
 
-Instead, let's make it so that on mobile the cards animate individually as they enter the viewport.
+```tsx {6,9-39} title="AnimatedGrid.tsx useGSAP hook"
+  useGSAP(
+    () => {
+      if (!container.current) return
 
-```tsx {1,7,10,79,91,94-96} title="AnimatedGrid.tsx" showLineNumbers
+      // Initialize matchMedia for responsive animations
+      const matchMedia = gsap.matchMedia()
 
-```tsx title="AnimatedGrid.tsx" showLineNumbers
+      // Smaller screens
+      matchMedia.add('screen and (max-width: 639px)', () => {
+        // Create an array of card elements create a GSAP animation for each
+        const cards = gsap.utils.toArray('.card') as HTMLDivElement[]
+
+        cards.forEach((card) => {
+          gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              scale: 0.9,
+              y: 24,
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              duration: 0.5,
+              ease: 'power2.in',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 90%',
+                toggleActions: 'play none none reverse',
+              },
+            },
+          )
+        })
+        // Reset Y temporarily when the scroll trigger refreshes, 
+        // because Y is initially set to 24 we don't want that to effect the scroll trigger calculations
+        ScrollTrigger.addEventListener('refreshInit', () => {
+          gsap.set('.card', { y: 0 })
+        })
+      })
+
+      // Larger screens
+      matchMedia.add('screen and (min-width: 640px)', () => {
+        // Grid animation code from earlier
+      })
+    },
+    { scope: container, dependencies: [] },
+  )
 ```
-
 
 ## Making it reusable: Passing the card data as Props
 
@@ -366,9 +407,8 @@ const AnimatedGrid: FC<Props> = ({ className, cards = [] }) => {
 ```
 
 ### How does this help?
-{/* These are the same thing obviously AI written needs to be more succinct */}
-Dynamic Data Injection: The component now receives its card data via a prop (data), making it easy to pass dynamic content from a server-side parent.
-Type Safety: Exporting the type ensures each card adheres to a consistent format—minimizing errors.
+- Dynamic Data Injection: The component now receives its card data via a prop, making it easy to pass dynamic content from a server-side page.
+- Type Safety: By exporting the type we can ensure each card adheres to the correct shape.
 
 
 ### Example usage:

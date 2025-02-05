@@ -39,8 +39,8 @@ export default function BlogPage() {
 
         <section className="w-full space-y-12 pb-24 horizontal-padding">
           {Object.values(BLOG_METADATA).map((metadata) => {
-            if (metadata.isDraft) return null
-            const { slug, title, description } = metadata
+            const { slug, title, description, isDraft } = metadata
+            if (!!isDraft) return null
             return (
               <BlogPostCard key={slug} href={`${Pathname.Blog}/${slug}`} heading={title} description={description}>
                 {BLOG_CARD_COMPONENTS[slug as BlogSlug]}
