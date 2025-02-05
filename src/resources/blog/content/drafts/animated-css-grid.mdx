@@ -174,7 +174,7 @@ export default AnimatedGrid
 - `twMerge` is useful when there are, or could be, be class conflicts. For example the `className` prop could contain a `grid-cols-5` class which we'd want to take precedence over the default grid classes.
 
 
-## 4. Animating Cards with GSAP
+## Animating Cards with GSAP
 
 In this section we'll bring it to life with some smooth animations using GSAP!
 
@@ -321,19 +321,17 @@ const AnimatedGrid: FC<Props> = ({ className }) => {
 
 ## Mobile friendly animations with GSAP 'matchMedia'
 
-Let's adjust our animations for mobile devices which would benefit from a different type of stagger because you only see 1 or 2 cards at a time.
+By leveraging GSAP's `matchMedia` utility, we can run different animations based on a media query.
 
-By leveraging GSAP's `matchMedia` utility, we can conditionally run animations based on a media query.
+We'll leave the desktop animation as it was - this timeline be added if the viewport is greater than 640px.
 
-Different Animations for Different Screens:
+Narrow views (less than 640px) would benefit from a different type of transition because there is a single column, and you can only see a couple of cards at any one time. 
 
-Mobile (max-width: 640px): Animations will kick off from the start of the grid, ensuring a smooth reveal on smaller screens.
+The grid stagger is ineffective because by the time the user sees the latter cards they will have already animated in.
 
-Desktop (min-width: 641px): Animations start from the center of the grid for a more balanced, eye-catching effect.
+Instead, let's make it so that on mobile the cards animate individually as they enter the viewport.
 
-We wrap our GSAP timeline logic in an animateFeatures function. This function accepts custom stagger parameters, so you can easily tweak how elements animate in based on the device.
-
-Using matchMedia.add, we define two sets of stagger parameters: one for mobile and one for desktop. This way, GSAP applies the correct settings automatically.
+```tsx {1,7,10,79,91,94-96} title="AnimatedGrid.tsx" showLineNumbers
 
 ```tsx title="AnimatedGrid.tsx" showLineNumbers
 ```
@@ -341,11 +339,13 @@ Using matchMedia.add, we define two sets of stagger parameters: one for mobile a
 
 ## Making it reusable: Passing the card data as Props
 
-Let's finish things off by allowing our Grid Component to receive data via props instead.
+Let's finish things off by allowing our Component to receive data via props instead of hardcoding it.
 
-We export the GridCardProps type and add a 'cards' prop to the component. We can then replace the hardcoded DATA array with the prop value.
+If we export the `GridCardProps` type we can use it wherever we're creating card data.
 
-```tsx {3,11} title="AnimatedGrid.tsx"
+After adding the 'cards' prop to the component, we can replace the hardcoded DATA array with the incoming value.
+
+```tsx {3-7,10} title="AnimatedGrid.tsx" showLineNumbers
 // ...
 
 export type GridCardProps = {
@@ -361,7 +361,7 @@ type Props = {
 
 const AnimatedGrid: FC<Props> = ({ className, cards = [] }) => {
   // ...
-  // Replace 'DATA' with 'cards' prop
+  // Replace hardcoded 'DATA' with 'cards'
 }
 ```
 
