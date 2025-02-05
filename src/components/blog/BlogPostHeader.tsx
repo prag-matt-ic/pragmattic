@@ -7,7 +7,7 @@ import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
 import Tag from '@/components/blog/Tag'
 import Button from '@/components/buttons/Button'
-import { BlogMetadata } from '@/resources/blog/content/blog'
+import { type BlogMetadata } from '@/resources/blog/content/blog'
 
 const BlogPostHeader: FC<BlogMetadata> = ({ title, tags, demoPathname, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
