@@ -1,6 +1,16 @@
+Learn how to create a dynamic, responsive grid in **Next.js** with **GSAP** animations and **Tailwind CSS**. We'll cover mapping over data arrays, dynamic styling, and scroll-triggered animations to build a reusable, mobile-friendly component that enhances your site's interactivity.
+
+Let’s get started!
+
 ## Project Setup
 
-- Next.js 
+Before we get started, make sure your Next.js project is ready to go. If you're starting from scratch, you can set up a new project by running:
+
+```bash
+npx create-next-app my-animated-grid
+```
+
+Next, install the necessary dependencies:
 
 ```bash
 npm i tailwind-merge gsap @gsap/react
@@ -10,16 +20,16 @@ npm i tailwind-merge gsap @gsap/react
 
 {/* -FEEDBACK
 -  Could do with a basic setup section and conclusion
-- IDS were being mapped causing duplicated IDs - they need to be unique - better to use className instead e.g ‘card’ 
+- IDS were being mapped causing duplicated IDs - they need to be unique - better to use className instead e.g ‘card’
 - As we are using the container as useGSAP scope we can use lazy selectors like img, h5, p which is a bit simpler
 - Need to register ScrollTrigger as well as useGSAP */}
 
 Before we dive into our JSX structure, let's create some data for our grid cards.
 
-By using an array we can map over the elements rather than writing out the same markup over and over. 
+By using an array we can map over the elements rather than writing out the same markup over and over.
 This helps us adhere to the DRY principle of <i>Don't Repeat Yourself</i> and makes it much easier to change content and styling in the future.
 
-{/* TODO: DOWNLOAD ICONS HERE.... */}
+To save you time, you can grab all the icons we’ll be using right <a href="/assets/grid-icons.zip" download="grid-icons.zip" className="underline underline-offset-2">here</a>.
 
 {/* // MATT: I've added a type and marked the object as 'const' */}
 {/* // Renamed 'title' to 'heading' and 'subtitle' to 'description' - you normally only have 1 title per page. */}
@@ -113,17 +123,17 @@ const AnimatedGrid: FC = () => {
 }
 
 export default AnimatedGrid
-``` 
+```
 
 ### What's happening here?
-- The `<section>` is styled as a grid with 3 columns using the `grid grid-cols-3` classes. 
+- The `<section>` is styled as a grid with 3 columns using the `grid grid-cols-3` classes.
 - We *aren't* stating how many rows the grid should have as it will automatically adjust based on the number of items.
 - Data mapping: We loop through our data and return a `<div>` card with an image, heading (h5), and description (p) for each item.
 
 
 ## From Static to Dynamic: Making the Grid Responsive
 
-Time to level up! Let's make a responsive layout that adapts to both the number of cards and the screen size. 
+Time to level up! Let's make a responsive layout that adapts to both the number of cards and the screen size.
 
 We conditionally assign Tailwind grid classes depending on whether we have 3, 4, or a different number of items.
 
@@ -178,8 +188,7 @@ export default AnimatedGrid
 
 In this section we'll bring it to life with some smooth animations using GSAP!
 
-We're going to be using the useGSAP hook and ScrollTrigger plugin, so we need to import and register them outside of the component.
-{/* TODO: reword this slightly */}
+We'll be using the [useGSAP](https://gsap.com/resources/React/#usegsap-hook-) hook along with the ScrollTrigger plugin, both of which need to be imported and registered outside the component.
 
 Now we can add a ref to our grid container and use that as the trigger element for the scroll based animations.
 
@@ -192,16 +201,17 @@ We'll hide the cards with an `opacity-0` class and then animate them in using GS
 
 The GSAP animations are scoped to the container, ensuring that only elements within the grid are targeted.
 
-{/* TODO: add links to useGSAP and Timeline. */}
-
 <Aside title="GSAP Stagger Parameters">
 
-{/* TODO: exxplain thse better and link to GSAP site */}
- We define parameters for our staggered animation. These include:
-A slight delay between each element (each: 0.05).
-The animation starting from the center (from: 'center').
-Automatic grid layout (grid: 'auto').
-Smooth easing (ease: 'power2.inOut').
+  We define parameters for our staggered animation to control how elements animate progressively. Learn more about stagger options in the [GSAP documentation](https://greensock.com/docs/v3/Staggers).
+
+  Key parameters include:
+
+  - **each**: Delay between each element's animation (`0.05` seconds).
+  - **from**: Animation starting point (`center` means the animation begins from the center of the grid).
+  - **grid**: Automatically handles grid-based staggering (`auto` layout).
+  - **ease**: Controls animation smoothness (`power2.inOut`).
+
 </Aside>
 
 
@@ -391,7 +401,7 @@ const CARDS: GridCardProps[] = [
 ];
 
 export default function ExamplePage() {
-  // fetch cards data? 
+  // fetch cards data?
   return (
     <main className="w-full font-sans">
       <section className="h-lvh">
@@ -404,4 +414,8 @@ export default function ExamplePage() {
 
 ## Signing Out
 
-{/* TODO: conclusion */}
+That's it! You've created a responsive, animated grid with **Next.js**, **GSAP**, and **Tailwind CSS**.
+
+This reusable component is ready to enhance your site's interactivity.
+
+Keep building and animating responsibly! :)
