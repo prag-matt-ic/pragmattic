@@ -16,7 +16,7 @@ gsap.registerPlugin(useGSAP)
 
 type Props = {}
 
-const SPHERE_RADIUS = 0.24
+const SPHERE_RADIUS = 0.2
 
 const EnergyTransfer: FC<Props> = ({}) => {
   return (
@@ -24,13 +24,12 @@ const EnergyTransfer: FC<Props> = ({}) => {
       <EnergyTunnel />
       <EnergyTunnelPoints />
 
-      {/* Spheres either end */}
       <Sphere args={[SPHERE_RADIUS, 32, 32]} position={[0.0, -HALF_TUNNEL_LENGTH - SPHERE_RADIUS, 0]}>
-        <MeshTransmissionMaterial thickness={1} color={'silver'} metalness={2} roughness={0} />
+        <meshBasicMaterial color={'#000'} />
       </Sphere>
 
       <Sphere args={[SPHERE_RADIUS, 32, 32]} position={[0, HALF_TUNNEL_LENGTH + SPHERE_RADIUS, 0]}>
-        <MeshTransmissionMaterial thickness={1} color={'silver'} metalness={2} roughness={0} />
+        <meshBasicMaterial color={'#000'} />
       </Sphere>
     </group>
   )
