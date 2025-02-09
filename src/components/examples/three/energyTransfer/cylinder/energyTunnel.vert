@@ -10,9 +10,9 @@ void main() {
 
     vec3 pos = position;
     
-    float n = noise(vec2(pos.x * 4.0, pos.y * 0.2 - uTime * 0.5));
-    pos.x += n * 0.1;
-    pos.z -= n * 0.1;
+    float n = noise(vec2(pos.x * 12.0, pos.y * 0.6 - uTime));
+    pos.x += n * 0.08;
+    pos.z -= n * 0.08;
 
     vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;

@@ -1,7 +1,7 @@
 'use client'
 import { useGSAP } from '@gsap/react'
-import { Environment, OrbitControls, shaderMaterial, Sphere, Stats } from '@react-three/drei'
-import { Canvas, extend, type ShaderMaterialProps, useFrame } from '@react-three/fiber'
+import { Environment, OrbitControls, Sphere, Stats } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import gsap from 'gsap'
 import { useControls } from 'leva'
@@ -71,9 +71,9 @@ const Postprocessing: FC = () => {
       <Bloom
         luminanceThreshold={0.7}
         mipmapBlur={true}
-        intensity={5}
-        opacity={0.6}
-        luminanceSmoothing={0.2}
+        intensity={2}
+        opacity={0.5}
+        luminanceSmoothing={0.1}
         height={512}
       />
     </EffectComposer>

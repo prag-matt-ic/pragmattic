@@ -20,16 +20,14 @@ type Uniforms = {
   uProgress: number
 }
 
-const NUMBER_OF_LINES = 6
+const NUMBER_OF_LINES = 10
+export const TUNNEL_LENGTH = 2.2
+export const HALF_TUNNEL_LENGTH = TUNNEL_LENGTH / 2
+export const TUNNEL_RADIUS = 0.08
 
-// Green, Green Alt, Cyan, Light Cyan, White,
-const COLOUR_OPTIONS: Color[] = [
-  new Color('#37FFA8'),
-  new Color('#0DAF69'),
-  new Color('#37F3FF'),
-  new Color('#D0FCFF'),
-  new Color('#ffffff'),
-]
+// Cyan, light cyan, white
+const COLOUR_OPTIONS: Color[] = [new Color('#37F3FF'), new Color('#D0FCFF'), new Color('#ffffff'), new Color('#FF6DF5')]
+
 const getRandomLineColour = (): Color => COLOUR_OPTIONS[Math.floor(Math.random() * COLOUR_OPTIONS.length)]
 
 const INITIAL_COLOURS = Array.from({ length: NUMBER_OF_LINES }, () => getRandomLineColour())
@@ -54,10 +52,6 @@ declare module '@react-three/fiber' {
 
 type Props = {}
 
-export const TUNNEL_LENGTH = 3
-export const HALF_TUNNEL_LENGTH = TUNNEL_LENGTH / 2
-export const TUNNEL_RADIUS = 0.08
-
 const EnergyTunnel: FC<Props> = ({}) => {
   const shaderMaterial = useRef<ShaderMaterial & Partial<Uniforms>>(null)
 
@@ -71,11 +65,11 @@ const EnergyTunnel: FC<Props> = ({}) => {
 
   useGSAP(
     () => {
-      const lineExtensions: number[] = [0, 0, 0.8, 1, 2]
+      const lineExtensions: number[] = [0, 0, 0.5, 1, 2, 2]
       function generateRandomLineParams(i: number) {
-        const xOffset = Math.random() - 0.5 // Random X offset between -0.5 and 0.5
+        const xOffset = Math.random() - 0.5 / 4.0 // Random X offset
         const yExtension = lineExtensions[Math.floor(Math.random() * lineExtensions.length)] // How "long" the line is
-        const thickness = 0.3 + Math.random() * 0.2
+        const thickness = 0.4 + Math.random() * 0.4
         return [xOffset, yExtension, thickness]
       }
 
@@ -84,14 +78,16 @@ const EnergyTunnel: FC<Props> = ({}) => {
         let progress = { value: 0 }
         let tween = gsap.to(progress, {
           value: 1,
-          delay: 'random(0, 1, 0.1)',
-          duration: 'random(4, 7, 0.25)',
+          delay: 'random(0, 1, 0.2)',
+          duration: 'random(0.8, 4, 0.2)',
           ease: 'none',
           onUpdate: () => {
             lineProgress.current[i] = progress.value
           },
           onComplete: () => {
+            lineProgress.current[i] = 1.0
             setTimeout(() => {
+              lineProgress.current[i] = 0.0
               lineParams.current.set(generateRandomLineParams(i), i * 3)
               lineColours.current[i] = getRandomLineColour()
               tween.restart()
@@ -114,7 +110,7 @@ const EnergyTunnel: FC<Props> = ({}) => {
   })
 
   return (
-    <Cylinder args={[TUNNEL_RADIUS, TUNNEL_RADIUS, TUNNEL_LENGTH, 24, 24, true]}>
+    <Cylinder args={[TUNNEL_RADIUS, TUNNEL_RADIUS, TUNNEL_LENGTH, 40, 40, true]}>
       <energyCylinderShaderMaterial
         ref={shaderMaterial}
         key={EnergyCylinderShaderMaterial.key}
