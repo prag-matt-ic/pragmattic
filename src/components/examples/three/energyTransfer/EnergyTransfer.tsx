@@ -1,13 +1,15 @@
 'use client'
 import { useGSAP } from '@gsap/react'
-import { Environment, OrbitControls, Sphere, Stats } from '@react-three/drei'
+import { PerformanceMonitor, Sphere, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import gsap from 'gsap'
-import { useControls } from 'leva'
 import React, { type FC } from 'react'
 
+import Camera from '@/components/three/Camera'
+
 import EnergyTunnel, { HALF_TUNNEL_LENGTH } from './cylinder/EnergyTunnel'
+import Environment from './environment/Environment'
 import EnergyTunnelPoints from './points/EnergyPoints'
 
 gsap.registerPlugin(useGSAP)
@@ -52,14 +54,12 @@ const EnergyTransferCanvas: FC<CanvasProps> = ({ className }) => {
         stencil: false,
         depth: false,
       }}>
-      <Environment
-        files={['https://cdnb.artstation.com/p/assets/panos/panos/074/909/667/medium/cecaaa372f280832.jpg?1713275782']}
-        background={true}
-        resolution={1024}
-      />
-      <EnergyTransfer />
-      <OrbitControls />
-      <Postprocessing />
+      <PerformanceMonitor>
+        <Environment />
+        <EnergyTransfer />
+        <Camera />
+        <Postprocessing />
+      </PerformanceMonitor>
       <Stats />
     </Canvas>
   )
@@ -68,14 +68,7 @@ const EnergyTransferCanvas: FC<CanvasProps> = ({ className }) => {
 const Postprocessing: FC = () => {
   return (
     <EffectComposer>
-      <Bloom
-        luminanceThreshold={0.7}
-        mipmapBlur={true}
-        intensity={2}
-        opacity={0.5}
-        luminanceSmoothing={0.1}
-        height={512}
-      />
+      <Bloom luminanceThreshold={0.75} mipmapBlur={true} intensity={2} opacity={0.5} height={512} />
     </EffectComposer>
   )
 }
