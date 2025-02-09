@@ -71,11 +71,11 @@ const EnergyTunnel: FC<Props> = ({}) => {
 
   useGSAP(
     () => {
-      const lineExtensions: number[] = [0, 0.5, 1, 1.5, 2]
+      const lineExtensions: number[] = [0, 0, 0.5, 1, 1.5, 2]
       function generateRandomLineParams(i: number) {
         const xOffset = Math.random() - 0.5 // Random X offset between -0.5 and 0.5
         const yExtension = lineExtensions[Math.floor(Math.random() * lineExtensions.length)] // How "long" the line is
-        const thickness = 0.24 + Math.random() * 0.3
+        const thickness = 0.3 + Math.random() * 0.2
         return [xOffset, yExtension, thickness]
       }
 
@@ -85,7 +85,7 @@ const EnergyTunnel: FC<Props> = ({}) => {
         let tween = gsap.to(progress, {
           value: 1,
           delay: 'random(0, 1, 0.1)',
-          duration: 'random(3, 6, 0.2)',
+          duration: 'random(4, 7, 0.25)',
           onUpdate: () => {
             lineProgress.current[i] = progress.value
           },
@@ -94,7 +94,7 @@ const EnergyTunnel: FC<Props> = ({}) => {
               lineParams.current.set(generateRandomLineParams(i), i * 3)
               lineColours.current[i] = getRandomLineColour()
               tween.restart()
-            }, 100)
+            }, 200)
           },
         })
       }
