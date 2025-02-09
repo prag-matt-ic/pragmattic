@@ -71,7 +71,7 @@ const Postprocessing: FC = () => {
       <Bloom
         luminanceThreshold={0.7}
         mipmapBlur={true}
-        intensity={4}
+        intensity={5}
         opacity={0.6}
         luminanceSmoothing={0.2}
         height={512}

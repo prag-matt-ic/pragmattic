@@ -71,7 +71,7 @@ const EnergyTunnel: FC<Props> = ({}) => {
 
   useGSAP(
     () => {
-      const lineExtensions: number[] = [0, 0, 0.5, 1, 1.5, 2]
+      const lineExtensions: number[] = [0, 0, 0.8, 1, 2]
       function generateRandomLineParams(i: number) {
         const xOffset = Math.random() - 0.5 // Random X offset between -0.5 and 0.5
         const yExtension = lineExtensions[Math.floor(Math.random() * lineExtensions.length)] // How "long" the line is
@@ -86,6 +86,7 @@ const EnergyTunnel: FC<Props> = ({}) => {
           value: 1,
           delay: 'random(0, 1, 0.1)',
           duration: 'random(4, 7, 0.25)',
+          ease: 'none',
           onUpdate: () => {
             lineProgress.current[i] = progress.value
           },
