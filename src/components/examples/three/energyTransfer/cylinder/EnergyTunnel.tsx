@@ -12,14 +12,6 @@ import vertexShader from './energyTunnel.vert'
 
 gsap.registerPlugin(useGSAP)
 
-type Uniforms = {
-  uTime: number
-  uLinesParams: Float32Array | null
-  uLinesProgress: Float32Array | null
-  uLinesColour: Color[]
-  uProgress: number
-}
-
 const NUMBER_OF_LINES = 10
 export const TUNNEL_LENGTH = 2.2
 export const HALF_TUNNEL_LENGTH = TUNNEL_LENGTH / 2
@@ -31,6 +23,14 @@ const COLOUR_OPTIONS: Color[] = [new Color('#37F3FF'), new Color('#D0FCFF'), new
 const getRandomLineColour = (): Color => COLOUR_OPTIONS[Math.floor(Math.random() * COLOUR_OPTIONS.length)]
 
 const INITIAL_COLOURS = Array.from({ length: NUMBER_OF_LINES }, () => getRandomLineColour())
+
+type Uniforms = {
+  uTime: number
+  uLinesParams: Float32Array | null
+  uLinesProgress: Float32Array | null
+  uLinesColour: Color[]
+  uProgress: number
+}
 
 const INITIAL_UNIFORMS: Uniforms = {
   uTime: 0,

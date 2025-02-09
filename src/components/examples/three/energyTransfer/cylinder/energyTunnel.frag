@@ -1,4 +1,5 @@
-  // Energy Cylinder Fragment Shader
+  // Energy Tunnel Fragment Shader
+  
   #pragma glslify: noise = require('glsl-noise/simplex/3d')
 
   // Number of lines is defined in the component

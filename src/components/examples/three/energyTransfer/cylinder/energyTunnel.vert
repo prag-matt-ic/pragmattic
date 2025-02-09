@@ -1,4 +1,4 @@
-// Energy Cylinder Vertex Shader
+// Energy Tunnel Vertex Shader
 
 #pragma glslify: noise = require('glsl-noise/simplex/2d')
 
