@@ -46,13 +46,7 @@ declare module '@react-three/fiber' {
 }
 
 const Environment: FC = () => {
-  // https://www.artstation.com/artwork/zPEmm2
-  const texture = useTexture(
-    '/images/environment/panos.jpg',
-    // "https://cdnb.artstation.com/p/assets/panos/panos/074/909/667/medium/cecaaa372f280832.jpg?1713275782"
-    // "https://cdnb.artstation.com/p/assets/panos/panos/074/909/685/large/67ed628115567a0a.jpg?1713275809"
-  )
-
+  const texture = useTexture('/images/environment/panos.jpg')
   const [resolution, setResolution] = useState(512)
 
   usePerformanceMonitor({
