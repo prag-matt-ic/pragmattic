@@ -1,0 +1,135 @@
+'use client'
+import { useGSAP } from '@gsap/react'
+import { Cylinder, shaderMaterial } from '@react-three/drei'
+import { extend, type ShaderMaterialProps, useFrame } from '@react-three/fiber'
+import gsap from 'gsap'
+import { useControls } from 'leva'
+import React, { type FC, useRef } from 'react'
+import { AdditiveBlending, Color, DoubleSide, ShaderMaterial } from 'three'
+
+import fragmentShader from './energyTunnel.frag'
+import vertexShader from './energyTunnel.vert'
+
+gsap.registerPlugin(useGSAP)
+
+type Uniforms = {
+  uTime: number
+  uLinesParams: Float32Array | null
+  uLinesProgress: Float32Array | null
+  uLinesColour: Color[]
+  uProgress: number
+}
+
+const NUMBER_OF_LINES = 6
+
+// Green, Green Alt, Cyan, Light Cyan, White,
+const COLOUR_OPTIONS: Color[] = [
+  new Color('#37FFA8'),
+  new Color('#0DAF69'),
+  new Color('#37F3FF'),
+  new Color('#D0FCFF'),
+  new Color('#ffffff'),
+]
+const getRandomLineColour = (): Color => COLOUR_OPTIONS[Math.floor(Math.random() * COLOUR_OPTIONS.length)]
+
+const INITIAL_COLOURS = Array.from({ length: NUMBER_OF_LINES }, () => getRandomLineColour())
+
+const INITIAL_UNIFORMS: Uniforms = {
+  uTime: 0,
+  uLinesParams: null,
+  uLinesProgress: null,
+  uLinesColour: INITIAL_COLOURS,
+  uProgress: 0,
+}
+
+const EnergyCylinderShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
+
+extend({ EnergyCylinderShaderMaterial })
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    energyCylinderShaderMaterial: ShaderMaterialProps & Uniforms
+  }
+}
+
+type Props = {}
+
+export const TUNNEL_LENGTH = 3
+export const HALF_TUNNEL_LENGTH = TUNNEL_LENGTH / 2
+export const TUNNEL_RADIUS = 0.08
+
+const EnergyTunnel: FC<Props> = ({}) => {
+  const shaderMaterial = useRef<ShaderMaterial & Partial<Uniforms>>(null)
+
+  // const { progress } = useControls({
+  //   progress: { value: 0, min: 0, max: 1 },
+  // })
+
+  const lineParams = useRef(new Float32Array(NUMBER_OF_LINES * 3))
+  const lineProgress = useRef(new Float32Array(NUMBER_OF_LINES))
+  const lineColours = useRef<Color[]>(INITIAL_COLOURS)
+
+  useGSAP(
+    () => {
+      const lineExtensions: number[] = [0, 0.5, 1, 1.5, 2]
+      function generateRandomLineParams(i: number) {
+        const xOffset = Math.random() - 0.5 // Random X offset between -0.5 and 0.5
+        const yExtension = lineExtensions[Math.floor(Math.random() * lineExtensions.length)] // How "long" the line is
+        const thickness = 0.24 + Math.random() * 0.3
+        return [xOffset, yExtension, thickness]
+      }
+
+      for (let i = 0; i < NUMBER_OF_LINES; i++) {
+        lineParams.current.set(generateRandomLineParams(i), i * 3)
+        let progress = { value: 0 }
+        let tween = gsap.to(progress, {
+          value: 1,
+          delay: 'random(0, 1, 0.1)',
+          duration: 'random(3, 6, 0.2)',
+          onUpdate: () => {
+            lineProgress.current[i] = progress.value
+          },
+          onComplete: () => {
+            setTimeout(() => {
+              lineParams.current.set(generateRandomLineParams(i), i * 3)
+              lineColours.current[i] = getRandomLineColour()
+              tween.restart()
+            }, 100)
+          },
+        })
+      }
+    },
+    {
+      dependencies: [],
+    },
+  )
+
+  useFrame(({ clock }) => {
+    if (!shaderMaterial.current) return
+    shaderMaterial.current.uTime = clock.elapsedTime
+    shaderMaterial.current.uLinesParams = lineParams.current
+    shaderMaterial.current.uLinesProgress = lineProgress.current
+    shaderMaterial.current.uLinesColour = lineColours.current
+  })
+
+  return (
+    <Cylinder args={[TUNNEL_RADIUS, TUNNEL_RADIUS, TUNNEL_LENGTH, 24, 24, true]}>
+      <energyCylinderShaderMaterial
+        ref={shaderMaterial}
+        key={EnergyCylinderShaderMaterial.key}
+        transparent={true}
+        side={DoubleSide}
+        depthWrite={false} // Prevent transparent fragments from occluding others
+        uTime={0}
+        uLinesParams={null}
+        uLinesProgress={null}
+        uLinesColour={INITIAL_COLOURS}
+        uProgress={0}
+        blending={AdditiveBlending}
+        defines={{ NUM_LINES: NUMBER_OF_LINES }}
+      />
+    </Cylinder>
+  )
+}
+
+export default EnergyTunnel
