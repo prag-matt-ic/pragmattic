@@ -5,11 +5,11 @@ import { useFrame, useThree } from '@react-three/fiber'
 import React, { type FC, useEffect, useRef } from 'react'
 import { MathUtils } from 'three'
 
-const MIN_POLAR_ANGLE = MathUtils.degToRad(80)
-const MAX_POLAR_ANGLE = MathUtils.degToRad(100)
+const MIN_POLAR_ANGLE = MathUtils.degToRad(75)
+const MAX_POLAR_ANGLE = MathUtils.degToRad(105)
 
-const MIN_AZIMUTH_ANGLE = -Math.PI / 8
-const MAX_AZIMUTH_ANGLE = Math.PI / 8
+const MIN_AZIMUTH_ANGLE = -Math.PI / 6
+const MAX_AZIMUTH_ANGLE = Math.PI / 6
 
 const Camera: FC = () => {
   const cameraControls = useRef<CameraControls>(null)
@@ -41,7 +41,6 @@ const Camera: FC = () => {
     if (!cameraControls.current) return
 
     // Move camera to pointer position with lerp for smoothness
-
     if (cameraControls.current.azimuthAngle !== targetAzimuthAngle.current.value) {
       const newAziumuthAngle = MathUtils.lerp(
         cameraControls.current.azimuthAngle,

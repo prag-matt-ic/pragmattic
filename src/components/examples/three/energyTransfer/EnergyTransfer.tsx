@@ -57,13 +57,12 @@ const EnergyTransferCanvas: FC<CanvasProps> = ({ className }) => {
         depth: false,
       }}>
       <PerformanceMonitor>
-        <ambientLight intensity={1.0} />
         <Environment />
         <EnergyTransfer />
         <Camera />
         <Postprocessing />
       </PerformanceMonitor>
-      <Stats />
+      {process.env.NODE_ENV === 'development' && <Stats />}
     </Canvas>
   )
 }
