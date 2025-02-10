@@ -1,11 +1,11 @@
 'use client'
 import { useGSAP } from '@gsap/react'
 import { PerformanceMonitor, Stats } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import gsap from 'gsap'
-import React, { type FC } from 'react'
-import { Color } from 'three'
+import React, { useMemo, type FC } from 'react'
+import { Color, type Vector3Tuple } from 'three'
 
 import Camera from '@/components/three/Camera'
 
@@ -18,21 +18,31 @@ gsap.registerPlugin(useGSAP)
 
 type Props = {}
 
+const PINK_COLOUR = new Color('#37F3FF')
+const CYAN_COLOUR = new Color('#FF6DF5')
+
 const EnergyTransfer: FC<Props> = ({}) => {
+  const size = useThree((s) => s.size)
+  const isLandscape = size.width > size.height
+  const rotation: Vector3Tuple = useMemo(() => (isLandscape ? [0, 0, Math.PI / 2] : [0, 0, 0]), [isLandscape])
+
+  const seedA = useMemo(() => Math.random(), [])
+  const seedB = useMemo(() => Math.random(), [])
+
   return (
-    <group rotation={[0, 0, Math.PI / 2]} position={[0, 0, 0]}>
+    <group rotation={rotation} position={[0, 0, isLandscape ? 0 : -1]}>
       <EnergyTunnel />
       <EnergyTunnelPoints />
       <EnergySphere
         isOnLeft={true}
-        seed={Math.random()}
-        colour={new Color('#37F3FF')}
+        seed={seedA}
+        colour={PINK_COLOUR}
         position={[0.0, -HALF_TUNNEL_LENGTH - SPHERE_RADIUS, 0]}
       />
       <EnergySphere
         isOnLeft={false}
-        seed={Math.random()}
-        colour={new Color('#FF6DF5')}
+        seed={seedB}
+        colour={CYAN_COLOUR}
         position={[0, HALF_TUNNEL_LENGTH + SPHERE_RADIUS, 0]}
       />
     </group>
