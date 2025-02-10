@@ -1,17 +1,20 @@
-'use client'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React from 'react'
 
-import EffectsCanvas from '@/components/examples/fboEffectShader/FBOEffects'
+import ExampleLayout from '@/components/examples/ExampleLayout'
+import EffectsCanvas from '@/components/examples/three/fboEffectShader/FBOEffects'
+import { ExamplePathname, EXAMPLES } from '@/resources/navigation'
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
+export const metadata = {
+  title: EXAMPLES[ExamplePathname.FBOEffects].title,
+  description: EXAMPLES[ExamplePathname.FBOEffects].description,
+}
 
 export default function FBOEffectsBasic() {
   return (
-    <main className="h-[200vh] w-full bg-black font-sans">
-      <EffectsCanvas />
-    </main>
+    <ExampleLayout {...EXAMPLES[ExamplePathname.FBOEffects]}>
+      <main className="h-[200vh] w-full bg-black font-sans">
+        <EffectsCanvas />
+      </main>
+    </ExampleLayout>
   )
 }

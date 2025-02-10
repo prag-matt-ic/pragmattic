@@ -7,7 +7,7 @@ import React, { type FC, useRef } from 'react'
 
 // import BasicParticles from '@/components/examples/particles/basicParticles/BasicParticles'
 // import MeshSamplerParticles from '@/components/examples/particles/gltfParticles/MeshSamplerParticles'
-import Stars from '@/components/examples/particles/stars/Stars'
+import Stars from '@/components/examples/three/particles/stars/Stars'
 import ScrollDownArrow from '@/components/examples/ScrollDown'
 import PointerCamera from '@/components/PointerCamera'
 

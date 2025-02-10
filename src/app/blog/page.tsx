@@ -5,7 +5,7 @@ import React, { type FC, type PropsWithChildren, type ReactNode } from 'react'
 
 import BlogBackgroundCanvas from '@/components/blog/blogBackground/BlogBackground'
 import { ScrollBackgroundGradientCanvas } from '@/components/examples/scrollingBackgroundGradient/ScrollingBackgroundGradient'
-import { GridLinesFragmentShaderPlaneCanvas } from '@/components/examples/wavePlane/blog/WavePlaneBlog'
+import { GridLinesFragmentShaderPlaneCanvas } from '@/components/examples/three/wavePlane/blog/WavePlaneBlog'
 import { BLOG_METADATA } from '@/resources/blog/content/blog'
 import { BlogSlug, Pathname } from '@/resources/navigation'
 

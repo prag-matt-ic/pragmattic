@@ -1,22 +1,21 @@
-'use client'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import ScrollTrigger from 'gsap/dist/ScrollTrigger'
-import { Leva } from 'leva'
-
+import ExampleLayout from '@/components/examples/ExampleLayout'
 import ScrollDownArrow from '@/components/examples/ScrollDown'
-import WavePlane from '@/components/examples/wavePlane/WavePlane'
+import WavePlane from '@/components/examples/three/wavePlane/WavePlane'
+import { ExamplePathname, EXAMPLES } from '@/resources/navigation'
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
-
-// TODO: metadata
+// TODO: add metadata to all examples by using dynamic [slug].tsx page
+export const metadata = {
+  title: EXAMPLES[ExamplePathname.WavePlane].title,
+  description: EXAMPLES[ExamplePathname.WavePlane].description,
+}
 
 export default function WavePlaneExample() {
   return (
-    <main className="h-[1000vh] w-full">
-      <WavePlane className="!fixed inset-0" withControls={true} />
-      <ScrollDownArrow />
-      <Leva titleBar={{ position: { x: -8, y: 64 } }} />
-    </main>
+    <ExampleLayout {...EXAMPLES[ExamplePathname.WavePlane]}>
+      <main className="h-[1000vh] w-full">
+        <WavePlane className="!fixed inset-0" withControls={true} />
+        <ScrollDownArrow />
+      </main>
+    </ExampleLayout>
   )
 }

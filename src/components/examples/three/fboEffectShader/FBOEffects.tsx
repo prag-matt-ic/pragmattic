@@ -5,6 +5,7 @@ import { Canvas, createPortal, extend, type ShaderMaterialProps, useFrame, useTh
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React, { type FC, type PropsWithChildren, useMemo, useRef } from 'react'
 import { Scene, ShaderMaterial, Texture } from 'three'
+import gsap from 'gsap'
 
 import backgroundFragment from './background/background.frag'
 import backgroundVertex from './background/background.vert'
@@ -15,7 +16,10 @@ import effectsVertex from './effects.vert'
 import imageSequenceFragment from './imageSequence.frag'
 import imageSequenceVertex from './imageSequence.vert'
 
+gsap.registerPlugin(ScrollTrigger, useGSAP)
+
 // Ensure packages are installed: "npm install @react-three/drei @react-three/fiber three raw-loader glslify-loader glslify glsl-noise glsl-fast-gaussian-blur"
+
 // Setup Next.js config for handling glsl files
 
 // Process

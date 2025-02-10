@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { Kumbh_Sans } from 'next/font/google'
 
 import Footer from '@/components/Footer'
-import Nav from '@/components/Nav'
+import Nav from '@/components/nav/Nav'
 
 const fontSans = Kumbh_Sans({
   subsets: ['latin'],

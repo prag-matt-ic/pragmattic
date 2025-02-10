@@ -5,7 +5,7 @@ import { Canvas, extend, type ShaderMaterialProps, useFrame, useThree } from '@r
 import { COSINE_GRADIENTS, type CosineGradientPreset } from '@thi.ng/color'
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
-import { useControls } from 'leva'
+import { Leva, useControls } from 'leva'
 import React, { type FC, useMemo, useRef } from 'react'
 import { ShaderMaterial, Vector3 } from 'three'
 
@@ -151,28 +151,31 @@ type CanvasProps = {
 
 const WavePlaneCanvas: FC<CanvasProps> = ({ className, withControls }) => {
   return (
-    <Canvas
-      className={className}
-      camera={{ position: [0, 0, 5], fov: 60, far: 20, near: 0.001 }}
-      gl={{
-        alpha: false,
-        antialias: false,
-        powerPreference: 'high-performance',
-      }}>
-      <color attach="background" args={['#000']} />
-      {withControls ? (
-        <WavePlaneWithControls />
-      ) : (
-        <WavePlane
-          screenHeights={12}
-          loopScroll={false}
-          showGrid={true}
-          gridSize={24}
-          colourPalette={DEFAULT_COLOUR_PALETTE}
-        />
-      )}
-      <PointerCamera />
-    </Canvas>
+    <>
+      <Canvas
+        className={className}
+        camera={{ position: [0, 0, 5], fov: 60, far: 20, near: 0.001 }}
+        gl={{
+          alpha: false,
+          antialias: false,
+          powerPreference: 'high-performance',
+        }}>
+        <color attach="background" args={['#000']} />
+        {withControls ? (
+          <WavePlaneWithControls />
+        ) : (
+          <WavePlane
+            screenHeights={12}
+            loopScroll={false}
+            showGrid={true}
+            gridSize={24}
+            colourPalette={DEFAULT_COLOUR_PALETTE}
+          />
+        )}
+        <PointerCamera />
+      </Canvas>
+      <Leva titleBar={{ position: { x: -8, y: 64 } }} />
+    </>
   )
 }
 

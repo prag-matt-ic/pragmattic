@@ -35,7 +35,7 @@ const VARIANT_CLASSES: Record<
     secondary: 'border border-light text-white bg-black/50 hover:bg-black/80',
   },
   text: {
-    primary: 'text-white hover:text-green',
+    primary: 'text-green hover:text-white',
     secondary: 'text-white hover:text-light',
   },
 } as const
