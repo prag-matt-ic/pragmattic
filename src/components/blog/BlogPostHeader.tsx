@@ -7,9 +7,10 @@ import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
 import Tag from '@/components/blog/Tag'
 import Button from '@/components/buttons/Button'
-import { type BlogMetadata } from '@/resources/blog/content/blog'
+import { type BlogMetadata } from '@/resources/blog/blog'
+import { Pathname } from '@/resources/pathname'
 
-const BlogPostHeader: FC<BlogMetadata> = ({ title, tags, demoPathname, date }) => {
+const BlogPostHeader: FC<BlogMetadata> = ({ title, tags, exampleSlug, date }) => {
   const formattedDate = format(new Date(date), 'PPP')
   return (
     <>
@@ -42,8 +43,9 @@ const BlogPostHeader: FC<BlogMetadata> = ({ title, tags, demoPathname, date }) =
             <span>{formattedDate}</span>
           </div>
 
-          {!!demoPathname && (
-            <Link href={demoPathname} passHref target="_blank" rel="noopener noreferrer">
+          {!!exampleSlug && (
+            // TODO: cant pass link props into Button component.
+            <Link href={`${Pathname.Example}/${exampleSlug}`} passHref target="_blank" rel="noopener noreferrer">
               <Button variant="outlined" colour="secondary">
                 Live demo
                 <Image

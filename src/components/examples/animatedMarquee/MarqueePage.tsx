@@ -1,7 +1,9 @@
-import BackgroundCanvas from '@/components/backgroundCanvas/BackgroundCanvas'
-import Marquee from '@/components/examples/Marquee'
+import { type FC } from 'react'
 
-export default function MarqueeExample() {
+import BackgroundCanvas from '@/components/backgroundCanvas/BackgroundCanvas'
+import Marquee from '@/components/examples/animatedMarquee/Marquee'
+
+const MarqueePage: FC = () => {
   return (
     <>
       <BackgroundCanvas />
@@ -15,3 +17,5 @@ export default function MarqueeExample() {
     </>
   )
 }
+
+export default MarqueePage

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import React, { type FC, type ReactNode, useRef } from 'react'
 
 import profilePic from '@/assets/brand/about-pic.png'
-import Marquee from '@/components/examples/Marquee'
+import Marquee from '@/components/examples/animatedMarquee/Marquee'
 
 const HomeFooter: FC = () => {
   const aboutSection = useRef<HTMLDivElement>(null)

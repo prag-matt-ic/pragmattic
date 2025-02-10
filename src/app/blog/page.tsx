@@ -6,8 +6,8 @@ import React, { type FC, type PropsWithChildren, type ReactNode } from 'react'
 import BlogBackgroundCanvas from '@/components/blog/blogBackground/BlogBackground'
 import { ScrollBackgroundGradientCanvas } from '@/components/examples/scrollingBackgroundGradient/ScrollingBackgroundGradient'
 import { GridLinesFragmentShaderPlaneCanvas } from '@/components/examples/three/wavePlane/blog/WavePlaneBlog'
-import { BLOG_METADATA } from '@/resources/blog/content/blog'
-import { BlogSlug, Pathname } from '@/resources/navigation'
+import { BLOG_METADATA } from '@/resources/blog/blog'
+import { BlogSlug, Pathname } from '@/resources/pathname'
 
 export const metadata: Metadata = {
   title: 'Blog by Matthew Frawley',

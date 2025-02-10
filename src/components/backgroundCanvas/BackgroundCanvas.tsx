@@ -6,9 +6,11 @@ import React, { type FC } from 'react'
 
 import BackdropPlane from '@/components/backgroundCanvas/BackdropPlane'
 
-type Props = {}
+type Props = {
+  className?: string
+}
 
-const BackgroundCanvas: FC<Props> = ({}) => {
+const BackgroundCanvas: FC<Props> = ({ className }) => {
   return (
     <Canvas gl={{ alpha: false, antialias: false }} className="!fixed inset-0">
       <OrthographicCamera makeDefault={true} position={[0, 0, 5]} />

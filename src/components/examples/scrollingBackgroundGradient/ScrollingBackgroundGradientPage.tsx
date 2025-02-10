@@ -15,7 +15,7 @@ import ScrollingBackgroundGradient from '@/components/examples/scrollingBackgrou
 
 const SCREENS = 5
 
-export default function ScrollingBackgroundShaderExample() {
+export default function ScrollingBackgroundShaderPage() {
   return (
     <main className="w-full font-sans" style={{ height: `${SCREENS * 100}vh` }}>
       <Canvas

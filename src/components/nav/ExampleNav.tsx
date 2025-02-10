@@ -5,25 +5,31 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { type FC, useRef, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
+import articleIcon from '@/assets/icons/article-white.svg'
 import collapseIcon from '@/assets/icons/collapse-green.svg'
 import dropDownIcon from '@/assets/icons/drop-down-white.svg'
 import expandIcon from '@/assets/icons/expand-green.svg'
 import forwardSlashIcon from '@/assets/icons/forward-slash-light.svg'
 import githubIcon from '@/assets/icons/socials/github.svg'
 import youtubeIcon from '@/assets/icons/socials/youtube.svg'
-import articleIcon from '@/assets/icons/article-white.svg'
 import Button from '@/components/buttons/Button'
-import { ExamplePathname, EXAMPLES, Pathname } from '@/resources/navigation'
+import { EXAMPLES_METADATA } from '@/resources/examples/examples'
+import { ExampleSlug, Pathname } from '@/resources/pathname'
 
 gsap.registerPlugin(useGSAP)
 
-const ExampleNav: FC = () => {
-  const currentPathname = usePathname()
+type Props = {
+  pathname: string
+}
+
+const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
+  const container = useRef<HTMLDivElement>(null)
+  const expandedContainer = useRef<HTMLDivElement>(null)
+  const containerHeight = 48
 
   const [isExpanded, setIsExpanded] = useState(false)
   const [isPickerOpen, setIsPickerOpen] = useState(false)
@@ -43,10 +49,6 @@ const ExampleNav: FC = () => {
   })
   const dismiss = useDismiss(context)
   const { getReferenceProps, getFloatingProps } = useInteractions([dismiss])
-
-  const container = useRef<HTMLDivElement>(null)
-  const expandedContainer = useRef<HTMLDivElement>(null)
-  const containerHeight = 48
 
   const onInfoEnter = () => {
     if (!expandedContainer.current) return
@@ -70,7 +72,9 @@ const ExampleNav: FC = () => {
       .to('#example-nav-border', { height: containerHeight, duration: 0.2, opacity: 1, ease: 'power2.out' }, '<')
   }
 
-  const currentExample = EXAMPLES[currentPathname as ExamplePathname]
+  // Extract the example slug from the pathname
+  const exampleSlug = currentPathname.split('/').pop() as ExampleSlug
+  const currentExample = EXAMPLES_METADATA[exampleSlug]
   if (!currentExample) return null
   const { title, description, githubUrl, youtubeUrl, blogSlug } = currentExample
 
@@ -167,7 +171,7 @@ const ExampleNav: FC = () => {
             {...getFloatingProps()}
             className="absolute left-0 top-0 z-[1000] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md">
             <div className="w-full overflow-y-auto">
-              {Object.values(EXAMPLES).map(({ title, pathname, youtubeUrl, githubUrl }, index) => {
+              {Object.values(EXAMPLES_METADATA).map(({ title, pathname, youtubeUrl, githubUrl }, index) => {
                 const isActive = pathname === currentPathname
                 const hasLinks = !!youtubeUrl || !!githubUrl
                 if (isActive) return null

@@ -38,13 +38,13 @@ const INITIAL_UNIFORMS: Uniforms = {
   uUvDistortionIntensity: 0,
 }
 
-const ScrollingBgGradientMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
+const ScrollingBackgroundMaterial = shaderMaterial(INITIAL_UNIFORMS, vertexShader, fragmentShader)
 
-extend({ ScrollingBgGradientMaterial })
+extend({ ScrollingBackgroundMaterial })
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    scrollingBgGradientMaterial: ShaderMaterialProps & Partial<Uniforms>
+    scrollingBackgroundMaterial: ShaderMaterialProps & Partial<Uniforms>
   }
 }
 
@@ -114,8 +114,8 @@ const ScrollingBackgroundGradient: FC<Props & Config> = ({
 
   return (
     <ScreenQuad>
-      <scrollingBgGradientMaterial
-        key={ScrollingBgGradientMaterial.key}
+      <scrollingBackgroundMaterial
+        key={ScrollingBackgroundMaterial.key}
         ref={gradientShader}
         // Uniforms
         uTime={0}

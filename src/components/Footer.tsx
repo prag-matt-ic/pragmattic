@@ -7,16 +7,17 @@ import githubIcon from '@/assets/icons/socials/github.svg'
 import instagramIcon from '@/assets/icons/socials/instagram.svg'
 import linkedInIcon from '@/assets/icons/socials/linkedin.svg'
 import youtubeIcon from '@/assets/icons/socials/youtube.svg'
-import { ExamplePathname } from '@/resources/navigation'
+import { ExampleSlug } from '@/resources/pathname'
 
 const socialLinkClasses = 'transition-all duration-200 hover:opacity-80 hover:animate-pulse p-2'
 
-const EXAMPLES_WITHOUT_FOOTER: string[] = [ExamplePathname.WavePlane, ExamplePathname.ScrollingBackgroundShader]
+const EXAMPLES_WITHOUT_FOOTER: string[] = [ExampleSlug.WavePlane, ExampleSlug.ScrollingBackgroundShader]
 
 const Footer: FC = () => {
   const pathname = usePathname()
 
-  const hideFooter = EXAMPLES_WITHOUT_FOOTER.includes(pathname)
+  const slug = pathname.split('/').pop()
+  const hideFooter = !!slug && EXAMPLES_WITHOUT_FOOTER.includes(slug)
   if (hideFooter) return null
 
   return (

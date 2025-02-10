@@ -2,10 +2,10 @@
 import { useGSAP } from '@gsap/react'
 import { OrthographicCamera, Plane, ScreenQuad, shaderMaterial, Stats, useFBO, useTexture } from '@react-three/drei'
 import { Canvas, createPortal, extend, type ShaderMaterialProps, useFrame, useThree } from '@react-three/fiber'
+import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React, { type FC, type PropsWithChildren, useMemo, useRef } from 'react'
 import { Scene, ShaderMaterial, Texture } from 'three'
-import gsap from 'gsap'
 
 import backgroundFragment from './background/background.frag'
 import backgroundVertex from './background/background.vert'
@@ -29,26 +29,28 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 // 3. Create image sequence shader
 // 4. Create effects component
 
-const EffectsCanvas: FC = () => (
-  <Canvas
-    className="!fixed inset-0"
-    gl={{
-      alpha: false,
-      // Recommended settings for postprocessing performance:
-      antialias: false,
-      powerPreference: 'high-performance',
-      stencil: false,
-      depth: false,
-    }}>
-    <OrthographicCamera makeDefault position={[0, 0, 1]} />
-    <CustomEffects>
-      <Main />
-    </CustomEffects>
-    <Stats />
-  </Canvas>
+const FBOEffectsCanvas: FC = () => (
+  <main className="h-[200vh] w-full bg-black font-sans">
+    <Canvas
+      className="!fixed inset-0"
+      gl={{
+        alpha: false,
+        // Recommended settings for postprocessing performance:
+        antialias: false,
+        powerPreference: 'high-performance',
+        stencil: false,
+        depth: false,
+      }}>
+      <OrthographicCamera makeDefault position={[0, 0, 1]} />
+      <CustomEffects>
+        <Main />
+      </CustomEffects>
+      {process.env.NODE_ENV === 'development' && <Stats />}
+    </Canvas>
+  </main>
 )
 
-export default EffectsCanvas
+export default FBOEffectsCanvas
 
 // Background Shader
 type BGUniforms = {

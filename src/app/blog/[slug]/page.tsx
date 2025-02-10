@@ -2,8 +2,8 @@ import { type Metadata, type ResolvingMetadata } from 'next'
 import React from 'react'
 
 import BlogLayout from '@/components/blog/BlogLayout'
-import { BLOG_CONTENT, BLOG_METADATA } from '@/resources/blog/content/blog'
-import { BlogSlug } from '@/resources/navigation'
+import { BLOG_CONTENT, BLOG_METADATA } from '@/resources/blog/blog'
+import { BlogSlug } from '@/resources/pathname'
 
 type Props = {
   params: { slug: string }

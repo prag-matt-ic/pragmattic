@@ -1,9 +1,8 @@
 import React, { type FC, type PropsWithChildren } from 'react'
 
 import BlogHeadingsNav from '@/components/blog/BlogHeadingsNav'
-import BlogNavSetter from '@/components/blog/BlogNavSetter'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
-import { type BlogMetadata } from '@/resources/blog/content/blog'
+import { type BlogMetadata } from '@/resources/blog/blog'
 
 type Props = PropsWithChildren<BlogMetadata>
 
@@ -11,7 +10,6 @@ const BlogLayout: FC<PropsWithChildren<Props>> = ({ children, ...metadata }) => 
   return (
     <>
       <JSONSchema {...metadata} />
-      <BlogNavSetter title={metadata.title} />
       <main className="relative w-full font-sans">
         <BlogPostHeader {...metadata} />
 
@@ -42,6 +40,7 @@ const JSONSchema: FC<BlogMetadata> = ({ title, description, date, slug }) => {
           datePublished: date,
           dateModified: date,
           description: description,
+          mainEntityOfPage: url,
           image: 'https://pragmattic.vercel.app/opengraph-image.jpg',
           // TODO: dynamically generated image with the blog title.
           // image: post.metadata.image

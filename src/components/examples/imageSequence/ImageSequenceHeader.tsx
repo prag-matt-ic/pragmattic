@@ -5,6 +5,8 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React, { type FC, useEffect, useRef, useState } from 'react'
 
+import BackgroundCanvas from '@/components/backgroundCanvas/BackgroundCanvas'
+
 // Video Tutorial: https://youtu.be/l8hwkDAr0Eg
 
 // Process
@@ -166,8 +168,6 @@ const ImageSequenceHeader: FC = () => {
   )
 }
 
-export default ImageSequenceHeader
-
 const loadImagesAndDrawFirstFrame = async ({
   canvas,
   imageSrcs,
@@ -235,3 +235,17 @@ const updateCanvasImage = (
   renderingContext.clearRect(0, 0, canvas.width, canvas.height)
   renderingContext.drawImage(image, offsetX, offsetY, image.width, image.height)
 }
+
+const ImageSequencePage: FC = () => {
+  return (
+    <>
+      <BackgroundCanvas />
+      <main className="w-full bg-black font-sans">
+        <ImageSequenceHeader />
+        <section className="h-lvh"></section>
+      </main>
+    </>
+  )
+}
+
+export default ImageSequencePage

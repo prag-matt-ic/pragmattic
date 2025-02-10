@@ -5,10 +5,10 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/dist/ScrollTrigger'
 import React, { type FC, useRef } from 'react'
 
+import ScrollDownArrow from '@/components/examples/ScrollDown'
 // import BasicParticles from '@/components/examples/particles/basicParticles/BasicParticles'
 // import MeshSamplerParticles from '@/components/examples/particles/gltfParticles/MeshSamplerParticles'
 import Stars from '@/components/examples/three/particles/stars/Stars'
-import ScrollDownArrow from '@/components/examples/ScrollDown'
 import PointerCamera from '@/components/PointerCamera'
 
 // Building modern day scroll controlled star wars intro with React Three Fiber and GSAP
@@ -30,7 +30,7 @@ import PointerCamera from '@/components/PointerCamera'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-export default function StarsPage() {
+export default function StarWarsPage() {
   return (
     <main className="h-[300vh] w-full font-sans">
       {/* ThreeJS content */}

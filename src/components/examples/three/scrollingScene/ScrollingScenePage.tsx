@@ -8,7 +8,7 @@ import React, { type FC, type ReactNode, useMemo, useRef } from 'react'
 import { twJoin } from 'tailwind-merge'
 import { Group, MeshPhysicalMaterial, type Object3DEventMap } from 'three'
 
-import PointerCamera from '@/components/PointerCamera'
+import Camera from '@/components/three/Camera'
 
 // Install dependencies: npm install @gsap/react @react-three/drei @react-three/fiber gsap
 
@@ -27,9 +27,9 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 // 4. Animating scrolling group element(s)
 // 5. Fixed group
 
-export default function ScrollingPageExample() {
+export default function ScrollingScenePage() {
   return (
-    <main className="w-full bg-white font-sans">
+    <main className="w-full bg-black font-sans text-white">
       {/* ThreeJS content */}
       <Canvas
         className="!fixed inset-0"
@@ -38,19 +38,12 @@ export default function ScrollingPageExample() {
           antialias: false,
           powerPreference: 'high-performance',
         }}>
-        <color attach="background" args={['#f6f6f6']} />
         <ambientLight intensity={0.5} color="#fff" />
         {/* Image downloaded from: https://polyhaven.com/hdris */}
-        <Environment
-          files="/images/environment/sky.hdr"
-          background={true}
-          backgroundBlurriness={0.05}
-          resolution={512}
-          ground={false}
-        />
+        <Environment files="/images/environment/panos.jpg" background={true} resolution={512} ground={false} />
         <ScrollingGroup />
         <FixedGroup />
-        <PointerCamera />
+        <Camera />
       </Canvas>
 
       {/* Scrolling HTML content */}
@@ -92,13 +85,12 @@ const Section: FC<SectionProps> = ({ heading, body, href, index }) => {
   )
 
   return (
-    <section
-      ref={section}
-      id={`section-${index}`}
-      className="grid h-screen w-full grid-cols-6 items-center text-[#030D18]">
+    <section ref={section} id={`section-${index}`} className="grid h-screen w-full grid-cols-6 items-center">
       <div className={twJoin('text col-span-2 h-fit space-y-4', isOnLeft ? 'col-start-2 text-right' : 'col-start-4')}>
-        <h2 className="text-2xl font-medium leading-normal tracking-tight sm:text-3xl lg:text-6xl">{heading}</h2>
-        <p className="text-base text-[#030D18]/80 lg:text-lg">
+        <h2 className="text-2xl font-bold leading-normal tracking-tight text-white sm:text-3xl lg:text-6xl">
+          {heading}
+        </h2>
+        <p className="text-base text-white/70 lg:text-lg">
           {body}
           {!!href && (
             <>
@@ -108,7 +100,7 @@ const Section: FC<SectionProps> = ({ heading, body, href, index }) => {
                 target="_blank"
                 href={href}
                 rel="noreferrer"
-                className="text-inherit w-fit rounded bg-white/40 px-2 py-0.5 hover:bg-white">
+                className="text-inherit w-fit rounded bg-black/40 px-3 py-1">
                 Learn more
               </a>
             </>
@@ -133,11 +125,11 @@ const ProgressBar: FC = () => {
   }, [])
 
   return (
-    <div className="pointer-events-none fixed bottom-0 left-0 right-0 z-[100] h-2 overflow-hidden bg-white">
+    <div className="pointer-events-none fixed bottom-0 left-0 right-0 z-[100] h-1 overflow-hidden bg-black">
       <div
         id="progress-bar"
         style={{ transform: 'scaleX(0)' }}
-        className="absolute left-0 h-full w-full origin-left bg-black"
+        className="absolute left-0 h-full w-full origin-left bg-white"
       />
     </div>
   )
@@ -158,7 +150,7 @@ const ScrollingGroup: FC = () => {
         group.current.position,
         { y: 0 },
         {
-          y: -pageHeight * (SECTIONS.length - 1),
+          y: pageHeight * (SECTIONS.length - 1),
           ease: 'none',
           scrollTrigger: {
             start: 0,
@@ -178,7 +170,7 @@ const ScrollingGroup: FC = () => {
       {Array.from({ length: SECTIONS.length }, (_, i) => (
         <ScenePage
           key={i}
-          position={[0, i * pageHeight, 0]}
+          position={[0, i * -pageHeight, 0]}
           radius={Math.max(columnWidth / 2, 0.5)}
           columnWidth={columnWidth}
           sectionIndex={i}
@@ -195,7 +187,7 @@ type ScenePageProps = {
   columnWidth: number
 }
 
-const SPHERE_COLOURS = ['#4D5E83', '#438083'] as const
+const SPHERE_COLOURS = ['grey', 'silver'] as const
 
 const ScenePage: FC<ScenePageProps> = ({ position, radius = 1, columnWidth, sectionIndex }) => {
   const isOnLeft = sectionIndex % 2 === 0
@@ -259,10 +251,9 @@ const FixedGroup: FC = () => {
           <meshPhysicalMaterial
             attach="material"
             color={SPHERE_COLOURS[i % SPHERE_COLOURS.length]}
-            roughness={0.12}
+            roughness={0.2}
             reflectivity={1}
-            transparent={true}
-            opacity={0.32}
+            opacity={1}
           />
         </Sphere>
       ))}

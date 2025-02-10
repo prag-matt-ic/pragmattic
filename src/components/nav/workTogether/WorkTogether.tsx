@@ -15,15 +15,15 @@ import Button from '@/components/buttons/Button'
 import { WorkTogetherAnimation, type WorkTogetherShader } from './shaders/WorkTogetherAnimation'
 
 const WorkTogether: FC = () => {
-  const [isShowing, setIsShowing] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   const { refs, floatingStyles, context } = useFloating({
     strategy: 'fixed',
     placement: 'bottom',
     transform: false,
-    open: isShowing,
+    open: isOpen,
     middleware: [shift({ padding: 8 }), offset({ mainAxis: 8 })],
-    onOpenChange: setIsShowing,
+    onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
   })
   const dismiss = useDismiss(context)
@@ -48,8 +48,8 @@ const WorkTogether: FC = () => {
         {...getReferenceProps()}
         variant="filled"
         size="small"
-        className={isShowing ? 'bg-white' : ''}
-        onClick={() => setIsShowing((prev) => !prev)}>
+        className={isOpen ? 'bg-white' : ''}
+        onClick={() => setIsOpen((prev) => !prev)}>
         Talk to Matt
         <svg
           width="24"
@@ -57,14 +57,14 @@ const WorkTogether: FC = () => {
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={twJoin('-mr-2 transition-transform duration-200', isShowing && 'rotate-180')}>
+          className={twJoin('-mr-2 transition-transform duration-200', isOpen && 'rotate-180')}>
           <path d="M12 15L7 10H17L12 15Z" className="fill-black" />
         </svg>
       </Button>
 
       <FloatingPortal>
         <Transition
-          in={isShowing}
+          in={isOpen}
           timeout={{ enter: 0, exit: 250 }}
           nodeRef={refs.floating}
           mountOnEnter={true}

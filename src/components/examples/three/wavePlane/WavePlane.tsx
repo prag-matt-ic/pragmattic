@@ -9,6 +9,7 @@ import { Leva, useControls } from 'leva'
 import React, { type FC, useMemo, useRef } from 'react'
 import { ShaderMaterial, Vector3 } from 'three'
 
+import ScrollDownArrow from '@/components/examples/ScrollDown'
 import PointerCamera from '@/components/PointerCamera'
 
 import fragmentShader from './wavePlane.frag'
@@ -149,34 +150,39 @@ type CanvasProps = {
   withControls?: boolean
 }
 
-const WavePlaneCanvas: FC<CanvasProps> = ({ className, withControls }) => {
+export const WavePlaneCanvas: FC<CanvasProps> = ({ className, withControls }) => {
   return (
-    <>
-      <Canvas
-        className={className}
-        camera={{ position: [0, 0, 5], fov: 60, far: 20, near: 0.001 }}
-        gl={{
-          alpha: false,
-          antialias: false,
-          powerPreference: 'high-performance',
-        }}>
-        <color attach="background" args={['#000']} />
-        {withControls ? (
-          <WavePlaneWithControls />
-        ) : (
-          <WavePlane
-            screenHeights={12}
-            loopScroll={false}
-            showGrid={true}
-            gridSize={24}
-            colourPalette={DEFAULT_COLOUR_PALETTE}
-          />
-        )}
-        <PointerCamera />
-      </Canvas>
-      <Leva titleBar={{ position: { x: -8, y: 64 } }} />
-    </>
+    <Canvas
+      className={className}
+      camera={{ position: [0, 0, 5], fov: 60, far: 20, near: 0.001 }}
+      gl={{
+        alpha: false,
+        antialias: false,
+        powerPreference: 'high-performance',
+      }}>
+      <color attach="background" args={['#000']} />
+      {withControls ? (
+        <WavePlaneWithControls />
+      ) : (
+        <WavePlane
+          screenHeights={12}
+          loopScroll={false}
+          showGrid={true}
+          gridSize={24}
+          colourPalette={DEFAULT_COLOUR_PALETTE}
+        />
+      )}
+      <PointerCamera />
+    </Canvas>
   )
 }
 
-export default WavePlaneCanvas
+export const WavePlanePage: FC = () => {
+  return (
+    <main className="h-[1000vh] w-full">
+      <WavePlaneCanvas className="!fixed inset-0" withControls={true} />
+      <ScrollDownArrow />
+      <Leva titleBar={{ position: { x: -8, y: 64 } }} />
+    </main>
+  )
+}

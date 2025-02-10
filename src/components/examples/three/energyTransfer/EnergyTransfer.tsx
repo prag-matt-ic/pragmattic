@@ -4,7 +4,7 @@ import { PerformanceMonitor, Stats } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import gsap from 'gsap'
-import React, { useMemo, type FC } from 'react'
+import React, { type FC, useMemo } from 'react'
 import { Color, type Vector3Tuple } from 'three'
 
 import Camera from '@/components/three/Camera'
@@ -55,25 +55,27 @@ type CanvasProps = {
 
 const EnergyTransferCanvas: FC<CanvasProps> = ({ className }) => {
   return (
-    <Canvas
-      className={className}
-      flat={true}
-      camera={{ position: [0, 0, 2], fov: 70, far: 10, near: 0.01 }}
-      gl={{
-        alpha: false,
-        antialias: false,
-        powerPreference: 'high-performance',
-        stencil: false,
-        depth: false,
-      }}>
-      <PerformanceMonitor>
-        <Environment />
-        <EnergyTransfer />
-        <Camera />
-        <Postprocessing />
-      </PerformanceMonitor>
-      {process.env.NODE_ENV === 'development' && <Stats />}
-    </Canvas>
+    <main className="h-lvh w-full font-sans">
+      <Canvas
+        className={className}
+        flat={true}
+        camera={{ position: [0, 0, 2], fov: 70, far: 10, near: 0.01 }}
+        gl={{
+          alpha: false,
+          antialias: false,
+          powerPreference: 'high-performance',
+          stencil: false,
+          depth: false,
+        }}>
+        <PerformanceMonitor>
+          <Environment />
+          <EnergyTransfer />
+          <Camera />
+          <Postprocessing />
+        </PerformanceMonitor>
+        {process.env.NODE_ENV === 'development' && <Stats />}
+      </Canvas>
+    </main>
   )
 }
 

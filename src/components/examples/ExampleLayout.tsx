@@ -1,5 +1,6 @@
-import { type Example } from '@/resources/navigation'
 import React, { type FC, type PropsWithChildren } from 'react'
+
+import { type Example } from '@/resources/examples/examples'
 
 type Props = PropsWithChildren<Example>
 

@@ -40,7 +40,7 @@ export default function RayMarchingPage() {
           <OrthographicCamera makeDefault={true} />
           <RayMarchingScreenQuadShader />
         </PerformanceMonitor>
-        {/* <Stats className="!bottom-0" /> */}
+        {process.env.NODE_ENV === 'development' && <Stats />}
       </Canvas>
 
       <header className="pointer-events-none relative z-10 flex h-svh w-full items-center justify-center">
