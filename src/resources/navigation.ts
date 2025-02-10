@@ -83,7 +83,7 @@ export const EXAMPLES: Record<ExamplePathname, Example> = {
     title: 'ThreeJS Wave Plane',
     pathname: ExamplePathname.WavePlane,
     youtubeUrl: 'https://youtu.be/CepFdiDe3Lw',
-    githubUrl: 'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/wavePlane/WavePlane.tsx',
+    githubUrl: 'https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/three/wavePlane',
     blogSlug: BlogSlug.WavePlane,
   },
   [ExamplePathname.RayMarching]: {
@@ -105,7 +105,7 @@ export const EXAMPLES: Record<ExamplePathname, Example> = {
       duration before being drawn in the cylinder fragment shader. I've been learning that it's much easier to manage animation progress and randomise parameters outside of
       the shader code!`,
     pathname: ExamplePathname.EnergyTransfer,
-    githubUrl: '',
+    githubUrl: 'https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/three/energyTransfer',
   },
 
   // REBUILDS

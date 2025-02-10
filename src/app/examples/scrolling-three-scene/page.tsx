@@ -41,7 +41,13 @@ export default function ScrollingPageExample() {
         <color attach="background" args={['#f6f6f6']} />
         <ambientLight intensity={0.5} color="#fff" />
         {/* Image downloaded from: https://polyhaven.com/hdris */}
-        <Environment files="/images/environment/sky.hdr" background={true} backgroundBlurriness={0.05} ground={false} />
+        <Environment
+          files="/images/environment/sky.hdr"
+          background={true}
+          backgroundBlurriness={0.05}
+          resolution={512}
+          ground={false}
+        />
         <ScrollingGroup />
         <FixedGroup />
         <PointerCamera />

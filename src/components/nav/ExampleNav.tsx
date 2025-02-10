@@ -16,8 +16,9 @@ import expandIcon from '@/assets/icons/expand-green.svg'
 import forwardSlashIcon from '@/assets/icons/forward-slash-light.svg'
 import githubIcon from '@/assets/icons/socials/github.svg'
 import youtubeIcon from '@/assets/icons/socials/youtube.svg'
+import articleIcon from '@/assets/icons/article-white.svg'
 import Button from '@/components/buttons/Button'
-import { ExamplePathname, EXAMPLES } from '@/resources/navigation'
+import { ExamplePathname, EXAMPLES, Pathname } from '@/resources/navigation'
 
 gsap.registerPlugin(useGSAP)
 
@@ -71,9 +72,7 @@ const ExampleNav: FC = () => {
 
   const currentExample = EXAMPLES[currentPathname as ExamplePathname]
   if (!currentExample) return null
-  const { title, description } = currentExample
-
-  const showExpandButton = !!description
+  const { title, description, githubUrl, youtubeUrl, blogSlug } = currentExample
 
   return (
     <>
@@ -98,20 +97,18 @@ const ExampleNav: FC = () => {
               {...getReferenceProps()}
               className="flex items-center gap-1 transition-opacity duration-200 hover:opacity-70"
               onClick={() => setIsPickerOpen((prev) => !prev)}>
-              <h1 className="text-ellipsis whitespace-nowrap text-base font-semibold">{title}</h1>
+              <span className="text-ellipsis whitespace-nowrap text-base font-semibold">{title}</span>
               <Image src={dropDownIcon} alt="open menu" className="size-6" />
             </button>
           </div>
 
-          {showExpandButton && (
-            <Button variant="text" colour="secondary" size="small" onClick={() => setIsExpanded((prev) => !prev)}>
-              {isExpanded ? (
-                <Image src={collapseIcon} alt="collapse" className="size-5" />
-              ) : (
-                <Image src={expandIcon} alt="expand" className="size-5" />
-              )}
-            </Button>
-          )}
+          <Button variant="text" colour="secondary" size="small" onClick={() => setIsExpanded((prev) => !prev)}>
+            {isExpanded ? (
+              <Image src={collapseIcon} alt="collapse" className="size-5" />
+            ) : (
+              <Image src={expandIcon} alt="expand" className="size-5" />
+            )}
+          </Button>
         </header>
 
         {/* Expanded Info Section */}
@@ -124,16 +121,39 @@ const ExampleNav: FC = () => {
           onEnter={onInfoEnter}
           onExit={onInfoExit}>
           <div ref={expandedContainer} className="relative w-full space-y-3 overflow-hidden px-4 pb-4 pt-2 opacity-0">
-            <p className="h-fit text-sm text-light">{description}</p>
+            {!!description && <p className="h-fit text-sm text-light">{description}</p>}
 
-            {/* <Button variant="text" colour="primary" size="small" onClick={() => setIsExpanded((prev) => !prev)}>
-              Learn more
-              {isExpanded ? (
-                <Image src={collapseIcon} alt="collapse" className="size-4" />
-              ) : (
-                <Image src={expandIcon} alt="expand" className="size-4" />
+            <div className="flex items-center gap-6 text-sm font-medium">
+              {!!blogSlug && (
+                <a
+                  href={`${Pathname.Blog}/${blogSlug}`}
+                  target="_blank"
+                  className="flex items-center gap-2 hover:opacity-50">
+                  <Image src={articleIcon} alt="Article" className="size-6" />
+                  Deep Dive
+                </a>
               )}
-            </Button> */}
+              {!!youtubeUrl && (
+                <a
+                  href={youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:opacity-50">
+                  <Image src={youtubeIcon} alt="Youtube" className="size-6" />
+                  YouTube Video
+                </a>
+              )}
+              {!!githubUrl && (
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:opacity-50">
+                  <Image src={githubIcon} alt="Github" className="size-6" />
+                  Code
+                </a>
+              )}
+            </div>
           </div>
         </Transition>
       </section>
