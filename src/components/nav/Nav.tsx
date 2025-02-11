@@ -10,25 +10,20 @@ import { type FC } from 'react'
 import { twJoin } from 'tailwind-merge'
 
 import logo from '@/assets/brand/pragmattic.svg'
-import { BLOG_METADATA } from '@/resources/blog/blog'
-import { BlogSlug, ExampleSlug, Pathname } from '@/resources/pathname'
+import { ExampleSlug, Pathname } from '@/resources/pathname'
 
 const WorkTogether = dynamic(() => import('./workTogether/WorkTogether'), { ssr: false })
-const ExampleNav = dynamic(() => import('./ExampleNav'), { ssr: false })
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
 const Nav: FC = () => {
   const pathname = usePathname()
   const isRebuildPage = pathname.includes('/rebuild')
-  const isExamplePage = pathname.includes('/example')
-  const isBlogPage = pathname.includes('/blog')
 
   useGSAP(
     () => {
       if (isRebuildPage) return
-      const targets = !!isBlogPage ? ['#nav-bg', '#nav-blog'] : '#nav-bg'
-      gsap.to(targets, {
+      gsap.to('#nav-bg', {
         duration: 0.3,
         opacity: 1,
         ease: 'power1.in',
@@ -38,15 +33,13 @@ const Nav: FC = () => {
         },
       })
     },
-    { dependencies: [isRebuildPage, isBlogPage] },
+    { dependencies: [isRebuildPage] },
   )
 
-  // Fade in the blog or example Navs
-
   return (
-    <nav className="fixed left-0 right-0 top-0 z-[500] flex items-center justify-between gap-3 py-1.5 pl-6 pr-4 md:gap-4 md:py-2.5 lg:gap-6">
+    <nav className="fixed left-0 right-0 top-0 z-[500] flex h-12 items-center justify-between gap-3 pl-6 pr-4 md:h-14 md:gap-4 lg:gap-6">
       <div id="nav-bg" className="absolute inset-0 bg-black opacity-0" />
-      <Link href="/" className="relative">
+      <Link href="/" className="relative shrink-0">
         <Image
           alt="Pragmattic"
           src={logo}
@@ -55,12 +48,7 @@ const Nav: FC = () => {
         />
       </Link>
 
-      <div className="relative hidden h-12 flex-1 items-center justify-center md:flex">
-        {isBlogPage && <BlogNav pathname={pathname} />}
-        {(isExamplePage || isRebuildPage) && <ExampleNav pathname={pathname} />}
-      </div>
-
-      <div className="relative flex items-center gap-2 md:gap-4">
+      <div className="relative flex shrink-0 items-center gap-2 md:gap-4">
         <Link
           href={`${Pathname.Example}/${ExampleSlug.EnergyTransfer}`}
           className={twJoin(
@@ -84,17 +72,3 @@ const Nav: FC = () => {
 }
 
 export default Nav
-
-const BlogNav: FC<{ pathname: string }> = ({ pathname }) => {
-  const blogSlug = pathname.split('/').pop()
-  const blogMetadata = BLOG_METADATA[blogSlug as BlogSlug]
-  if (!blogMetadata) return null
-
-  return (
-    <span
-      id="nav-blog"
-      className="block overflow-hidden text-ellipsis whitespace-nowrap text-center text-lg font-semibold text-white opacity-0">
-      {blogMetadata.title}
-    </span>
-  )
-}

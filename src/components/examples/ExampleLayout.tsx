@@ -15,7 +15,7 @@ const ExampleLayout: FC<Props> = ({ children, ...example }) => {
 
 export default ExampleLayout
 
-const JSONSchema: FC<Example> = ({ title, description, pathname }) => {
+const JSONSchema: FC<Example> = ({ title, description, slug: pathname }) => {
   const url = `https://pragmattic.vercel.app/${pathname}`
   return (
     <script

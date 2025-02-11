@@ -23,13 +23,13 @@ import { ExampleSlug, Pathname } from '@/resources/pathname'
 gsap.registerPlugin(useGSAP)
 
 type Props = {
-  pathname: string
+  slug: ExampleSlug
 }
 
-const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
+const ExampleNav: FC<Props> = ({ slug }) => {
   const container = useRef<HTMLDivElement>(null)
   const expandedContainer = useRef<HTMLDivElement>(null)
-  const containerHeight = 48
+  const containerHeight = 40
 
   const [isExpanded, setIsExpanded] = useState(false)
   const [isPickerOpen, setIsPickerOpen] = useState(false)
@@ -73,16 +73,15 @@ const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
   }
 
   // Extract the example slug from the pathname
-  const exampleSlug = currentPathname.split('/').pop() as ExampleSlug
-  const currentExample = EXAMPLES_METADATA[exampleSlug]
+  const currentExample = EXAMPLES_METADATA[slug]
   if (!currentExample) return null
   const { title, description, githubUrl, youtubeUrl, blogSlug } = currentExample
 
   return (
-    <>
+    <div className="pointer-events-none fixed left-0 right-0 top-0 z-[1001] hidden h-14 items-center justify-center lg:flex">
       <section
         ref={container}
-        className="absolute top-0 max-w-full text-white md:w-[480px] lg:w-[540px] xl:w-[600px]"
+        className="pointer-events-auto absolute max-w-full text-white lg:w-[420px] xl:w-[600px]"
         style={{ height: containerHeight }}>
         {/* background container which expands */}
         <div
@@ -92,7 +91,7 @@ const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
           <div id="example-nav-bg" className="absolute inset-0 bg-black" />
         </div>
 
-        <header className="relative flex h-12 w-full items-center justify-between gap-2 pl-3">
+        <header className="relative flex h-10 w-full items-center justify-between gap-2 pl-3">
           <div className="flex select-none items-center gap-1.5">
             <span className="text-sm text-light">Examples</span>
             <Image src={forwardSlashIcon} alt="/" className="size-5" />
@@ -171,8 +170,8 @@ const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
             {...getFloatingProps()}
             className="absolute left-0 top-0 z-[1000] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md">
             <div className="w-full overflow-y-auto">
-              {Object.values(EXAMPLES_METADATA).map(({ title, pathname, youtubeUrl, githubUrl }, index) => {
-                const isActive = pathname === currentPathname
+              {Object.values(EXAMPLES_METADATA).map(({ title, slug: exampleSlug, youtubeUrl, githubUrl }, index) => {
+                const isActive = slug === exampleSlug
                 const hasLinks = !!youtubeUrl || !!githubUrl
                 if (isActive) return null
                 return (
@@ -183,7 +182,7 @@ const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
                       index % 2 === 0 && 'bg-black/40',
                     )}>
                     <Link
-                      href={pathname}
+                      href={`${Pathname.Example}/${exampleSlug}`}
                       className="block font-medium hover:text-green"
                       onClick={() => {
                         setIsPickerOpen(false)
@@ -212,7 +211,7 @@ const ExampleNav: FC<Props> = ({ pathname: currentPathname }) => {
           </section>
         </FloatingPortal>
       )}
-    </>
+    </div>
   )
 }
 

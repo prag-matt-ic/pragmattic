@@ -35,7 +35,7 @@ export type Example = {
   title: string
   description?: string
   tags: TagName[]
-  pathname: ExampleSlug
+  slug: ExampleSlug
   youtubeUrl?: string
   githubUrl?: string
   blogSlug?: BlogSlug
@@ -46,7 +46,7 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
     title: 'Scroll-driven image sequence header',
     description: '',
     tags: [TagName.React, TagName.GSAP, TagName.Tailwind],
-    pathname: ExampleSlug.ImageSequence,
+    slug: ExampleSlug.ImageSequence,
     blogSlug: BlogSlug.ImageSequenceHeader,
     youtubeUrl: 'https://youtu.be/l8hwkDAr0Eg',
     githubUrl:
@@ -54,7 +54,7 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
   },
   [ExampleSlug.ScrollingBackgroundShader]: {
     title: 'Magical gradients in a scrolling background shader',
-    pathname: ExampleSlug.ScrollingBackgroundShader,
+    slug: ExampleSlug.ScrollingBackgroundShader,
     tags: [TagName.NextJS, TagName.FragmentShader, TagName.GSAP],
     youtubeUrl: 'https://youtu.be/_YvCZ4I16Vg',
     githubUrl:
@@ -62,21 +62,21 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
   },
   [ExampleSlug.ScrollingThreeJs]: {
     title: 'Scrolling React Three Fiber Scene',
-    pathname: ExampleSlug.ScrollingThreeJs,
+    slug: ExampleSlug.ScrollingThreeJs,
     tags: [TagName.React, TagName.ThreeJS, TagName.GSAP],
     youtubeUrl: 'https://youtu.be/1GGe3j59aKQ',
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic/blob/main/src/app/examples/scrolling-three-scene/page.tsx',
   },
   [ExampleSlug.StarsParticles]: {
     title: 'Stars Wars particles with scrolling text',
-    pathname: ExampleSlug.StarsParticles,
+    slug: ExampleSlug.StarsParticles,
     tags: [TagName.React, TagName.ThreeJS, TagName.Particles, TagName.Tailwind],
     youtubeUrl: 'https://youtu.be/E4XKY-ISKdU',
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic/blob/main/src/app/examples/stars-particles/page.tsx',
   },
   [ExampleSlug.FBOEffects]: {
     title: 'FBO Effects',
-    pathname: ExampleSlug.FBOEffects,
+    slug: ExampleSlug.FBOEffects,
     tags: [TagName.PostProcessing, TagName.ThreeJS, TagName.FragmentShader],
     youtubeUrl: 'https://youtu.be/vJaLN3UMnso',
     githubUrl:
@@ -84,14 +84,14 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
   },
   [ExampleSlug.InfiniteMarquee]: {
     title: 'Infinite marquee for logos or icons',
-    pathname: ExampleSlug.InfiniteMarquee,
+    slug: ExampleSlug.InfiniteMarquee,
     tags: [TagName.React, TagName.GSAP, TagName.Tailwind],
     youtubeUrl: 'https://youtu.be/KLruwdU28bw',
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/Marquee.tsx',
   },
   [ExampleSlug.WavePlane]: {
     title: 'ThreeJS Wave Plane',
-    pathname: ExampleSlug.WavePlane,
+    slug: ExampleSlug.WavePlane,
     tags: [TagName.React, TagName.ThreeJS, TagName.FragmentShader, TagName.VertexShader],
     youtubeUrl: 'https://youtu.be/CepFdiDe3Lw',
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/three/wavePlane',
@@ -100,14 +100,14 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
   [ExampleSlug.RayMarching]: {
     title: 'GLSL Ray Marching with infinite scroll',
     tags: [TagName.FragmentShader, TagName.GSAP],
-    pathname: ExampleSlug.RayMarching,
+    slug: ExampleSlug.RayMarching,
     githubUrl:
       'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/raymarching/RayMarchingScreenQuad.tsx',
   },
   [ExampleSlug.AnimatedCSSGrid]: {
     title: 'Animated CSS Grid using Tailwind and GSAP',
     tags: [TagName.NextJS, TagName.GSAP, TagName.Responsive, TagName.Tailwind],
-    pathname: ExampleSlug.AnimatedCSSGrid,
+    slug: ExampleSlug.AnimatedCSSGrid,
     githubUrl:
       'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/animatedCSSGrid/AnimatedCSSGrid.tsx',
   },
@@ -118,7 +118,7 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
         duration before being drawn in the cylinder fragment shader. I've been learning that it's much easier to manage animation progress and randomise parameters outside of
         the shader code!`,
     tags: [TagName.ThreeJS, TagName.FragmentShader, TagName.VertexShader, TagName.PostProcessing, TagName.Particles],
-    pathname: ExampleSlug.EnergyTransfer,
+    slug: ExampleSlug.EnergyTransfer,
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/three/energyTransfer',
   },
 } as const
