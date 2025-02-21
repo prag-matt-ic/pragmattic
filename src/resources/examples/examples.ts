@@ -55,7 +55,8 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
       'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/imageSequence/ImageSequenceHeader.tsx',
   },
   [ExampleSlug.ScrollingBackgroundShader]: {
-    title: 'Magical gradients in a scrolling background shader',
+    title: 'Magical scrolling gradients',
+    description: `This is a fun illustration of what's possible with a simple fragment shader - and almost impossible using Javascript and CSS. It's coloured using a cosine gradient function which uses a noise value generated within a loop. You can experiment with the settings to get a wide range of effects! I personally like setting the time to 0, iterations to 4 and intensity to 0.5.`,
     slug: ExampleSlug.ScrollingBackgroundShader,
     tags: [TagName.NextJS, TagName.FragmentShader, TagName.GSAP],
     youtubeUrl: 'https://youtu.be/_YvCZ4I16Vg',
