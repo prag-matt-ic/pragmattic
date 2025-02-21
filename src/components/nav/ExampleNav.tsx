@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Dispatch, type FC, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, type FC, type SetStateAction, useRef, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
@@ -79,7 +79,7 @@ const ExampleNav: FC<Props> = ({ slug }) => {
   const { title, description, githubUrl, youtubeUrl, blogSlug, tags } = currentExample
 
   return (
-    <div className="pointer-events-none fixed left-0 right-0 top-0 z-[1001] hidden h-14 items-center justify-center lg:flex">
+    <div className="pointer-events-none fixed left-0 right-0 top-0 z-[1000] hidden h-14 items-center justify-center lg:flex">
       <section
         ref={container}
         className="pointer-events-auto absolute max-w-full text-white lg:w-[420px] xl:w-[600px]"
@@ -180,7 +180,7 @@ const ExampleNav: FC<Props> = ({ slug }) => {
             ref={refs.setFloating}
             style={{ ...floatingStyles, transform: `translate3d(${x}px, ${y}px, 0)` }}
             {...getFloatingProps()}
-            className="absolute left-0 top-0 z-[1000] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md sm:max-w-lg">
+            className="absolute left-0 top-0 z-[1001] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md sm:max-w-lg">
             <ExamplesPicker slug={slug} setIsExpanded={setIsExpanded} setIsPickerOpen={setIsPickerOpen} />
           </section>
         </FloatingPortal>
