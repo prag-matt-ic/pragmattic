@@ -50,36 +50,22 @@ float darkenValue(in float colour) {
 void main() {
   float nScale = 0.1;
 
-  // base colour
   vec3 noiseIn = vec3((vWorldPos.x * nScale) - uTime * 0.2, (vWorldPos.y * nScale), nScale);
   float n = noise(noiseIn) * 0.5 + 0.5;
-
-  // [[0.078 -0.912 0.518] [-1.176 -0.833 -0.154] [-0.263 0.389 -1.883] [-0.582 -0.292 -1.505]]
-  // vec3 colour = cosineGradientColour(n, vec3(0.078, -0.912, 0.518), vec3(-1.176, -0.833, -0.154), vec3(-0.263, 0.389, -1.883), vec3(-0.582, -0.292, -1.505));
 
   vec3 colour = gradientColorRGB(n);
 
   vec2 textureUv = vUv;
   textureUv.y += n * 0.03;
+  colour *= 0.08;
 
-  colour *= 0.1;
-
-  // Add layered horizontal strips 
-  for(float i = 1.; i < 4.; i++) {
-    float strip = 1.0 - (smoothstep(0.0, i, abs(vWorldPos.y + sin(vWorldPos.x - uTime) * 0.4)));
-    float cInput = sin(i + uTime * 0.5) * 0.5 + 0.5;
-    vec3 stripColour = gradientColorRGB(cInput);
-    strip *= 0.1;
-    colour = mix(colour, stripColour, strip);
-  }
-  
   // Mix with texture colour
   vec4 textureColour = texture2D(uTexture, textureUv);
   vec3 textureColourGreyscale = vec3(dot(textureColour.rgb, vec3(0.299, 0.587, 0.114))) * 0.2;
   colour = mix(colour, textureColourGreyscale, 0.12);
 
   // Add vertical vignette
-  float vFade = smoothstep(1.0, 4.3, abs(vWorldPos.y));
+  float vFade = smoothstep(1.0, 4.5, abs(vWorldPos.y));
   colour = mix(colour, uDarkestColour, vFade);
 
   gl_FragColor = vec4(colour, 1.0);

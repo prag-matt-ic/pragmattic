@@ -1,10 +1,11 @@
 'use client'
 import { useGSAP } from '@gsap/react'
-import { PerformanceMonitor, Stats } from '@react-three/drei'
+import { PerformanceMonitor, PerformanceMonitorApi, Stats, usePerformanceMonitor } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import gsap from 'gsap'
-import React, { type FC, useMemo } from 'react'
+import { KernelSize } from 'postprocessing'
+import React, { type FC, useMemo, useState } from 'react'
 import { Color, type Vector3Tuple } from 'three'
 
 import Camera from '@/components/three/Camera'
@@ -80,9 +81,28 @@ const EnergyTransferCanvas: FC<CanvasProps> = ({ className }) => {
 }
 
 const Postprocessing: FC = () => {
+  const [isEnabled, setIsEnabled] = useState(true)
+
+  const onIncline = (api: PerformanceMonitorApi) => {
+    setIsEnabled(api.fps > 50)
+  }
+
+  const onDecline = (api: PerformanceMonitorApi) => {
+    setIsEnabled(!(api.fps > 50))
+  }
+
+  usePerformanceMonitor({ onIncline, onDecline })
+
   return (
-    <EffectComposer>
-      <Bloom luminanceThreshold={0.8} mipmapBlur={true} intensity={2} opacity={0.5} height={512} />
+    <EffectComposer enabled={isEnabled}>
+      <Bloom
+        luminanceThreshold={0.9}
+        mipmapBlur={true}
+        intensity={4}
+        opacity={0.3}
+        height={512}
+        kernelSize={KernelSize.MEDIUM}
+      />
     </EffectComposer>
   )
 }

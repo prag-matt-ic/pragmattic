@@ -7,6 +7,7 @@ import RayMarchingPage from '@/components/examples/raymarching/RayMarchingPage'
 import ScrollingBackgroundShaderPage from '@/components/examples/scrollingBackgroundGradient/ScrollingBackgroundGradientPage'
 import EnergyTransferCanvas from '@/components/examples/three/energyTransfer/EnergyTransfer'
 import FBOEffectsCanvas from '@/components/examples/three/fboEffectShader/FBOEffects'
+import LoopPointsCanvas from '@/components/examples/three/loopPoints/LoopPointsCanvas'
 import StarWarsPage from '@/components/examples/three/particles/stars/StarWarsPage'
 import ScrollingScenePage from '@/components/examples/three/scrollingScene/ScrollingScenePage'
 import { WavePlanePage } from '@/components/examples/three/wavePlane/WavePlane'
@@ -29,6 +30,7 @@ export const EXAMPLES_CONTENT: Record<ExampleSlug, FC> = {
   [ExampleSlug.ScrollingThreeJs]: ScrollingScenePage,
   [ExampleSlug.ScrollingBackgroundShader]: ScrollingBackgroundShaderPage,
   [ExampleSlug.StarsParticles]: StarWarsPage,
+  [ExampleSlug.LoopPoints]: LoopPointsCanvas,
 }
 
 export type Example = {
@@ -112,7 +114,7 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
       'https://github.com/prag-matt-ic/pragmattic/blob/main/src/components/examples/animatedCSSGrid/AnimatedCSSGrid.tsx',
   },
   [ExampleSlug.EnergyTransfer]: {
-    title: 'Energy Transfer Concept',
+    title: 'Energy Transfer',
     description: `This was inspired by a magnet attraction effect in the thoroughly enjoyable game "It Takes Two"! It's essentially just a cylindrical tunnel, points and two spheres. Each with
         their own vertex and fragment shader. The energy “lines” are spawned in JS with random colour, length and
         duration before being drawn in the cylinder fragment shader. I've been learning that it's much easier to manage animation progress and randomise parameters outside of
@@ -120,6 +122,12 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
     tags: [TagName.ThreeJS, TagName.FragmentShader, TagName.VertexShader, TagName.PostProcessing, TagName.Particles],
     slug: ExampleSlug.EnergyTransfer,
     githubUrl: 'https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/three/energyTransfer',
+  },
+  [ExampleSlug.LoopPoints]: {
+    title: 'Scatty Loop Points',
+    description: `In this example I'm sampling points on the loop mesh and creating an alternative set of scattered point positions. Both position sets are passed into a simulation shader as a data texture on compile. Then noise is applied to animate the positions. Toggling between the two states triggers a GSAP tween on the scattered amount, which is used in the simulation shader to mix between the two positions. The output of the simulation is then passed into the points vertex shader to set their positions. The code is written in such a way that any mesh can be used as the basis for points. You could make something pretty cool if you used a scroll trigger to update the scattered value!`,
+    tags: [TagName.ThreeJS, TagName.FragmentShader, TagName.VertexShader, TagName.Particles],
+    slug: ExampleSlug.LoopPoints,
   },
 } as const
 

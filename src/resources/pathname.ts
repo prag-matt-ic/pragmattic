@@ -23,4 +23,5 @@ export enum ExampleSlug {
   RayMarching = 'raymarching-fragment-shader',
   AnimatedCSSGrid = 'animated-grid-tailwind-gsap',
   EnergyTransfer = 'three-energy-transfer-concept',
+  LoopPoints = 'three-loop-mesh-fbo-points',
 }

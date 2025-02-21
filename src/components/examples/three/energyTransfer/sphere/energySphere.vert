@@ -9,12 +9,11 @@ uniform bool uIsOnLeft;
 varying vec2 vUv;
 
 void main() {
-
     vec3 pos = position;
     
     float n = noise(vec2(pos.x + uSeed, pos.y - uSeed - uTime * 0.4));
-    pos.z += n * 0.04;
-    pos.x -= n * 0.04;
+    pos.z += n * 0.1;
+    pos.x -= n * 0.1;
 
     vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;

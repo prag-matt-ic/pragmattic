@@ -36,7 +36,7 @@ declare module '@react-three/fiber' {
   }
 }
 
-const NUMBER_OF_POINTS = 80
+const NUMBER_OF_POINTS = 96
 
 const EnergyTunnelPoints: FC<Props> = ({}) => {
   const shaderMaterial = useRef<ShaderMaterial & Uniforms>(null)
