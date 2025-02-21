@@ -125,9 +125,10 @@ export const EXAMPLES_METADATA: Record<ExampleSlug, Example> = {
   },
   [ExampleSlug.LoopPoints]: {
     title: 'Scatty Loop Points',
-    description: `In this example I'm sampling points on the loop mesh and creating an alternative set of scattered point positions. Both position sets are passed into a simulation shader as a data texture on compile. Then noise is applied to animate the positions. Toggling between the two states triggers a GSAP tween on the scattered amount, which is used in the simulation shader to mix between the two positions. The output of the simulation is then passed into the points vertex shader to set their positions. The code is written in such a way that any mesh can be used as the basis for points. You could make something pretty cool if you used a scroll trigger to update the scattered value!`,
+    description: `In this example I'm sampling points on the loop mesh and creating a second set of scattered 3D positions. Both position sets are passed into a simulation shader as a data texture. Noise is then applied to animate the positions. Toggling between the two states triggers a GSAP tween on the scattered value, which is used in the simulation shader to mix between the two positions. The output of the simulation is then passed into the points vertex shader to set their positions. The code is written in such a way that any mesh can be used as the basis for points. You could make something pretty cool if you used a scroll trigger to update the scattered value!`,
     tags: [TagName.ThreeJS, TagName.FragmentShader, TagName.VertexShader, TagName.Particles],
     slug: ExampleSlug.LoopPoints,
+    githubUrl: 'https://github.com/prag-matt-ic/pragmattic/tree/main/src/components/examples/three/loopPoints',
   },
 } as const
 

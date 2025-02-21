@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import Image from 'next/image'
 import Link from 'next/link'
-import { type FC, useRef, useState } from 'react'
+import { Dispatch, type FC, SetStateAction, useRef, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
@@ -17,6 +17,7 @@ import forwardSlashIcon from '@/assets/icons/forward-slash-light.svg'
 import githubIcon from '@/assets/icons/socials/github.svg'
 import youtubeIcon from '@/assets/icons/socials/youtube.svg'
 import Button from '@/components/buttons/Button'
+import Tag from '@/components/Tag'
 import { EXAMPLES_METADATA } from '@/resources/examples/examples'
 import { ExampleSlug, Pathname } from '@/resources/pathname'
 
@@ -75,7 +76,7 @@ const ExampleNav: FC<Props> = ({ slug }) => {
   // Extract the example slug from the pathname
   const currentExample = EXAMPLES_METADATA[slug]
   if (!currentExample) return null
-  const { title, description, githubUrl, youtubeUrl, blogSlug } = currentExample
+  const { title, description, githubUrl, youtubeUrl, blogSlug, tags } = currentExample
 
   return (
     <div className="pointer-events-none fixed left-0 right-0 top-0 z-[1001] hidden h-14 items-center justify-center lg:flex">
@@ -109,7 +110,10 @@ const ExampleNav: FC<Props> = ({ slug }) => {
             {isExpanded ? (
               <Image src={collapseIcon} alt="collapse" className="size-5" />
             ) : (
-              <Image src={expandIcon} alt="expand" className="size-5" />
+              <>
+                <span className="text-green">Info</span>
+                <Image src={expandIcon} alt="expand" className="size-5" />
+              </>
             )}
           </Button>
         </header>
@@ -125,6 +129,14 @@ const ExampleNav: FC<Props> = ({ slug }) => {
           onExit={onInfoExit}>
           <div ref={expandedContainer} className="relative w-full space-y-3 overflow-hidden px-4 pb-4 pt-2 opacity-0">
             {!!description && <p className="h-fit text-sm text-light">{description}</p>}
+
+            {!!tags && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                {tags.map((tag) => (
+                  <Tag key={tag} name={tag} />
+                ))}
+              </div>
+            )}
 
             <div className="flex items-center gap-6 text-sm font-medium">
               {!!blogSlug && (
@@ -168,46 +180,8 @@ const ExampleNav: FC<Props> = ({ slug }) => {
             ref={refs.setFloating}
             style={{ ...floatingStyles, transform: `translate3d(${x}px, ${y}px, 0)` }}
             {...getFloatingProps()}
-            className="absolute left-0 top-0 z-[1000] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md">
-            <div className="w-full overflow-y-auto">
-              {Object.values(EXAMPLES_METADATA).map(({ title, slug: exampleSlug, youtubeUrl, githubUrl }, index) => {
-                const isActive = slug === exampleSlug
-                const hasLinks = !!youtubeUrl || !!githubUrl
-                if (isActive) return null
-                return (
-                  <div
-                    key={title}
-                    className={twJoin(
-                      'example flex items-center justify-between gap-6 px-4 py-3 text-white',
-                      index % 2 === 0 && 'bg-black/40',
-                    )}>
-                    <Link
-                      href={`${Pathname.Example}/${exampleSlug}`}
-                      className="block font-medium hover:text-green"
-                      onClick={() => {
-                        setIsPickerOpen(false)
-                        setIsExpanded(false)
-                      }}>
-                      {title}
-                    </Link>
-                    {hasLinks && (
-                      <div className="flex items-center gap-4">
-                        {!!youtubeUrl && (
-                          <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50">
-                            <Image src={youtubeIcon} alt="Youtube" className="size-5" />
-                          </a>
-                        )}
-                        {!!githubUrl && (
-                          <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50">
-                            <Image src={githubIcon} alt="Github" className="size-5" />
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
+            className="absolute left-0 top-0 z-[1000] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md sm:max-w-lg">
+            <ExamplesPicker slug={slug} setIsExpanded={setIsExpanded} setIsPickerOpen={setIsPickerOpen} />
           </section>
         </FloatingPortal>
       )}
@@ -216,3 +190,84 @@ const ExampleNav: FC<Props> = ({ slug }) => {
 }
 
 export default ExampleNav
+
+type ExamplesPickerProps = {
+  slug: ExampleSlug
+  setIsPickerOpen: Dispatch<SetStateAction<boolean>>
+  setIsExpanded: Dispatch<SetStateAction<boolean>>
+}
+
+const ALL_EXAMPLE_TAGS = Object.values(EXAMPLES_METADATA).reduce<string[]>(
+  (acc, { tags }) => (tags ? [...acc, ...tags.filter((tag) => !acc.includes(tag))] : acc),
+  [],
+)
+const ExamplesPicker: FC<ExamplesPickerProps> = ({ slug, setIsExpanded, setIsPickerOpen }) => {
+  const [activeTags, setActiveTags] = useState<string[]>([])
+
+  const onTagClick = (tag: string) => {
+    if (activeTags.includes(tag)) {
+      setActiveTags(activeTags.filter((activeTag) => activeTag !== tag))
+    } else {
+      setActiveTags([...activeTags, tag])
+    }
+  }
+
+  const filteredExamples = Object.values(EXAMPLES_METADATA).filter(({ tags }) => {
+    if (!activeTags.length) return true
+    if (!tags) return true
+    return tags.some((tag) => activeTags.includes(tag))
+  })
+
+  return (
+    <div className="w-full overflow-y-auto">
+      <div className="flex flex-wrap gap-1.5 p-2">
+        {ALL_EXAMPLE_TAGS.map((tag) => {
+          const isActive = activeTags.includes(tag)
+          return (
+            <button key={tag} onClick={() => onTagClick(tag)} className="p-0 hover:opacity-70">
+              <Tag name={tag} className={isActive ? 'text-green' : undefined} />
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="mx-2 my-2 h-px w-auto bg-mid" />
+
+      {filteredExamples.map(({ title, slug: exampleSlug, youtubeUrl, githubUrl }, index) => {
+        const hasLinks = !!youtubeUrl || !!githubUrl
+        return (
+          <div
+            key={title}
+            className={twJoin(
+              'example flex items-center justify-between gap-6 px-4 py-3 text-white',
+              index % 2 === 0 && 'bg-black/40',
+            )}>
+            <Link
+              href={`${Pathname.Example}/${exampleSlug}`}
+              className="block font-medium hover:text-green"
+              onClick={() => {
+                setIsPickerOpen(false)
+                setIsExpanded(false)
+              }}>
+              {title}
+            </Link>
+            {hasLinks && (
+              <div className="flex items-center gap-4">
+                {!!youtubeUrl && (
+                  <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50">
+                    <Image src={youtubeIcon} alt="Youtube" className="size-5" />
+                  </a>
+                )}
+                {!!githubUrl && (
+                  <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="hover:opacity-50">
+                    <Image src={githubIcon} alt="Github" className="size-5" />
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
