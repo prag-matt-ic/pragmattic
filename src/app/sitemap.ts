@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 
 import { BlogSlug, ExampleSlug, Pathname } from '@/resources/pathname'
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://pragmattic.vercel.app'
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://pragmattic.dev'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date().toISOString().split('T')[0]

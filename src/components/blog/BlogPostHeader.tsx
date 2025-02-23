@@ -5,8 +5,8 @@ import React, { type FC } from 'react'
 
 import avatarPic from '@/assets/avatar.jpg'
 import openNewIcon from '@/assets/icons/open-new.svg'
-import Tag from '@/components/Tag'
 import Button from '@/components/buttons/Button'
+import Tag from '@/components/Tag'
 import { type BlogMetadata } from '@/resources/blog/blog'
 import { Pathname } from '@/resources/pathname'
 
