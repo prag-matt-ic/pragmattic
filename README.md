@@ -1,1 +1,1 @@
-https://pragmattic.vercel.app/
+[https://pragmattic.dev](https://pragmattic.dev)
