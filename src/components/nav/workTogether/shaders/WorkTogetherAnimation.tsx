@@ -2,9 +2,9 @@
 import { useGSAP } from '@gsap/react'
 import { ScreenQuad, shaderMaterial } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { extend, type ShaderMaterialProps } from '@react-three/fiber'
+import { extend } from '@react-three/fiber'
 import gsap from 'gsap'
-import { type FC, useRef } from 'react'
+import { type FC, RefObject, useRef } from 'react'
 import React from 'react'
 import { Color, ShaderMaterial } from 'three'
 
@@ -53,11 +53,14 @@ const DeveloperShaderMaterial = shaderMaterial(DEVELOPER_UNIFORMS, vertexShader,
 
 extend({ AgencyShaderMaterial, StartupShaderMaterial, DeveloperShaderMaterial })
 
+type ShaderMaterialProps = Partial<ShaderMaterial> &
+  Partial<Uniforms> & { ref: RefObject<ShaderMaterialProps | null>; key: string }
+
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    agencyShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
-    startupShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
-    developerShaderMaterial: ShaderMaterialProps & Partial<Uniforms>
+    agencyShaderMaterial: ShaderMaterialProps
+    startupShaderMaterial: ShaderMaterialProps
+    developerShaderMaterial: ShaderMaterialProps
   }
 }
 
@@ -67,7 +70,7 @@ type Props = {
 }
 
 export const WorkTogetherAnimation: FC<Props> = ({ type, isHovered }) => {
-  const material = useRef<ShaderMaterial & Uniforms>(null)
+  const material = useRef<ShaderMaterialProps>(null)
   const time = useRef({ value: 0 }) // Time value for the shader accelerates when hovered
 
   useGSAP(() => {

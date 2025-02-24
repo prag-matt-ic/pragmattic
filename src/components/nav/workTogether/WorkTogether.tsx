@@ -10,7 +10,7 @@ import { type FC, useState } from 'react'
 import { Transition } from 'react-transition-group'
 import { twJoin } from 'tailwind-merge'
 
-import Button from '@/components/buttons/Button'
+import Button from '@/components/Button'
 
 import { WorkTogetherAnimation, type WorkTogetherShader } from './shaders/WorkTogetherAnimation'
 

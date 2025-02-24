@@ -17,22 +17,22 @@ html {
   }
 }
 
-/* Custom scrollbars 
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background-color: #000;
+/* custom scroll bar */
+.sleek-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: #1E1B23;
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #fff;
+.sleek-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #9D97AA; 
   border-radius: 0px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.sleek-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #fff;
-} */
+} 
+
 
 /* Hide the cursor */
 .no-cursor,

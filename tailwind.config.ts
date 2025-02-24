@@ -1,13 +1,11 @@
 import type { Config } from 'tailwindcss'
 import type { PluginAPI } from 'tailwindcss/types/config'
 
-const config: Config = {
+const tailwindConfig: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/hooks/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/mdx-components.tsx',
   ],
   theme: {
     colors: {
@@ -40,7 +38,6 @@ const config: Config = {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
     function ({ addUtilities, theme }: PluginAPI) {
       const newUtilities = {
         '.horizontal-padding': {
@@ -64,4 +61,5 @@ const config: Config = {
     },
   ],
 }
-export default config
+
+export default tailwindConfig

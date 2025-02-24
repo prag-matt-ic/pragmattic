@@ -2,15 +2,15 @@ import dynamic from 'next/dynamic'
 import { headers } from 'next/headers'
 
 import CustomCursor from '@/components/Cursor'
-import HomeFooter from '@/components/home/HomeFooter'
-import HomeHeader from '@/components/home/HomeHeader'
-import HomeScrollManager from '@/components/home/HomeScrollManager'
-import { HomeProvider } from '@/hooks/home/HomeProvider'
+import HomeFooter from '@/components/HomeFooter'
+import HomeHeader from '@/components/HomeHeader'
+import HomeScrollManager from '@/components/HomeScrollManager'
+import { HomeProvider } from '@/hooks/HomeProvider'
 
-const HomeCanvas = dynamic(() => import('@/components/home/HomeCanvas'), { ssr: false })
+const HomeCanvas = dynamic(() => import('@/components/HomeCanvas'))
 
 export default async function HomePage() {
-  const headersList = headers()
+  const headersList = await headers()
   const userAgent = headersList.get('user-agent')
   const isMobile = !!userAgent?.includes('Mobile')
 
