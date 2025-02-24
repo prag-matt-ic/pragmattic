@@ -43,7 +43,7 @@ const ExampleNav: FC<Props> = ({ slug }) => {
     onOpenChange: setIsPickerOpen,
     middleware: [
       offset({
-        mainAxis: 8,
+        mainAxis: 4,
         crossAxis: -16,
       }),
     ],
@@ -180,7 +180,7 @@ const ExampleNav: FC<Props> = ({ slug }) => {
             ref={refs.setFloating}
             style={{ ...floatingStyles, transform: `translate3d(${x}px, ${y}px, 0)` }}
             {...getFloatingProps()}
-            className="absolute left-0 top-0 z-[1001] max-w-[calc(100%-16px)] overflow-hidden rounded-lg bg-black/80 shadow-xl backdrop-blur-md sm:max-w-lg">
+            className="absolute left-0 top-0 z-[1001] max-w-[calc(100%-16px)] overflow-hidden rounded border border-mid bg-black/80 shadow-xl backdrop-blur-md lg:max-w-xl xl:max-w-2xl">
             <ExamplesPicker slug={slug} setIsExpanded={setIsExpanded} setIsPickerOpen={setIsPickerOpen} />
           </section>
         </FloatingPortal>
