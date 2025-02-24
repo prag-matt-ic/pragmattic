@@ -9,18 +9,13 @@ import Button from '@/components/buttons/Button'
 import LoopModel from './loopModel/LoopModel'
 import LoopPoints from './LoopPoints'
 
-type CanvasProps = {
-  className?: string
-}
-
-const LoopPointsCanvas: FC<CanvasProps> = ({ className }) => {
+const LoopPointsCanvas: FC = () => {
   const loopMesh = useRef<Mesh>(null)
   const [isScattered, setIsScattered] = useState(true)
 
   return (
     <main className="h-lvh w-full font-sans">
       <Canvas
-        className={className}
         flat={true}
         camera={{ position: [0, 0, 3], fov: 70, far: 10, near: 0.01 }}
         gl={{
