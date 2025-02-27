@@ -2,8 +2,8 @@
 import { Plane } from '@react-three/drei'
 import { shaderMaterial } from '@react-three/drei'
 import { extend, useFrame, useThree } from '@react-three/fiber'
-import React, { type FC, type RefObject, useRef } from 'react'
-import { Color, ShaderMaterial } from 'three'
+import React, { type FC, useRef } from 'react'
+import { Color } from 'three'
 
 import { BLACK_VEC3_RGB, LIGHT_VEC3_RGB, MID_VEC3_RGB, OFF_BLACK_VEC3_RGB } from '@/resources/colours'
 
@@ -19,22 +19,20 @@ type Uniforms = {
   uBlackColour: Color
 }
 
-const INITIAL_UNIFORMS: Uniforms = {
+const INITIAL_UNIFORMS: Partial<Uniforms> = {
   uTime: 0,
-  uAspect: 1,
   uLightColour: LIGHT_VEC3_RGB,
   uMidColour: MID_VEC3_RGB,
   uOffBlackColour: OFF_BLACK_VEC3_RGB,
   uBlackColour: BLACK_VEC3_RGB,
 }
 
-const HomeBackgroundShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, bgVertex, bgFragment)
-
-extend({ HomeBackgroundShaderMaterial })
+const CustomShaderMaterial = shaderMaterial(INITIAL_UNIFORMS, bgVertex, bgFragment)
+const HomeBackgroundShaderMaterial = extend(CustomShaderMaterial)
 
 const HomeBackgroundPlane: FC = () => {
   const { viewport } = useThree()
-  const shader = useRef<SM>(null)
+  const shader = useRef<typeof HomeBackgroundShaderMaterial & Uniforms>(null)
 
   useFrame(({ clock }) => {
     if (!shader.current) return
@@ -43,8 +41,8 @@ const HomeBackgroundPlane: FC = () => {
 
   return (
     <Plane args={[viewport.width * 3, viewport.height * 3, 1, 1]} position={[0, 0, -6]}>
-      <homeBackgroundShaderMaterial
-        key={HomeBackgroundShaderMaterial.key}
+      <HomeBackgroundShaderMaterial
+        key={CustomShaderMaterial.key}
         ref={shader}
         {...INITIAL_UNIFORMS}
         uAspect={viewport.aspect}
@@ -54,11 +52,3 @@ const HomeBackgroundPlane: FC = () => {
 }
 
 export default HomeBackgroundPlane
-
-type SM = Partial<ShaderMaterial> & Uniforms & { ref: RefObject<SM | null>; key: string }
-
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    homeBackgroundShaderMaterial: SM
-  }
-}
