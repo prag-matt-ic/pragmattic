@@ -20,7 +20,7 @@ const Footer: FC = () => {
 
       <div className="order-1 flex items-center justify-center md:order-3 md:justify-end">
         <a
-          href="https://www.linkedin.com/in/matthewjfrawley/"
+          href="https://www.linkedin.com/in/pragmattic/"
           rel="noreferrer"
           target="_blank"
           className={socialLinkClasses}>
