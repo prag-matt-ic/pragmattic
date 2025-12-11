@@ -31,7 +31,7 @@
     "glslify-loader": "^2.0.0",
     "gsap": "npm:@gsap/business@^3.12.5",
     "leva": "^0.10.0",
-    "next": "^15.1.7",
+    "next": "15.1.9",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "raw-loader": "^4.0.2",
     "react": "^19.0.0",
